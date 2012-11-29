@@ -52,5 +52,4 @@ public class Adjacency extends Representation {
 	public void mutate() {
 		// TODO Auto-generated method stub
 	}
-	
 }

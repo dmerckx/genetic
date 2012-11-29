@@ -1,12 +1,12 @@
 package crossover;
 
-import java.util.SortedSet;
+import java.util.List;
 
 import representations.Representation;
 
 
 public interface CrossOver<R extends Representation> {
 	
-	SortedSet<R> doCrossOver(SortedSet<R> selection);
+	List<R> doCrossOver(List<R> selection);
 
 }

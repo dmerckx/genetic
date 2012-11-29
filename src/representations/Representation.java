@@ -1,5 +1,7 @@
 package representations;
 
+import java.util.Random;
+
 public abstract class Representation implements Comparable<Representation>{
 
 	public int compareTo(Representation r2) {
@@ -9,6 +11,8 @@ public abstract class Representation implements Comparable<Representation>{
 			return 1;
 		return 0;
 	}
+	
+	public abstract void setRandom(Random rand);
 	
 	public abstract double getFitness();
 	
