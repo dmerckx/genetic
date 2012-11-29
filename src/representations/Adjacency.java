@@ -2,6 +2,7 @@ package representations;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -19,22 +20,30 @@ public class Adjacency extends Representation {
 	}
 	
 	public Adjacency(Problem problem, List<Integer> path ) {
-		if(path.isEmpty())
-			fillPath();
-		else
-			this.path = path;
+		if(path == null ) throw new IllegalArgumentException();
+		
 		this.problem = problem;
-	}
-	
-	private void fillPath() {
-		this.path = new ArrayList<Integer>();
-		for(int i = 0; i < problem.size(); i++){
-			path.add(i);
-		}
+		this.path = path;
 	}
 
 	public void setRandom(Random rand){
-		Collections.shuffle(path, rand);
+		List<Integer> pathRep = new ArrayList<Integer>();
+		path = new ArrayList<Integer>();
+		
+		for(int i = 1; i < problem.size(); i++){
+			pathRep.add(i);
+			path.add(0);
+		}
+		path.add(0);
+
+		Collections.shuffle(pathRep, rand);
+		
+		int index = 0;
+		for(int i = 0; i < problem.size()-1; i++){
+			path.set( index, pathRep.get(i));
+			index = pathRep.get(i);
+		}
+		path.set(index, 0);
 	}
 	
 	@Override

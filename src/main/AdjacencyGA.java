@@ -18,11 +18,13 @@ public class AdjacencyGA extends GA<Adjacency>{
 	}
 
 	@Override
-	List<Adjacency> initPopulation(Problem problem) {
+	public List<Adjacency> initPopulation(Problem problem) {
 		List<Adjacency> result = new ArrayList<Adjacency>();
 		
 		for(int i=0; i < problem.size(); i++){
-			result.add(new Adjacency(problem));
+			Adjacency adj = new Adjacency(problem);
+			adj.setRandom(params.rand);
+			result.add(adj);
 		}
 		
 		return result;

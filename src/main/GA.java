@@ -78,5 +78,5 @@ public abstract class GA<R extends Representation> {
 		}
 	}
 	
-	abstract List<R> initPopulation(Problem problem);
+	public abstract List<R> initPopulation(Problem problem);
 }
