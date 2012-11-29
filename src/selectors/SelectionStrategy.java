@@ -1,6 +1,6 @@
 package selectors;
 
-import java.util.SortedSet;
+import java.util.List;
 
 import representations.Representation;
 
@@ -8,5 +8,8 @@ import representations.Representation;
 
 public interface SelectionStrategy<R extends Representation> {
 	
-	SortedSet<R> doSelection(SortedSet<R> pop);
+	/**
+	 * The selection strategy assumes that the population is sorted!
+	 */
+	List<R> doSelection(List<R> pop);
 }

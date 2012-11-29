@@ -1,52 +1,58 @@
 package main;
-import java.util.SortedSet;
+import insertion.Insertor;
 
-import crossover.CrossOver;
+import java.util.Collections;
+import java.util.List;
 
 import params.Params;
 import representations.Representation;
 import selectors.SelectionStrategy;
+import crossover.CrossOver;
 
 
 public abstract class GA<R extends Representation> {
 
-	private Params params;
+	protected Params params;
 	private SelectionStrategy<R> selector;
 	private CrossOver<R> crossover;
+	private Insertor<R> insertor;
 	
-	public GA(Params params) {
+	public GA(Params params, SelectionStrategy<R> selector, CrossOver<R> crossover, Insertor<R> insertor) {
 		this.params = params;
-		//TODO
+		this.selector = selector;
+		this.crossover = crossover;
+		this.insertor = insertor;
 	}
 	
 	public void run(Problem problem, History history){
 		
-		SortedSet<R> pop = initPopulation(problem);
+		List<R> pop = initPopulation(problem);
 		
 		int i = 0;
 		while(i < params.maxGenerations){
-			double best = pop.first().getFitness();
-			double worst = pop.last().getFitness();
+			//TODO: work with linkedlists instead of arraylists?
+			Collections.sort(pop);
+			
+			double best = pop.get(0).getFitness();
+			double worst = pop.get(pop.size()-1).getFitness();
 			double mean = calculateMean(pop);
 			history.write(best, mean, worst);
 			
 			if(checkStop(best, pop)) break;
 			
-			SortedSet<R> selection = selector.doSelection(pop);
+			List<R> selection = selector.doSelection(pop);
 			
-			SortedSet<R> children = crossover.doCrossOver(selection);
+			List<R> children = crossover.doCrossOver(selection);
 			
 			mutate(children);
 			
-			pop = merge(pop, selection, children);
-			
-			loopDetection(pop);
+			pop = insertor.merge(pop, children);
 			
 			i++;
 		}
 	}
 	
-	private double calculateMean(SortedSet<R> pop){
+	private double calculateMean(List<R> pop){
 		double total = 0;
 		for(R chrom:pop){
 			total += chrom.getFitness();
@@ -55,7 +61,7 @@ public abstract class GA<R extends Representation> {
 		return total / pop.size();
 	}
 	
-	private boolean checkStop(double best, SortedSet<R> pop){
+	private boolean checkStop(double best, List<R> pop){
 		int index = 0;
 		for(R r: pop){
 			if(r.getFitness() - best > params.mach)
@@ -65,16 +71,12 @@ public abstract class GA<R extends Representation> {
 		return index > params.stop * pop.size();
 	}
 	
-	abstract SortedSet<R> initPopulation(Problem problem);
-	
-	private void mutate(SortedSet<R> selection){
+	private void mutate(List<R> selection){
 		for(R chrom : selection){ 
 			if( params.rand.nextFloat() > params.mutation )
 				chrom.mutate();
 		}
 	}
 	
-	abstract SortedSet<R> merge(SortedSet<R> oldPop, SortedSet<R> selection, SortedSet<R> children);
-	
-	abstract void loopDetection(SortedSet<R> population);
+	public abstract List<R> initPopulation(Problem problem);
 }

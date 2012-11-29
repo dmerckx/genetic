@@ -2,8 +2,6 @@ package selectors;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import params.Params;
 import representations.Representation;
@@ -17,12 +15,12 @@ public class SUS<R extends Representation> implements SelectionStrategy<R>{
 	}
 
 	@Override
-	public SortedSet<R> doSelection(SortedSet<R> pop) {
+	public List<R> doSelection(List<R> pop) {
 		double total = 0;
 		for(R chrom: pop){
 			total += chrom.getFitness();
 		}
-		SortedSet<R> result = new TreeSet<R>();
+		List<R> result = new ArrayList<R>();
 		
 		
 		int nrToSelect = (int) Math.max(Math.floor((1 - params.elitists) * pop.size()), 2);

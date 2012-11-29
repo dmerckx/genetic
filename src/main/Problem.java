@@ -7,7 +7,7 @@ import util.Point;
 
 public class Problem {
 
-	private List<Point> cities;
+	public final List<Point> cities;
 	
 	public Problem(List<Point> cities) {
 		this.cities = cities;

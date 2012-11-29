@@ -30,9 +30,7 @@ public class AlternatingEdge implements CrossOver<Adjacency> {
 
 			List<Integer> path = constructPath(firstParent, secondParent);
 
-			Adjacency child = new Adjacency(problem, path);
-
-			children.add(child);
+			children.add(new Adjacency(problem, path));
 		}
 
 		return children;
@@ -40,7 +38,6 @@ public class AlternatingEdge implements CrossOver<Adjacency> {
 
 	public List<Integer> constructPath(Adjacency firstParent,
 			Adjacency secondParent) {
-		// List<Integer> result = new ArrayList<Integer>();
 		Integer[] result = new Integer[firstParent.size()];
 		List<String> options = initializeOptions(firstParent.size());
 		Adjacency currentParent = secondParent;
@@ -51,22 +48,24 @@ public class AlternatingEdge implements CrossOver<Adjacency> {
 		while (!options.isEmpty()) {
 			counter++;
 			result[currentEdge.getBegin()] = currentEdge.getEnd();
-			currentEdge = currentParent.getNextEdge(currentEdge);
-//			System.out.println(currentEdge);
-			while (producesCycle(currentEdge, result, counter)) {
-				currentEdge = chooseNewEdge(currentEdge, options);
-			}
+			currentEdge = determineEdge(result, options, currentParent,
+					currentEdge, counter);
 			currentParent = (currentParent == firstParent) ? secondParent
 					: firstParent;
 			options.remove(currentEdge.getEnd() + "");
 			
 		}
 		result[currentEdge.getBegin()] = currentEdge.getEnd();
-		for (int i = 0; i < result.length; i++) {
-			System.out.print(result[i]+ " ");
-		}
-		System.out.println("");
 		return Arrays.asList(result);
+	}
+
+	private Edge determineEdge(Integer[] result, List<String> options,
+			Adjacency currentParent, Edge currentEdge, int counter) {
+		currentEdge = currentParent.getNextEdge(currentEdge);
+		while (producesCycle(currentEdge, result, counter)) {
+			currentEdge = chooseNewEdge(currentEdge, options);
+		}
+		return currentEdge;
 	}
 
 	private List<String> initializeOptions(int number) {

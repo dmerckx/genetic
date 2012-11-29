@@ -18,10 +18,8 @@ import util.ProblemGenerator;
 
 public class AdjacencyTest {
 
-	private static Problem problem;
-	
+	private static Problem problem;	
 	private static Adjacency ad;
-	
 	private static String filePath = "../genetic/datafiles/rondrit016.tsp";
 	
 	@BeforeClass
