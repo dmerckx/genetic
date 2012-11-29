@@ -15,13 +15,24 @@ public class Adjacency extends Representation {
 	private Problem problem;
 	
 	public Adjacency(Problem problem){
+		this(problem, new ArrayList<Integer>());
+	}
+	
+	public Adjacency(Problem problem, List<Integer> path ) {
+		if(path.isEmpty())
+			fillPath();
+		else
+			this.path = path;
+		this.problem = problem;
+	}
+	
+	private void fillPath() {
 		this.path = new ArrayList<Integer>();
 		for(int i = 0; i < problem.size(); i++){
 			path.add(i);
 		}
-		this.problem = problem;
 	}
-	
+
 	public void setRandom(Random rand){
 		Collections.shuffle(path, rand);
 	}
@@ -51,6 +62,14 @@ public class Adjacency extends Representation {
 	@Override
 	public void mutate() {
 		// TODO Auto-generated method stub
+	}
+	
+	public List<Integer> getPath() {
+		return path;
+	}
+	
+	public int size() {
+		return path.size();
 	}
 	
 }
