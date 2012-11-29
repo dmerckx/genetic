@@ -15,10 +15,6 @@ import main.Problem;
  *
  */
 public class ProblemGenerator {
-
-	public static void main(String[] args) {
-		generate("C:/Users/Kristof/Documents/School/Semester 1/Genetic Algorithms and Evolutionary Computing/Project/ga/template/datasets/rondrit016.tsp");
-	}
 	
 	public static Problem generate(String filePath) {
 
