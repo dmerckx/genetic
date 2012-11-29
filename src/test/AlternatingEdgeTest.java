@@ -55,11 +55,14 @@ public class AlternatingEdgeTest {
 	}
 	
 	@Test
-	public void testConstructPath() {
+	public void testCrossOver() {
 		Params params = new Params();
 		params.rand = new Random(1);
+		List<Adjacency> parents = new ArrayList<Adjacency>();
+		parents.add(firstParent);
+		parents.add(secondParent);
 		AlternatingEdge crossover = new AlternatingEdge(params, problem);
-		System.out.println(crossover.constructPath(firstParent, secondParent));
+		System.out.println(crossover.doCrossOver(parents).get(0).getPath());
 	}
 
 }
