@@ -1,13 +1,15 @@
 package crossover;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import main.Problem;
 import params.Params;
 import representations.Adjacency;
+import representations.Edge;
 
-public class AlternatingEdge implements CrossOver<Adjacency>{
+public class AlternatingEdge implements CrossOver<Adjacency> {
 
 	private Params params;
 	private Problem problem;
@@ -16,40 +18,79 @@ public class AlternatingEdge implements CrossOver<Adjacency>{
 		this.params = params;
 		this.problem = problem;
 	}
-	
+
 	@Override
 	public List<Adjacency> doCrossOver(List<Adjacency> selection) {
-		
+
 		List<Adjacency> children = new ArrayList<Adjacency>();
-		
-		while(!selection.isEmpty()) {
+
+		while (!selection.isEmpty()) {
 			Adjacency firstParent = selectParent(selection);
 			Adjacency secondParent = selectParent(selection);
-			
+
 			List<Integer> path = constructPath(firstParent, secondParent);
-			
+
 			Adjacency child = new Adjacency(problem, path);
-			
+
 			children.add(child);
 		}
-		
+
 		return children;
 	}
 
-	private List<Integer> constructPath(Adjacency firstParent,
+	public List<Integer> constructPath(Adjacency firstParent,
 			Adjacency secondParent) {
-		
-		return null;
+		// List<Integer> result = new ArrayList<Integer>();
+		Integer[] result = new Integer[firstParent.size()];
+		List<String> options = initializeOptions(firstParent.size());
+		Adjacency currentParent = secondParent;
+		// Edge currentEdge = currentParent.getRandomEdge(params.rand);
+		Edge currentEdge = new Edge(0, 1);
+		options.remove(1 + "");
+		int counter = 0;
+		while (!options.isEmpty()) {
+			counter++;
+			result[currentEdge.getBegin()] = currentEdge.getEnd();
+			currentEdge = currentParent.getNextEdge(currentEdge);
+//			System.out.println(currentEdge);
+			while (producesCycle(currentEdge, result, counter)) {
+				currentEdge = chooseNewEdge(currentEdge, options);
+			}
+			currentParent = (currentParent == firstParent) ? secondParent
+					: firstParent;
+			options.remove(currentEdge.getEnd() + "");
+			
+		}
+		result[currentEdge.getBegin()] = currentEdge.getEnd();
+		for (int i = 0; i < result.length; i++) {
+			System.out.print(result[i]+ " ");
+		}
+		System.out.println("");
+		return Arrays.asList(result);
+	}
+
+	private List<String> initializeOptions(int number) {
+		List<String> options = new ArrayList<String>();
+		for (int i = 0; i < number; i++) {
+			options.add(i + "");
+		}
+		return options;
+	}
+
+	private Edge chooseNewEdge(Edge currentEdge, List<String> options) {
+		System.out.println(options);
+		int end = Integer.valueOf(options.get(params.rand.nextInt(options.size())));
+		options.remove(end + "");
+		return new Edge(currentEdge.getBegin(), end);
+	}
+
+	private boolean producesCycle(Edge currentEdge, Integer[] result, int counter) {
+		return counter != problem.size()
+				&& result[currentEdge.getEnd()] != null;
 	}
 
 	private Adjacency selectParent(List<Adjacency> selection) {
 		return selection.remove(params.rand.nextInt(selection.size()));
 	}
 
-	private Edge getRandomEdge(Adjacency parent) {
-		int begin = params.rand.nextInt(parent.size());
-		int end = parent.getPath().get(begin);
-		return new Edge(begin, end);
-	}
-	
 }

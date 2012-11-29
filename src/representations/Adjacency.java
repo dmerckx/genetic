@@ -19,11 +19,11 @@ public class Adjacency extends Representation {
 	}
 	
 	public Adjacency(Problem problem, List<Integer> path ) {
+		this.problem = problem;
 		if(path.isEmpty())
 			fillPath();
 		else
 			this.path = path;
-		this.problem = problem;
 	}
 	
 	private void fillPath() {
@@ -70,6 +70,24 @@ public class Adjacency extends Representation {
 	
 	public int size() {
 		return path.size();
+	}
+	
+	public Edge getRandomEdge(Random rand) {
+		int begin = rand.nextInt(size());
+		int end = path.get(begin);
+		return new Edge(begin, end);
+	}
+
+	public Edge getNextEdge(Edge edge) {
+		return new Edge(edge.getEnd(),path.get(edge.getEnd()));
+	}
+	
+	public void printPath() {
+		int counter = 0;
+		for (int nb : path) {
+			System.out.println(counter + " " + nb);
+			counter++;
+		}
 	}
 	
 }

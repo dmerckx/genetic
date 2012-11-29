@@ -1,4 +1,4 @@
-package crossover;
+package representations;
 
 public class Edge {
 
@@ -16,6 +16,10 @@ public class Edge {
 	
 	public int getEnd() {
 		return end;
+	}
+	
+	public String toString() {
+		return "begin: " + begin + " end: " + end;
 	}
 	
 }

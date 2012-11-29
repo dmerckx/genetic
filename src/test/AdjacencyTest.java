@@ -1,6 +1,7 @@
 package test;
 
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
@@ -12,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import representations.Adjacency;
+import representations.Edge;
 import util.ProblemGenerator;
 
 public class AdjacencyTest {
@@ -44,8 +46,26 @@ public class AdjacencyTest {
 	@Test
 	public void testGetFitness_complex() {
 		ad.setRandom(new Random(1));
+		ad.printPath();
 		double fitness = 2444.588783;
 		assertTrue(Math.floor(ad.getFitness()*1000000)/1000000 - fitness <= 1e-15);
+	}
+	
+	@Test
+	public void testGetRandomEdge() {
+		Edge edge = ad.getRandomEdge(new Random(65));
+		assertEquals(11,edge.getBegin());
+		assertEquals(0,edge.getEnd());
+	}
+	
+	@Test
+	public void testGetNextEdge() {
+		Edge edge = ad.getNextEdge(new Edge(0,14));
+		assertEquals(14,edge.getBegin());
+		assertEquals(4,edge.getEnd());
+		Edge edge1 = ad.getNextEdge(new Edge(10,11));
+		assertEquals(11,edge1.getBegin());
+		assertEquals(0,edge1.getEnd());
 	}
 	
 }
