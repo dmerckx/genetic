@@ -44,22 +44,6 @@ public class Adjacency extends Representation {
 			index = pathRep.get(i);
 		}
 		path.set(index, 0);
-		this.problem = problem;
-		if(path.isEmpty())
-			fillPath();
-		else
-			this.path = path;
-	}
-	
-	private void fillPath() {
-		this.path = new ArrayList<Integer>();
-		for(int i = 0; i < problem.size(); i++){
-			path.add(i);
-		}
-	}
-
-	public void setRandom(Random rand){
-		Collections.shuffle(path, rand);
 	}
 	
 	@Override
