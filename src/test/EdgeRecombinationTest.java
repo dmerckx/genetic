@@ -1,11 +1,12 @@
 package test;
 
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import main.Problem;
 
@@ -35,7 +36,7 @@ public class EdgeRecombinationTest {
 		problem = ProblemGenerator.generate("../genetic/datafiles/rondrit008.tsp");
 		
 		params = new Params();
-		params.rand = new Random(1);
+		params.rand = new Random(33);
 		
 		List<Integer> path1 = new ArrayList<Integer>();
 		path1.add(0);
@@ -70,66 +71,70 @@ public class EdgeRecombinationTest {
 
 	@Test
 	public void constructEdgeMapTest() {
-		int[][] edgeMap = edgeRecombination.constructEdgeMap(parent1, parent2);
+		List<Set<Integer>> edgeMap = edgeRecombination.constructEdgeMap(parent1, parent2);
 		//0
-		assertEquals(8,edgeMap[0][0]);
-		assertEquals(1,edgeMap[0][1]);
-		assertEquals(3,edgeMap[0][2]);
-		assertEquals(1,edgeMap[0][3]);
+		assertTrue(edgeMap.get(0).contains(8));
+		assertTrue(edgeMap.get(0).contains(1));
+		assertTrue(edgeMap.get(0).contains(3));
 		
 //		1
-		assertEquals(0,edgeMap[1][0]);
-		assertEquals(2,edgeMap[1][1]);
-		assertEquals(0,edgeMap[1][2]);
-		assertEquals(7,edgeMap[1][3]);
+		assertTrue(edgeMap.get(1).contains(0));
+		assertTrue(edgeMap.get(1).contains(2));
+		assertTrue(edgeMap.get(1).contains(7));
 	
 //		2
-		assertEquals(1,edgeMap[2][0]);
-		assertEquals(3,edgeMap[2][1]);
-		assertEquals(8,edgeMap[2][2]);
-		assertEquals(4,edgeMap[2][3]);
+		assertTrue(edgeMap.get(2).contains(1));
+		assertTrue(edgeMap.get(2).contains(3));
+		assertTrue(edgeMap.get(2).contains(8));
+		assertTrue(edgeMap.get(2).contains(4));
 		
 //		3
-		assertEquals(4,edgeMap[3][0]);
-		assertEquals(0,edgeMap[3][1]);
-		assertEquals(2,edgeMap[3][2]);
-		assertEquals(4,edgeMap[3][3]);
+		assertTrue(edgeMap.get(3).contains(4));
+		assertTrue(edgeMap.get(3).contains(0));
+		assertTrue(edgeMap.get(3).contains(2));
 		
 //		4
-		assertEquals(3,edgeMap[4][0]);
-		assertEquals(5,edgeMap[4][1]);
-		assertEquals(2,edgeMap[4][2]);
-		assertEquals(3,edgeMap[4][3]);
+		assertTrue(edgeMap.get(4).contains(3));
+		assertTrue(edgeMap.get(4).contains(5));
+		assertTrue(edgeMap.get(4).contains(2));
 		
 //		5
-		assertEquals(4,edgeMap[5][0]);
-		assertEquals(6,edgeMap[5][1]);
-		assertEquals(6,edgeMap[5][2]);
-		assertEquals(8,edgeMap[5][3]);
+		assertTrue(edgeMap.get(5).contains(4));
+		assertTrue(edgeMap.get(5).contains(6));
+		assertTrue(edgeMap.get(5).contains(8));
 		
 //		6
-		assertEquals(7,edgeMap[6][0]);
-		assertEquals(5,edgeMap[6][1]);
-		assertEquals(5,edgeMap[6][2]);
-		assertEquals(7,edgeMap[6][3]);
+		assertTrue(edgeMap.get(6).contains(7));
+		assertTrue(edgeMap.get(6).contains(5));
 		
 //		7
-		assertEquals(1,edgeMap[7][0]);
-		assertEquals(6,edgeMap[7][1]);
-		assertEquals(6,edgeMap[7][2]); 
-		assertEquals(8,edgeMap[7][3]); 
+		assertTrue(edgeMap.get(7).contains(1));
+		assertTrue(edgeMap.get(7).contains(6));
+		assertTrue(edgeMap.get(7).contains(8));
 		
 //		8
-		assertEquals(5,edgeMap[8][0]);
-		assertEquals(2,edgeMap[8][1]);
-		assertEquals(7,edgeMap[8][2]);
-		assertEquals(0,edgeMap[8][3]);
+		assertTrue(edgeMap.get(8).contains(5));
+		assertTrue(edgeMap.get(8).contains(2));
+		assertTrue(edgeMap.get(8).contains(7));
+		assertTrue(edgeMap.get(8).contains(0));
 		
 	}
 	
 	@Test
-	public void getFitnessTest() {
-		//TODO
+	public void breedTest() {
+		List<Integer> result = edgeRecombination.breed(parent1, parent2);
+		
+		assertEquals((Integer)0, result.get(0));
+		assertEquals((Integer)3, result.get(1));
+		assertEquals((Integer)4, result.get(2));
+		assertEquals((Integer)5, result.get(3));
+		assertEquals((Integer)6, result.get(4));
+		assertEquals((Integer)7, result.get(5));
+		assertEquals((Integer)8, result.get(6));
+		assertEquals((Integer)2, result.get(7));
+		assertEquals((Integer)1, result.get(8));
+		
+		
 	}
 	
 }

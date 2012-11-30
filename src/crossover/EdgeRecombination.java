@@ -1,15 +1,17 @@
 package crossover;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import main.Problem;
 import params.Params;
+import representations.path.Path;
 import crossover.factory.RepresentationFactory;
 
-import representations.path.Path;
+public class EdgeRecombination extends CrossOver<Path> {
 
-public class EdgeRecombination extends CrossOver<Path>{
-	
 	public EdgeRecombination(RepresentationFactory<Path> factory,
 			Problem problem, Params params) {
 		super(factory, problem, params);
@@ -17,62 +19,140 @@ public class EdgeRecombination extends CrossOver<Path>{
 
 	@Override
 	public List<Integer> breed(Path p1, Path p2) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Integer> result = new ArrayList<Integer>();
+		List<Integer> unvisitedCities = getCities();
+		List<Set<Integer>> edgeMap = constructEdgeMap(p1, p2);
+		int currentCity = chooseCity(p1, p2);
+		while (unvisitedCities.size() > 1) {
+			removeOccurences(currentCity, edgeMap);
+			result.add(currentCity);
+			unvisitedCities.remove(new Integer(currentCity));
+			if (hasNeighbours(currentCity, edgeMap))
+				currentCity = chooseCity(currentCity, edgeMap);
+			else
+				currentCity = chooseCity(unvisitedCities);
+		}
+		result.add(unvisitedCities.get(0));
+		return result;
 	}
-	
-	public int[][] constructEdgeMap(Path parent1, Path parent2) {
-		int[][] edgeMap = new int[parent1.size()][parent1.size()];
+
+	/**
+	 * Choose a random city from the list of unvisited cities (corresponds to
+	 * step 5 of the algorithm).
+	 * 
+	 * @param unvisitedCities
+	 * @return
+	 */
+	private int chooseCity(List<Integer> unvisitedCities) {
+		return unvisitedCities.get(params.rand.nextInt(unvisitedCities.size()));
+	}
+
+	/**
+	 * Choose the city which has the fewest entities in its (own) edge list. In case of ties, the first city is chosen.
+	 * TODO the tie case should maybe be chosen completely random!
+	 * 
+	 * @param edgeMap
+	 * @return
+	 */
+	private int chooseCity(int currentCity, List<Set<Integer>> edgeMap) {
+		int currentMinimum = -1;
+		int minimumNbNeighbours = 4;
+		for (int neighbour : edgeMap.get(currentCity)) {
+			int nbNeighbours = edgeMap.get(neighbour).size();
+			if(nbNeighbours <= minimumNbNeighbours && nbNeighbours > 0) {
+				currentMinimum = neighbour;
+				minimumNbNeighbours = nbNeighbours;
+			}
+		}
+		return currentMinimum;
+	}
+
+	/**
+	 * Returns a list with all the integers between 0 (inc.) and the size of the
+	 * problem (inc.).
+	 * 
+	 * @return
+	 */
+	private List<Integer> getCities() {
+		List<Integer> cities = new ArrayList<Integer>();
+		for (int i = 0; i < problem.size(); i++) {
+			cities.add(i);
+		}
+		return cities;
+	}
+
+	/**
+	 * Returns true if the given city still has entities in its edge list.
+	 * @param city
+	 * @param edgeMap
+	 * @return
+	 */
+	private boolean hasNeighbours(int city, List<Set<Integer>> edgeMap) {
+		return !edgeMap.get(city).isEmpty();
+	}
+
+	/**
+	 * Remove all occurrences of the given city from the right hand side of
+	 * the given edgemap. (corresponds to step 2 of the algorithm).
+	 * 
+	 * @param city
+	 * @param edgeMap
+	 */
+	private void removeOccurences(int city, List<Set<Integer>> edgeMap) {
+		for (int i = 0; i < edgeMap.size(); i++) {
+			Set<Integer> currentEdgeSet = edgeMap.get(i);
+			if(currentEdgeSet.contains(city))
+				currentEdgeSet.remove(city);
+		}
+	}
+
+	/**
+	 * Choose a city of one of the 2 parents at random.
+	 * 
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
+	private int chooseCity(Path p1, Path p2) {
+		return params.rand.nextFloat() > 0.5 ? p1.getRandomCity(params.rand)
+				: p2.getRandomCity(params.rand);
+	}
+
+	public List<Set<Integer>> constructEdgeMap(Path parent1, Path parent2) {
+		List<Set<Integer>> edgeMap = new ArrayList<Set<Integer>>();
 		for (int city = 0; city < parent1.size(); city++) {
-			edgeMap[city] = getConnectedCities(city, parent1, parent2);
-//			for (int i = 0; i < edgeMap[0].length; i++) {
-//				System.out.println(edgeMap[city][i]);
-//			}
+			edgeMap.add(getConnectedCities(city, parent1, parent2));
 		}
 		return edgeMap;
 	}
 
-	private int[] getConnectedCities(int city, Path parent1, Path parent2) {
-		int[] result = new int[parent1.size()];
-		
-		int currentIndex = 0;
-		for (int index = 0; index < result.length; index++) {
-			currentIndex = extractConnectedCities(city, parent1, result,
-					currentIndex, index);
-			System.out.println(parent1);
-			currentIndex = extractConnectedCities(city, parent2, result,
-					currentIndex, index);
-			System.out.println(parent2);
+	private Set<Integer> getConnectedCities(int city, Path parent1, Path parent2) {
+		Set<Integer> result = new HashSet<Integer>();
+		for (int index = 0; index < parent1.size(); index++) {
+			extractNeighbours(city, parent1, result, index);
+			extractNeighbours(city, parent2, result, index);
 		}
-		
 		return result;
 	}
 
-	private int extractConnectedCities(int city, Path parent, int[] result,
-			int currentIndex, int j) {
-		if(parent.getPath().get(j)==city) {
-			System.out.println("city: " + (city+1));
-			System.out.println("index: " + (j+1));
-			result[currentIndex] = convertToValidLeftNeighbour(parent, j, result.length);
-			System.out.println("left neighbour: " + (result[currentIndex]+1));
-			currentIndex++;
-			result[currentIndex] = convertToValidRightNeighbour(parent, j, result.length);
-			System.out.println("right neighbour: " + (result[currentIndex]+1));
-			currentIndex++;
-			System.out.println("city: " + (city+1) + " with neighbours: " + (result[currentIndex-2]+1) +" and " + (result[currentIndex-1]+1));
+	private void extractNeighbours(int city, Path parent, Set<Integer> neighbours, int j) {
+		if (parent.getPath().get(j) == city) {
+			neighbours.add(convertToValidLeftNeighbour(parent, j,
+					parent.size()));
+			neighbours.add(convertToValidRightNeighbour(parent, j,
+					parent.size()));
 		}
-		return currentIndex;
 	}
 
 	private int convertToValidRightNeighbour(Path parent, int j, int length) {
-		int index = (j+1 < length) ? j+1 : 0;
+		int index = (j + 1 < length) ? j + 1 : 0;
 		return parent.getPath().get(index);
 	}
 
 	private int convertToValidLeftNeighbour(Path parent, int j, int length) {
-		int index = (j-1 >= 0) ? j-1 : length-1;
+		int index = (j - 1 >= 0) ? j - 1 : length - 1;
 		return parent.getPath().get(index);
-		
+
 	}
 
 }

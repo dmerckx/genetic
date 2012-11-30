@@ -75,10 +75,13 @@ public class Path extends Representation {
 		return new Edge(edge.getEnd(),path.get(edge.getEnd()));
 	}
 	
+	public int getRandomCity(Random rand) {
+		return path.get(rand.nextInt(path.size()));
+	}
+	
 	public String printPath() {
 		String print ="";
 		for (int nb : path) {
-//			System.out.println(counter + " " + nb);
 			print = print + nb + " ";
 		}
 		return print;
