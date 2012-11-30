@@ -4,6 +4,10 @@ import java.util.Random;
 
 public abstract class Representation implements Comparable<Representation>{
 
+	private boolean isCached = false;
+	
+	protected double fitness;
+	
 	public int compareTo(Representation r2) {
 		if(getFitness() < r2.getFitness())
 			return -1;
@@ -12,9 +16,29 @@ public abstract class Representation implements Comparable<Representation>{
 		return 0;
 	}
 	
-	public abstract void setRandom(Random rand);
+	public final void setRandom(Random rand) {
+		setRandomImpl(rand);
+		
+		isCached = false;
+	}
 	
-	public abstract double getFitness();
+	public abstract void setRandomImpl(Random rand);
 	
-	public abstract  void mutate();
+	public final double getFitness() {
+		if(!isCached) {
+			fitness = 0;
+			getFitnessImpl();
+			isCached = true;
+		}
+		return fitness;
+	}
+	
+	public abstract void getFitnessImpl();
+
+	public final void mutate() {
+		mutateImpl();
+		isCached = false;
+	}
+	
+	public abstract void mutateImpl();
 }

@@ -10,8 +10,7 @@ import main.Problem;
 public class Adjacency extends Representation {
 
 	private List<Integer> path;
-	private boolean isCached = false;
-	private double fitness;
+	
 	private Problem problem;
 	
 	public Adjacency(Problem problem){
@@ -25,7 +24,8 @@ public class Adjacency extends Representation {
 		this.path = path;
 	}
 
-	public void setRandom(Random rand){
+	@Override
+	public void setRandomImpl(Random rand){
 		List<Integer> pathRep = new ArrayList<Integer>();
 		path = new ArrayList<Integer>();
 		
@@ -46,16 +46,8 @@ public class Adjacency extends Representation {
 	}
 	
 	@Override
-	public double getFitness() {
-		if(!isCached)
-			calculateFitness();
-		
-		return fitness;
-	}
-	
-	private void calculateFitness(){
+	public void getFitnessImpl() {
 		recursiveCalculation(0);
-		isCached = true;
 	}
 	
 	private void recursiveCalculation(int nextCity) {
@@ -68,7 +60,7 @@ public class Adjacency extends Representation {
 	}
 
 	@Override
-	public void mutate() {
+	public void mutateImpl() {
 		// TODO Auto-generated method stub
 	}
 	
@@ -90,10 +82,8 @@ public class Adjacency extends Representation {
 	}
 	
 	public void printPath() {
-		int counter = 0;
-		for (int nb : path) {
-			System.out.println(counter + " " + nb);
-			counter++;
+		for (int i =0; i < path.size(); i++) {
+			System.out.println(i + " " + path.get(i));
 		}
 	}
 	

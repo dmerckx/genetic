@@ -12,8 +12,6 @@ import representations.Representation;
 public class Path extends Representation {
 
 	private List<Integer> path;
-	private boolean isCached = false;
-	private double fitness;
 	private Problem problem;
 	
 	public Path(Problem problem){
@@ -27,34 +25,27 @@ public class Path extends Representation {
 		this.path = path;
 	}
 
-	public void setRandom(Random rand){
+	@Override
+	public void setRandomImpl(Random rand){
 		
 		for (int i = 0; i < problem.size(); i++) {
 			path.add(i);
 		}
 		Collections.shuffle(path, rand);
-		
 	}
 	
 	@Override
-	public double getFitness() {
-		if(!isCached)
-			calculateFitness();
-		
-		return fitness;
-	}
-	
-	private void calculateFitness(){
+	public void getFitnessImpl() {
+		fitness = 0;
 		for (int i = 0; i < path.size()-1; i++) {
 			fitness += problem.distance(path.get(i), path.get(i+1));
 			if(i+1 == path.size()-1)
 				fitness += problem.distance(path.get(i+1), path.get(0));
 		}
-		isCached = true;
 	}
 
 	@Override
-	public void mutate() {
+	public void mutateImpl() {
 		// TODO Auto-generated method stub
 	}
 	

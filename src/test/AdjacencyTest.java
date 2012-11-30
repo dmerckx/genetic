@@ -21,6 +21,7 @@ public class AdjacencyTest {
 	private static Problem problem;	
 	private static Adjacency ad;
 	private static String filePath = "../genetic/datafiles/rondrit016.tsp";
+	public static final int rounding = 1000000;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -37,33 +38,39 @@ public class AdjacencyTest {
 	@Test
 	public void testGetFitness_simple() {
 		ad.setRandom(new Random(5));
-		double fitness = 317.254916;
-		assertTrue(Math.floor(ad.getFitness()*1000000)/1000000 - fitness <= 1e-15);
+		double fitness = 2439.190713;
+		assertTrue(Math.abs((Math.floor(ad.getFitness()*rounding)/rounding) - fitness) <= 1e-15);
 	}
 	
 	@Test
 	public void testGetFitness_complex() {
 		ad.setRandom(new Random(1));
-		ad.printPath();
-		double fitness = 2444.588783;
-		assertTrue(Math.floor(ad.getFitness()*1000000)/1000000 - fitness <= 1e-15);
+		double fitness = 3210.522106;
+		assertTrue(Math.abs((Math.floor(ad.getFitness()*rounding)/rounding) - fitness) <= 1e-15);
 	}
 	
+	@SuppressWarnings("serial")
 	@Test
 	public void testGetRandomEdge() {
-		Edge edge = ad.getRandomEdge(new Random(65));
-		assertEquals(11,edge.getBegin());
-		assertEquals(0,edge.getEnd());
+		Random rand = new Random(65) {
+			@Override
+			public int nextInt(int n) {
+				return 0;
+			}
+		};
+		Edge edge = ad.getRandomEdge(rand);
+		assertEquals(0,edge.getBegin());
+		assertEquals(3,edge.getEnd());
 	}
 	
 	@Test
 	public void testGetNextEdge() {
 		Edge edge = ad.getNextEdge(new Edge(0,14));
 		assertEquals(14,edge.getBegin());
-		assertEquals(4,edge.getEnd());
+		assertEquals(12,edge.getEnd());
 		Edge edge1 = ad.getNextEdge(new Edge(10,11));
 		assertEquals(11,edge1.getBegin());
-		assertEquals(0,edge1.getEnd());
+		assertEquals(4,edge1.getEnd());
 	}
 	
 }
