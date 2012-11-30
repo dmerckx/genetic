@@ -4,43 +4,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import crossover.factory.AdjacencyFactory;
+
 import main.Problem;
 import params.Params;
 import representations.Adjacency;
 import representations.Edge;
 
-public class AlternatingEdge implements CrossOver<Adjacency> {
+public class AlternatingEdge extends CrossOver<Adjacency> {
 
-	private Params params;
-	private Problem problem;
 
-	public AlternatingEdge(Params params, Problem problem) {
-		this.params = params;
-		this.problem = problem;
+	public AlternatingEdge(AdjacencyFactory adjacencyFactory, Params params, Problem problem) {
+		super(adjacencyFactory, problem, params);
 	}
 
+	//TODO misschien sneller met array list door de omzettingen die moeten gebeuren
 	@Override
-	public List<Adjacency> doCrossOver(List<Adjacency> selection) {
-
-		List<Adjacency> children = new ArrayList<Adjacency>();
-
-		while (!selection.isEmpty()) {
-			Adjacency firstParent = selectParent(selection);
-			Adjacency secondParent = selectParent(selection);
-
-			List<Integer> path = constructPath(firstParent, secondParent);
-
-			children.add(new Adjacency(problem, path));
-		}
-
-		return children;
-	}
-
-	private List<Integer> constructPath(Adjacency firstParent,
+	protected List<Integer> breed(Adjacency firstParent,
 			Adjacency secondParent) {
 		Integer[] result = new Integer[firstParent.size()];
 		List<String> options = initializeOptions(firstParent.size());
-		Adjacency currentParent = secondParent;
+		Adjacency currentParent = firstParent;
 		Edge currentEdge = currentParent.getRandomEdge(params.rand);
 		options.remove(currentEdge.getEnd() + "");
 		int counter = 1;
@@ -123,10 +107,6 @@ public class AlternatingEdge implements CrossOver<Adjacency> {
 
 	private boolean hasCycle(Edge currentEdge, Integer[] result) {
 		return result[currentEdge.getEnd()] != null;
-	}
-
-	private Adjacency selectParent(List<Adjacency> selection) {
-		return selection.remove(params.rand.nextInt(selection.size()));
 	}
 
 }

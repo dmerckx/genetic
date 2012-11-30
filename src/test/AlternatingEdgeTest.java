@@ -15,6 +15,7 @@ import params.Params;
 import representations.Adjacency;
 import util.ProblemGenerator;
 import crossover.AlternatingEdge;
+import crossover.factory.AdjacencyFactory;
 
 public class AlternatingEdgeTest {
 
@@ -61,7 +62,8 @@ public class AlternatingEdgeTest {
 		List<Adjacency> parents = new ArrayList<Adjacency>();
 		parents.add(firstParent);
 		parents.add(secondParent);
-		AlternatingEdge crossover = new AlternatingEdge(params, problem);
+		
+		AlternatingEdge crossover = new AlternatingEdge(new AdjacencyFactory(),params, problem);
 		System.out.println(crossover.doCrossOver(parents).get(0).getPath());
 	}
 
