@@ -12,6 +12,8 @@ import factory.RepresentationFactory;
 
 public class EdgeRecombination extends CrossOver<Path> {
 
+	// TODO the tie case in choose city(edgeMap) should maybe be chosen completely random!
+	
 	public EdgeRecombination(RepresentationFactory<Path> factory,
 			Problem problem, Params params) {
 		super(factory, problem, params);
@@ -48,8 +50,7 @@ public class EdgeRecombination extends CrossOver<Path> {
 	}
 
 	/**
-	 * Choose the city which has the fewest entities in its (own) edge list. In case of ties, the first city is chosen.
-	 * TODO the tie case should maybe be chosen completely random!
+	 * Choose the city which has the fewest entities in its (own) edge list. In case of ties, the last city is chosen.
 	 * 
 	 * @param edgeMap
 	 * @return

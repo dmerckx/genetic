@@ -73,7 +73,7 @@ public class Adjacency extends Representation {
 	}
 
 	public Edge getNextEdge(Edge edge) {
-		return new Edge(edge.getEnd(),path.get(edge.getEnd()));
+		return new Edge(edge.getEnd(),getPath().get(edge.getEnd()));
 	}
 	
 	public void printPath() {

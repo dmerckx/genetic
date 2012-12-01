@@ -4,6 +4,8 @@ package test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import main.Problem;
@@ -67,13 +69,25 @@ public class AdjacencyTest {
 	
 	@Test
 	public void testGetNextEdge() {
-		//TODO ik zie deze af en toe falen
-		Edge edge = ad.getNextEdge(new Edge(0,14));
-		assertEquals(14,edge.getBegin());
-		assertEquals(12,edge.getEnd());
-		Edge edge1 = ad.getNextEdge(new Edge(10,11));
-		assertEquals(11,edge1.getBegin());
-		assertEquals(4,edge1.getEnd());
+		Adjacency ad1 = new Adjacency(problem) {
+			@Override
+			public List<Integer> getPath() {
+				List<Integer> result = new ArrayList<Integer>();
+				result.add(5);
+				result.add(0);
+				result.add(1);
+				result.add(2);
+				result.add(3);
+				result.add(4);
+				return result;
+			}
+		};
+		Edge edge = ad1.getNextEdge(new Edge(0,5));
+		assertEquals(5,edge.getBegin());
+		assertEquals(4,edge.getEnd());
+		Edge edge1 = ad1.getNextEdge(new Edge(5,4));
+		assertEquals(4,edge1.getBegin());
+		assertEquals(3,edge1.getEnd());
 	}
 	
 	@Test

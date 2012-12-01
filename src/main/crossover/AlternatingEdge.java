@@ -13,6 +13,7 @@ import representations.Edge;
 
 public class AlternatingEdge extends CrossOver<Adjacency> {
 
+	//TODO lijst met string omzetten naar lijst met ints en werken met new Integer() voor het removen.
 
 	public AlternatingEdge(AdjacencyFactory adjacencyFactory, Params params, Problem problem) {
 		super(adjacencyFactory, problem, params);
@@ -65,7 +66,6 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 				end = Integer.valueOf(options.get(0));
 			else {
 				end = getRemainingCity(result);
-				System.out.println(end);
 			}
 			currentEdge = new Edge(currentEdge.getEnd(), end);
 		}
