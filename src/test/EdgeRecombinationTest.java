@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Set;
 
 import main.Problem;
+import main.crossover.EdgeRecombination;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -17,8 +18,7 @@ import org.junit.Test;
 import params.Params;
 import representations.path.Path;
 import util.ProblemGenerator;
-import crossover.EdgeRecombination;
-import crossover.factory.PathFactory;
+import factory.PathFactory;
 
 public class EdgeRecombinationTest {
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import main.Problem;
+import representations.path.Path;
 
 public class Adjacency extends Representation {
 
@@ -46,24 +47,18 @@ public class Adjacency extends Representation {
 	}
 	
 	@Override
-	public void getFitnessImpl() {
-		recursiveCalculation(0);
+	public double getPathLength() {
+		return recursiveCalculation(0);
 	}
 	
-	private void recursiveCalculation(int nextCity) {
+	private double recursiveCalculation(int nextCity) {
 		int c1 = nextCity;
 		int c2 = path.get(nextCity);
-		fitness += problem.distance(c1, c2);
 		if(c2 == 0)
-			return;
-		recursiveCalculation(c2);
+			return problem.distance(c1, c2);
+		return problem.distance(c1, c2) + recursiveCalculation(c2);
 	}
 
-	@Override
-	public void mutateImpl() {
-		// TODO Auto-generated method stub
-	}
-	
 	public List<Integer> getPath() {
 		return path;
 	}
@@ -85,6 +80,31 @@ public class Adjacency extends Representation {
 		for (int i =0; i < path.size(); i++) {
 			System.out.println(i + " " + path.get(i));
 		}
+	}
+
+	
+	@Override
+	public Path toPath() {
+		List<Integer> pathRep = new ArrayList<Integer>();
+		
+		int index = 0;
+		for(int i = 0; i < problem.size(); i++){
+			pathRep.add(path.get(index));
+			index = path.get(index);
+		}
+		
+		return new Path(problem, pathRep);
+	}
+
+	@Override
+	public void fromPath(Path p) {
+		List<Integer> pathRep = p.getPath();
+		
+		for(int i = 0; i < problem.size()-1; i++){
+			path.set(pathRep.get(i), pathRep.get(i+1));
+		}
+		path.set(pathRep.get(problem.size()-1), pathRep.get(0));
+		isChanged();
 	}
 	
 }

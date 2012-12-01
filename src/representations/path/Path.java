@@ -33,20 +33,17 @@ public class Path extends Representation {
 		}
 		Collections.shuffle(path, rand);
 	}
+
 	
 	@Override
-	public void getFitnessImpl() {
-		fitness = 0;
+	public double getPathLength() {
+		double pathLength = 0;
 		for (int i = 0; i < path.size()-1; i++) {
-			fitness += problem.distance(path.get(i), path.get(i+1));
+			pathLength += problem.distance(path.get(i), path.get(i+1));
 			if(i+1 == path.size()-1)
-				fitness += problem.distance(path.get(i+1), path.get(0));
+				pathLength += problem.distance(path.get(i+1), path.get(0));
 		}
-	}
-
-	@Override
-	public void mutateImpl() {
-		// TODO Auto-generated method stub
+		return pathLength;
 	}
 	
 	public List<Integer> getPath() {
@@ -80,6 +77,17 @@ public class Path extends Representation {
 	
 	public String toString() {
 		return printPath();
+	}
+
+	@Override
+	public Path toPath() {
+		return this;
+	}
+
+	@Override
+	public void fromPath(Path path) {
+		this.path = path.path;
+		isChanged();
 	}
 	
 }

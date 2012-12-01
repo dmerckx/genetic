@@ -1,27 +1,38 @@
 package main;
-import insertion.Insertor;
+import factory.RepresentationFactory;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import main.crossover.CrossOver;
+import main.insertion.Insertor;
+import main.mutation.Mutator;
+import main.selectors.Selector;
+
 import params.Params;
 import representations.Representation;
-import selectors.SelectionStrategy;
-import crossover.CrossOver;
 
 
-public abstract class GA<R extends Representation> {
+public class GA<R extends Representation> {
 
 	protected Params params;
-	private SelectionStrategy<R> selector;
-	private CrossOver<R> crossover;
-	private Insertor<R> insertor;
+	private RepresentationFactory<R> factory;
 	
-	public GA(Params params, SelectionStrategy<R> selector, CrossOver<R> crossover, Insertor<R> insertor) {
+	private final Selector<R> selector;
+	private final CrossOver<R> crossover;
+	private final Insertor<R> insertor;
+	private final Mutator<R> mutator;
+	
+	public GA(Params params, RepresentationFactory<R> factory, Selector<R> selector,
+			CrossOver<R> crossover, Insertor<R> insertor, Mutator<R> mutator) {
 		this.params = params;
+		this.factory = factory;
+		
 		this.selector = selector;
 		this.crossover = crossover;
 		this.insertor = insertor;
+		this.mutator = mutator;
 	}
 	
 	public void run(Problem problem, History history){
@@ -74,9 +85,20 @@ public abstract class GA<R extends Representation> {
 	private void mutate(List<R> selection){
 		for(R chrom : selection){ 
 			if( params.rand.nextFloat() > params.mutation )
-				chrom.mutate();
+				mutator.mutate(chrom);
 		}
 	}
 	
-	public abstract List<R> initPopulation(Problem problem);
+	public List<R> initPopulation(Problem problem){
+		List<R> result = new ArrayList<R>();
+		
+		for(int i=0; i < problem.size(); i++){
+			R chrom = factory.create(problem);
+			chrom.setRandom(params.rand);
+			result.add(chrom);
+		}
+		
+		return result;
+		
+	}
 }

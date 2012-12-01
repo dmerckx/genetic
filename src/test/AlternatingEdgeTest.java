@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import main.Problem;
+import main.crossover.AlternatingEdge;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -14,8 +15,7 @@ import org.junit.Test;
 import params.Params;
 import representations.Adjacency;
 import util.ProblemGenerator;
-import crossover.AlternatingEdge;
-import crossover.factory.AdjacencyFactory;
+import factory.AdjacencyFactory;
 
 public class AlternatingEdgeTest {
 

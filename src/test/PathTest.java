@@ -21,8 +21,7 @@ public class PathTest {
 	private static Path path;
 	private static String filePath = "../genetic/datafiles/rondrit016.tsp";
 	
-	public static final int rounding = 1000000;
-	public static final double machine_precision = 1e-15;
+	public static final double machine_precision = 1e-10;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		problem = ProblemGenerator.generate(filePath);
@@ -53,9 +52,8 @@ public class PathTest {
 
 	@Test
 	public void getFitnessTest() {
-		double fitness = 3210.522106;;
-		double diff = (Math.floor(path.getFitness()*rounding)/rounding) - fitness;
-		assertTrue(Math.abs(diff) <= machine_precision);
+		double fitness = 1 / 3210.522106;
+		assertTrue(Math.abs(path.getFitness() - fitness) <= machine_precision);
 	}
 	
 }
