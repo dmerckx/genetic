@@ -13,8 +13,6 @@ import representations.Edge;
 
 public class AlternatingEdge extends CrossOver<Adjacency> {
 
-	//TODO lijst met string omzetten naar lijst met ints en werken met new Integer() voor het removen.
-
 	public AlternatingEdge(AdjacencyFactory adjacencyFactory, Params params, Problem problem) {
 		super(adjacencyFactory, problem, params);
 	}
@@ -24,10 +22,10 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 	protected List<Integer> breed(Adjacency firstParent,
 			Adjacency secondParent) {
 		Integer[] result = new Integer[firstParent.size()];
-		List<String> options = initializeOptions(firstParent.size());
+		List<Integer> options = initializeOptions(firstParent.size());
 		Adjacency currentParent = firstParent;
 		Edge currentEdge = currentParent.getRandomEdge(params.rand);
-		options.remove(currentEdge.getEnd() + "");
+		options.remove(new Integer(currentEdge.getEnd()));
 		int counter = 1;
 		while (Arrays.asList(result).contains(null)) {
 			counter++;
@@ -36,7 +34,7 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 					currentEdge, isLastEdge(result, counter));
 			currentParent = (currentParent == firstParent) ? secondParent
 					: firstParent;
-			options.remove(currentEdge.getEnd() + "");
+			options.remove(new Integer(currentEdge.getEnd()));
 			if(isLastEdge(result,counter))
 				result[currentEdge.getBegin()] = currentEdge.getEnd();
 		}
@@ -58,12 +56,12 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 	 * @param isLastEdge
 	 * @return
 	 */
-	private Edge determineEdge(Integer[] result, List<String> options,
+	private Edge determineEdge(Integer[] result, List<Integer> options,
 			Adjacency currentParent, Edge currentEdge, boolean isLastEdge) {
 		if(isLastEdge) {
 			int end;
 			if(!options.isEmpty())
-				end = Integer.valueOf(options.get(0));
+				end = options.get(0);
 			else {
 				end = getRemainingCity(result);
 			}
@@ -79,29 +77,29 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 	}
 
 	private int getRemainingCity(Integer[] result) {
-		List<String> options = initializeOptions(result.length);
+		List<Integer> options = initializeOptions(result.length);
 		int index = 0;
 		while(options.size() > 1) {
-			if(result[index] != null && options.contains(result[index]+"")) {
-				options.remove(result[index]+"");
+			if(result[index] != null && options.contains(new Integer(result[index]))) {
+				options.remove(new Integer(result[index]));
 			}
 			index++;
 		}
-		return Integer.valueOf(options.get(0));
+		return options.get(0);
 	}
 
-	private List<String> initializeOptions(int number) {
-		List<String> options = new ArrayList<String>();
+	private List<Integer> initializeOptions(int number) {
+		List<Integer> options = new ArrayList<Integer>();
 		for (int i = 0; i < number; i++) {
-			options.add(i + "");
+			options.add(i);
 		}
 		return options;
 	}
 
-	private Edge chooseNewEdge(Edge currentEdge, List<String> options) {
-		int end = Integer.valueOf(options.get(params.rand.nextInt(options
-				.size())));
-		options.remove(end + "");
+	private Edge chooseNewEdge(Edge currentEdge, List<Integer> options) {
+		int end = options.get(params.rand.nextInt(options
+				.size()));
+		options.remove(new Integer(end));
 		return new Edge(currentEdge.getBegin(), end);
 	}
 
