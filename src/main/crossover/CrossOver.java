@@ -31,7 +31,7 @@ public abstract class CrossOver<R extends Representation> {
 		
 		List<R> children = new ArrayList<R>();
 
-		while (!selection.isEmpty()) {
+		while (selection.size() > 1) {
 			R firstParent = selectParent(selection);
 			R secondParent = selectParent(selection);
 

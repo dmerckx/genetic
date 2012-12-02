@@ -92,7 +92,7 @@ public class GA<R extends Representation> {
 	public List<R> initPopulation(Problem problem){
 		List<R> result = new ArrayList<R>();
 		
-		for(int i=0; i < problem.size(); i++){
+		for(int i=0; i < params.popSize; i++){
 			R chrom = factory.create(problem);
 			chrom.setRandom(params.rand);
 			result.add(chrom);
