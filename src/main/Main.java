@@ -2,6 +2,7 @@ package main;
 
 import main.crossover.AlternatingEdge;
 import main.crossover.CrossOver;
+import main.crossover.EdgeRecombination;
 import main.insertion.FBI;
 import main.insertion.Insertor;
 import main.mutation.ExchangeMutator;
@@ -12,23 +13,35 @@ import params.Params;
 import params.TestParams;
 import representations.Adjacency;
 import representations.Representation;
+import representations.path.Path;
 import util.ProblemGenerator;
 import factory.AdjacencyFactory;
+import factory.PathFactory;
 
 
 public class Main {
 
 	public static void main(String[] args) {
 		Problem problem = ProblemGenerator.generate("../genetic/datafiles/rondrit016.tsp");
-		History history = new History("../genetic/result/result.txt");
-		createGA(problem).run(problem, history);
+		History history1 = new History("../genetic/result/result.txt");
+		createGA1(problem).run(problem, history1);
+		
+		System.out.println("Adjacency");
+		history1.printResults(100000);
+		
+
+		History history2 = new History("../genetic/result/result.txt");
+		createGA2(problem).run(problem, history2);
+
+		System.out.println("Path");
+		history2.printResults(100000);
 	}
 	
 	
 	public static <R extends Representation>  void run(GA<R> ga){
 	}
 	
-	public static GA<Adjacency> createGA(Problem problem){
+	public static GA<Adjacency> createGA1(Problem problem){
 		Params params = createParams(true);
 		AdjacencyFactory factory = new AdjacencyFactory();
 		Selector<Adjacency> selector = new SUS<Adjacency>(params);
@@ -38,6 +51,16 @@ public class Main {
 		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator);
 	}
 
+	public static GA<Path> createGA2(Problem problem){
+		Params params = createParams(true);
+		PathFactory factory = new PathFactory();
+		Selector<Path> selector = new SUS<Path>(params);
+		CrossOver<Path> crossover = new EdgeRecombination(factory, problem, params);
+		Insertor<Path> insertor =new FBI<Path>(params);
+		Mutator<Path> mutator = new ExchangeMutator<Path>(params);
+		return new GA<Path>(params, factory, selector, crossover, insertor, mutator);
+	}
+	
 	/**
 	 * useTestParams can be set to true to use the predefined TestParams class which has default values.
 	 * @param useTestParams

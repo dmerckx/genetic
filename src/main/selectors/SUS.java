@@ -29,12 +29,9 @@ public class SUS<R extends Representation> extends Selector<R>{
 		for(int i=0; i < nrToSelect; i++){
 			ptrs.add(start + 1.0d * i / nrToSelect);
 		}
-
-		System.out.println(ptrs);
 		
 		for(int i =0; i < nrToSelect; i++){
 			result.add( RWS.select(pop, total, ptrs.get(i)));
-			System.out.println(result.get(i).getFitness());
 		}
 		return result;
 	}

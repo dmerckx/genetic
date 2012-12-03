@@ -44,12 +44,12 @@ public class GA<R extends Representation> {
 			//TODO: work with linkedlists instead of arraylists?
 			Collections.sort(pop);
 			
-			double best = pop.get(0).getFitness();
-			double worst = pop.get(pop.size()-1).getFitness();
+			double worst = pop.get(0).getFitness();
+			double best = pop.get(pop.size()-1).getFitness();
 			double mean = calculateMean(pop);
 			history.write(best, mean, worst);
 			
-			if(checkStop(best, pop)) break;
+			//if(checkStop(best, pop)) break;
 			
 			List<R> selection = selector.doSelection(pop);
 			
