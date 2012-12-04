@@ -32,7 +32,7 @@ public class Main {
 		history1.writeFile();
 		
 		System.out.println("Adjacency");
-		history1.printResults();
+		history1.printShort();
 		
 
 		History history2 = new History("../genetic/result/resultFBIPath.txt");
@@ -52,8 +52,8 @@ public class Main {
 		AdjacencyFactory factory = new AdjacencyFactory();
 		Selector<Adjacency> selector = new SUS<Adjacency>(params);
 		CrossOver<Adjacency> crossover = new AlternatingEdge(factory, params, problem);
-		Insertor<Adjacency> insertor =new FBI<Adjacency>(params);
-		Mutator<Adjacency> mutator = new ExchangeMutator<Adjacency>(params);
+		Insertor<Adjacency> insertor = new Nico<Adjacency>(params);
+		Mutator<Adjacency> mutator = new SimpleInversionMutator<Adjacency>(params);
 		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator);
 	}
 
@@ -62,8 +62,8 @@ public class Main {
 		PathFactory factory = new PathFactory();
 		Selector<Path> selector = new SUS<Path>(params);
 		CrossOver<Path> crossover = new EdgeRecombination(factory, problem, params);
-		Insertor<Path> insertor =new Nico<Path>(params);
-		Mutator<Path> mutator = new SimpleInversionMutator<Path>(params);
+		Insertor<Path> insertor = new Nico<Path>(params, 0.07d, 0.96d);
+		Mutator<Path> mutator = new ExchangeMutator<Path>(params);
 		return new GA<Path>(params, factory, selector, crossover, insertor, mutator);
 	}
 	
@@ -77,10 +77,10 @@ public class Main {
 		params.crossover = 0.95;
 		params.elitists = 0.05;
 		params.maxGenerations = 100;
-		params.mutation = 0.05;
+		params.mutation = 0.10;
 		params.popSize = 100;
 		params.stop = 0.95;
-		params.rand = new Random(13);
+		params.rand = new Random();
 		return useTestParams ? new TestParams() : params ;
 	}
 	

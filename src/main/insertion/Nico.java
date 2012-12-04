@@ -12,9 +12,17 @@ import representations.Representation;
 public class Nico<R extends Representation> implements Insertor<R>{
 
 	private Params params;
+	private double del;
+	private double keep;
 	
 	public Nico(Params params) {
+		this(params, 0.1d, 0.70d);
+	}
+	
+	public Nico(Params params, double del, double keep) {
 		this.params = params;
+		this.del = del;
+		this.keep = keep;
 	}
 	
 	@Override
@@ -25,8 +33,8 @@ public class Nico<R extends Representation> implements Insertor<R>{
 		oldPop.addAll(children);
 		Collections.sort(oldPop);
 		
-		int min = (int) (0.2f * oldPop.size());
-		int max = (int) (0.8f * oldPop.size());
+		int min = (int) (del * oldPop.size());
+		int max = (int) (keep * oldPop.size());
 		
 		newPop.addAll(oldPop.subList(max, oldPop.size()));
 		

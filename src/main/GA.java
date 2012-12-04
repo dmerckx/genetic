@@ -66,6 +66,16 @@ public class GA<R extends Representation> {
 			
 			i++;
 		}
+		
+		/*int doubles = 0;
+		for(R chrom:pop){
+			int d = 0;
+			for(R chrom2:pop){
+				if(chrom == chrom2)
+					d++;
+			}
+			doubles += d-1;
+		}*/
 	}
 	
 	private double calculateMean(List<R> pop){
