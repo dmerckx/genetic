@@ -53,9 +53,16 @@ public class GA<R extends Representation> {
 			
 			List<R> selection = selector.doSelection(pop);
 			
+
+			System.out.println("selection: " + selection.size());
+			
 			List<R> children = crossover.doCrossOver(selection);
 			
+			System.out.println("children: " + children.size());
+			
 			mutate(children);
+			
+			System.out.println("pop: " + pop.size());
 			
 			pop = insertor.merge(pop, children);
 			
@@ -83,8 +90,8 @@ public class GA<R extends Representation> {
 	}
 	
 	private void mutate(List<R> selection){
-		for(R chrom : selection){ 
-			if( params.rand.nextFloat() > params.mutation )
+		for(R chrom : selection){
+			if( params.rand.nextFloat() < params.mutation )
 				mutator.mutate(chrom);
 		}
 	}

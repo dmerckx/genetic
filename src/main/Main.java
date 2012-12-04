@@ -7,6 +7,8 @@ import main.crossover.CrossOver;
 import main.crossover.EdgeRecombination;
 import main.insertion.FBI;
 import main.insertion.Insertor;
+import main.insertion.Nico;
+import main.mutation.ExchangeMutator;
 import main.mutation.Mutator;
 import main.mutation.SimpleInversionMutator;
 import main.selectors.SUS;
@@ -33,11 +35,11 @@ public class Main {
 		history1.printResults();
 		
 
-		History history2 = new History("../genetic/result/result.txt");
+		/*History history2 = new History("../genetic/result/result.txt");
 		createGA2(problem).run(problem, history2);
 
 		System.out.println("Path");
-		history2.printShort();
+		history2.printShort();*/
 	}
 	
 	
@@ -49,8 +51,8 @@ public class Main {
 		AdjacencyFactory factory = new AdjacencyFactory();
 		Selector<Adjacency> selector = new SUS<Adjacency>(params);
 		CrossOver<Adjacency> crossover = new AlternatingEdge(factory, params, problem);
-		Insertor<Adjacency> insertor =new FBI<Adjacency>(params);
-		Mutator<Adjacency> mutator = new SimpleInversionMutator<Adjacency>(params);
+		Insertor<Adjacency> insertor =new Nico<Adjacency>(params);
+		Mutator<Adjacency> mutator = new ExchangeMutator<Adjacency>(params);
 		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator);
 	}
 
@@ -75,9 +77,9 @@ public class Main {
 		params.elitists = 0.05;
 		params.maxGenerations = 100;
 		params.mutation = 1.0;
-		params.popSize = 1000;
+		params.popSize = 100;
 		params.stop = 0.95;
-		params.rand = new Random();
+		params.rand = new Random(13);
 		return useTestParams ? new TestParams() : params ;
 	}
 	
