@@ -60,7 +60,7 @@ public class EdgeRecombination extends CrossOver<Path> {
 		int minimumNbNeighbours = 4;
 		for (int neighbour : edgeMap.get(currentCity)) {
 			int nbNeighbours = edgeMap.get(neighbour).size();
-			if(nbNeighbours <= minimumNbNeighbours && nbNeighbours > 0) {
+			if(nbNeighbours <= minimumNbNeighbours) {
 				currentMinimum = neighbour;
 				minimumNbNeighbours = nbNeighbours;
 			}
