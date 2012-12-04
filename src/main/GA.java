@@ -84,7 +84,7 @@ public class GA<R extends Representation> {
 	
 	private void mutate(List<R> selection){
 		for(R chrom : selection){ 
-			if( params.rand.nextFloat() > params.mutation )
+			if( params.rand.nextFloat() < params.mutation )
 				mutator.mutate(chrom);
 		}
 	}

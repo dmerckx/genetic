@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import main.Problem;
+import representations.Adjacency;
 import representations.Edge;
 import representations.Representation;
 
@@ -88,6 +89,15 @@ public class Path extends Representation {
 	public void fromPath(Path path) {
 		this.path = path.path;
 		isChanged();
+	}
+	
+	@Override
+	public Path clone() {
+		List<Integer> clonedList = new ArrayList<Integer>();
+		for (int i = 0; i < getPath().size(); i++) {
+			clonedList.add(getPath().get(i));
+		}
+		return new Path(problem, clonedList);
 	}
 	
 }

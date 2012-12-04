@@ -107,4 +107,13 @@ public class Adjacency extends Representation {
 		isChanged();
 	}
 	
+	@Override
+	public Adjacency clone() {
+		List<Integer> clonedList = new ArrayList<Integer>();
+		for (int i = 0; i < getPath().size(); i++) {
+			clonedList.add(getPath().get(i));
+		}
+		return new Adjacency(problem, clonedList);
+	}
+	
 }

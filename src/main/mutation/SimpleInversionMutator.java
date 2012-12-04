@@ -35,8 +35,6 @@ public class SimpleInversionMutator<R extends Representation> extends Mutator<R>
 		
 		
 		chrom.fromPath(p);
-		
-		chrom.setRandom(params.rand);
 	}
 
 }
