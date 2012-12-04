@@ -12,7 +12,7 @@ public class SimpleInversionMutator<R extends Representation> extends Mutator<R>
 
 	@Override
 	public void mutate(R chrom) {
-		/*Path p = chrom.toPath();
+		Path p = chrom.toPath();
 		
 		int rnd1, rnd2;
 		
@@ -34,9 +34,7 @@ public class SimpleInversionMutator<R extends Representation> extends Mutator<R>
 		}while(rnd2-1 >= rnd1);
 		
 		
-		
-		
-		chrom.fromPath(p);*/
+		chrom.fromPath(p);
 		
 		chrom.setRandom(params.rand);
 	}

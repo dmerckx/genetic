@@ -7,10 +7,8 @@ import main.crossover.CrossOver;
 import main.crossover.EdgeRecombination;
 import main.insertion.FBI;
 import main.insertion.Insertor;
-import main.mutation.ExchangeMutator;
 import main.mutation.Mutator;
 import main.mutation.SimpleInversionMutator;
-import main.selectors.RWS;
 import main.selectors.SUS;
 import main.selectors.Selector;
 import params.Params;
@@ -29,6 +27,7 @@ public class Main {
 		Problem problem = ProblemGenerator.generate("../genetic/datafiles/rondrit016.tsp");
 		History history1 = new History("../genetic/result/result.txt");
 		createGA1(problem).run(problem, history1);
+		history1.writeFile();
 		
 		System.out.println("Adjacency");
 		history1.printResults();
@@ -58,10 +57,10 @@ public class Main {
 	public static GA<Path> createGA2(Problem problem){
 		Params params = createParams(false);
 		PathFactory factory = new PathFactory();
-		Selector<Path> selector = new RWS<Path>(params);
+		Selector<Path> selector = new SUS<Path>(params);
 		CrossOver<Path> crossover = new EdgeRecombination(factory, problem, params);
 		Insertor<Path> insertor =new FBI<Path>(params);
-		Mutator<Path> mutator = new ExchangeMutator<Path>(params);
+		Mutator<Path> mutator = new SimpleInversionMutator<Path>(params);
 		return new GA<Path>(params, factory, selector, crossover, insertor, mutator);
 	}
 	
@@ -72,11 +71,11 @@ public class Main {
 	 */
 	private static Params createParams(boolean useTestParams) {
 		Params params = new Params();
-		params.crossover = 0.00;
-		params.elitists = 0.00;
+		params.crossover = 0.0;
+		params.elitists = 0.05;
 		params.maxGenerations = 100;
 		params.mutation = 1.0;
-		params.popSize = 100;
+		params.popSize = 1000;
 		params.stop = 0.95;
 		params.rand = new Random();
 		return useTestParams ? new TestParams() : params ;
