@@ -17,7 +17,7 @@ title('Adjacency with UI insertion');
 subplot(2,2,3);
 plotSingleGraph(resultFbiPath);
 title('Path with FBI insertion');
-axis([0 100 1300 400]);
+axis([0 100 1300 4000]);
 subplot(2,2,4);
 plotSingleGraph(resultUiPath);
 title('Path with UI insertion');

@@ -31,7 +31,7 @@ public class SUS<R extends Representation> extends Selector<R>{
 		}
 		
 		for(int i =0; i < nrToSelect; i++){
-			result.add( RWS.select(pop, total, ptrs.get(i)));
+			result.add((R) RWS.select(pop, total, ptrs.get(i)).clone());
 		}
 		return result;
 	}

@@ -17,7 +17,7 @@ public class RWS<R extends Representation> extends Selector<R>{
 		List<R> result = new ArrayList<R>();
 		
 		for(int i =0; i < nrToSelect; i++){
-			result.add( RWS.select(pop, total, params.rand.nextDouble()) );
+			result.add( (R)RWS.select(pop, total, params.rand.nextDouble()).clone() );
 		}
 		
 		return result;
