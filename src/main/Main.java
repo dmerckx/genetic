@@ -63,7 +63,7 @@ public class Main {
 		Selector<Path> selector = new SUS<Path>(params);
 		CrossOver<Path> crossover = new EdgeRecombination(factory, problem, params);
 		Insertor<Path> insertor = new Nico<Path>(params, 0.07d, 0.96d);
-		Mutator<Path> mutator = new ExchangeMutator<Path>(params);
+		Mutator<Path> mutator = new SimpleInversionMutator<Path>(params);
 		return new GA<Path>(params, factory, selector, crossover, insertor, mutator);
 	}
 	
@@ -80,7 +80,7 @@ public class Main {
 		params.mutation = 0.10;
 		params.popSize = 100;
 		params.stop = 0.95;
-		params.rand = new Random();
+		params.rand = new Random(13);
 		return useTestParams ? new TestParams() : params ;
 	}
 	
