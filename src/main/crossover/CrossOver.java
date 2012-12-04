@@ -30,7 +30,8 @@ public abstract class CrossOver<R extends Representation> {
 	public final List<R> doCrossOver(List<R> selection) {
 
 		List<R> children = new ArrayList<R>();
-		int size = selection.size()/2;
+
+		int size =selection.size()/2;
 		for (int i = 0; i < size; i++) {
 			R firstParent = selectParent(selection);
 			R secondParent = selectParent(selection);

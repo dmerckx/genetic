@@ -7,7 +7,8 @@ import main.crossover.CrossOver;
 import main.crossover.EdgeRecombination;
 import main.insertion.FBI;
 import main.insertion.Insertor;
-import main.insertion.UI;
+import main.insertion.Nico;
+import main.mutation.ExchangeMutator;
 import main.mutation.Mutator;
 import main.mutation.SimpleInversionMutator;
 import main.selectors.SUS;
@@ -26,15 +27,15 @@ public class Main {
 
 	public static void main(String[] args) {
 		Problem problem = ProblemGenerator.generate("../genetic/datafiles/rondrit016.tsp");
-		History history1 = new History("../genetic/result/resultUIAdj.txt");
+		History history1 = new History("../genetic/result/resultFBIAdj.txt");
 		createGA1(problem).run(problem, history1);
 		history1.writeFile();
 		
 		System.out.println("Adjacency");
-		history1.printResults();
+		history1.printShort();
 		
 
-		History history2 = new History("../genetic/result/resultUIPath.txt");
+		History history2 = new History("../genetic/result/resultFBIPath.txt");
 		createGA2(problem).run(problem, history2);
 		history2.writeFile();
 		
@@ -51,7 +52,7 @@ public class Main {
 		AdjacencyFactory factory = new AdjacencyFactory();
 		Selector<Adjacency> selector = new SUS<Adjacency>(params);
 		CrossOver<Adjacency> crossover = new AlternatingEdge(factory, params, problem);
-		Insertor<Adjacency> insertor =new UI<Adjacency>(params);
+		Insertor<Adjacency> insertor = new Nico<Adjacency>(params);
 		Mutator<Adjacency> mutator = new SimpleInversionMutator<Adjacency>(params);
 		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator);
 	}
@@ -61,8 +62,8 @@ public class Main {
 		PathFactory factory = new PathFactory();
 		Selector<Path> selector = new SUS<Path>(params);
 		CrossOver<Path> crossover = new EdgeRecombination(factory, problem, params);
-		Insertor<Path> insertor =new UI<Path>(params);
-		Mutator<Path> mutator = new SimpleInversionMutator<Path>(params);
+		Insertor<Path> insertor = new Nico<Path>(params, 0.07d, 0.96d);
+		Mutator<Path> mutator = new ExchangeMutator<Path>(params);
 		return new GA<Path>(params, factory, selector, crossover, insertor, mutator);
 	}
 	
@@ -76,7 +77,7 @@ public class Main {
 		params.crossover = 0.95;
 		params.elitists = 0.05;
 		params.maxGenerations = 100;
-		params.mutation = 0.05;
+		params.mutation = 0.10;
 		params.popSize = 100;
 		params.stop = 0.95;
 		params.rand = new Random();

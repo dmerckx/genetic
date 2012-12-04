@@ -1,6 +1,4 @@
 package main;
-import factory.RepresentationFactory;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,9 +7,9 @@ import main.crossover.CrossOver;
 import main.insertion.Insertor;
 import main.mutation.Mutator;
 import main.selectors.Selector;
-
 import params.Params;
 import representations.Representation;
+import factory.RepresentationFactory;
 
 
 public class GA<R extends Representation> {
@@ -53,14 +51,31 @@ public class GA<R extends Representation> {
 			
 			List<R> selection = selector.doSelection(pop);
 			
+
+			//System.out.println("selection: " + selection.size());
+			
 			List<R> children = crossover.doCrossOver(selection);
 			
+			//System.out.println("children: " + children.size());
+			
 			mutate(children);
+			
+			//System.out.println("pop: " + pop.size());
 			
 			pop = insertor.merge(pop, children);
 			
 			i++;
 		}
+		
+		/*int doubles = 0;
+		for(R chrom:pop){
+			int d = 0;
+			for(R chrom2:pop){
+				if(chrom == chrom2)
+					d++;
+			}
+			doubles += d-1;
+		}*/
 	}
 	
 	private double calculateMean(List<R> pop){
@@ -83,7 +98,8 @@ public class GA<R extends Representation> {
 	}
 	
 	private void mutate(List<R> selection){
-		for(R chrom : selection){ 
+		
+		for(R chrom : selection){
 			if( params.rand.nextFloat() < params.mutation )
 				mutator.mutate(chrom);
 		}
