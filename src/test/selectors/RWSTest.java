@@ -148,6 +148,11 @@ class DummyRep extends Representation{
 	@Override
 	public void fromPath(Path path) {
 	}
+
+	@Override
+	public Representation clone() {
+		return null;
+	}
 }
 
 class DummyRand extends Random{

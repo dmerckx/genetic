@@ -1,6 +1,4 @@
 package main;
-import factory.RepresentationFactory;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,9 +7,9 @@ import main.crossover.CrossOver;
 import main.insertion.Insertor;
 import main.mutation.Mutator;
 import main.selectors.Selector;
-
 import params.Params;
 import representations.Representation;
+import factory.RepresentationFactory;
 
 
 public class GA<R extends Representation> {
@@ -90,6 +88,7 @@ public class GA<R extends Representation> {
 	}
 	
 	private void mutate(List<R> selection){
+		
 		for(R chrom : selection){
 			if( params.rand.nextFloat() < params.mutation )
 				mutator.mutate(chrom);

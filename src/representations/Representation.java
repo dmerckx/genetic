@@ -4,7 +4,7 @@ import java.util.Random;
 
 import representations.path.Path;
 
-public abstract class Representation implements Comparable<Representation>{
+public abstract class Representation implements Comparable<Representation>, Cloneable{
 
 	private boolean isCached = false;
 	
@@ -52,4 +52,6 @@ public abstract class Representation implements Comparable<Representation>{
 	
 	public abstract Path toPath();
 	public abstract void fromPath(Path path);
+	
+	public abstract Representation clone();
 }

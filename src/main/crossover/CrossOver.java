@@ -42,8 +42,8 @@ public abstract class CrossOver<R extends Representation> {
 				children.add(factory.create(problem, path2));
 			}
 			else {
-				children.add(firstParent);
-				children.add(secondParent);
+				children.add((R)firstParent.clone());
+				children.add((R)secondParent.clone());
 			}
 		}
 		return children;

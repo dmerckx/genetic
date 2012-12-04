@@ -27,7 +27,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Problem problem = ProblemGenerator.generate("../genetic/datafiles/rondrit016.tsp");
-		History history1 = new History("../genetic/result/result.txt");
+		History history1 = new History("../genetic/result/resultFBIAdj.txt");
 		createGA1(problem).run(problem, history1);
 		history1.writeFile();
 		
@@ -35,9 +35,11 @@ public class Main {
 		history1.printResults();
 		
 
-		/*History history2 = new History("../genetic/result/result.txt");
+		/*
+		History history2 = new History("../genetic/result/resultFBIPath.txt");
 		createGA2(problem).run(problem, history2);
-
+		history2.writeFile();
+		
 		System.out.println("Path");
 		history2.printShort();*/
 	}
@@ -73,10 +75,10 @@ public class Main {
 	 */
 	private static Params createParams(boolean useTestParams) {
 		Params params = new Params();
-		params.crossover = 0.0;
+		params.crossover = 0.95;
 		params.elitists = 0.05;
 		params.maxGenerations = 100;
-		params.mutation = 1.0;
+		params.mutation = 0.05;
 		params.popSize = 100;
 		params.stop = 0.95;
 		params.rand = new Random(13);
