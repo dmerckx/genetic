@@ -10,5 +10,5 @@ public class Params {
 	public double stop;
 	public double elitists;
 	public double mach = 1e-15d;
-	public Random rand = new Random(15);
+	public Random rand = new Random();
 }

@@ -5,10 +5,8 @@ import java.util.Random;
 import main.crossover.AlternatingEdge;
 import main.crossover.CrossOver;
 import main.crossover.EdgeRecombination;
-import main.insertion.FBI;
 import main.insertion.Insertor;
 import main.insertion.Nico;
-import main.mutation.ExchangeMutator;
 import main.mutation.Mutator;
 import main.mutation.SimpleInversionMutator;
 import main.selectors.SUS;
@@ -27,7 +25,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Problem problem = ProblemGenerator.generate("../genetic/datafiles/rondrit016.tsp");
-		History history1 = new History("../genetic/result/resultFBIAdj.txt");
+		History history1 = new History("../genetic/result/resultNewAdj.txt");
 		createGA1(problem).run(problem, history1);
 		history1.writeFile();
 		
@@ -35,7 +33,7 @@ public class Main {
 		history1.printShort();
 		
 
-		History history2 = new History("../genetic/result/resultFBIPath.txt");
+		History history2 = new History("../genetic/result/resultNewPath.txt");
 		createGA2(problem).run(problem, history2);
 		history2.writeFile();
 		
@@ -63,7 +61,7 @@ public class Main {
 		Selector<Path> selector = new SUS<Path>(params);
 		CrossOver<Path> crossover = new EdgeRecombination(factory, problem, params);
 		Insertor<Path> insertor = new Nico<Path>(params, 0.07d, 0.96d);
-		Mutator<Path> mutator = new ExchangeMutator<Path>(params);
+		Mutator<Path> mutator = new SimpleInversionMutator<Path>(params);
 		return new GA<Path>(params, factory, selector, crossover, insertor, mutator);
 	}
 	
@@ -77,10 +75,10 @@ public class Main {
 		params.crossover = 0.95;
 		params.elitists = 0.05;
 		params.maxGenerations = 100;
-		params.mutation = 0.10;
+		params.mutation = 0.05;
 		params.popSize = 100;
 		params.stop = 0.95;
-		params.rand = new Random();
+		params.rand = new Random(13);
 		return useTestParams ? new TestParams() : params ;
 	}
 	
