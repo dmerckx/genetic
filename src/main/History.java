@@ -25,19 +25,28 @@ public class History {
 	}
 	
 	public void write(double best, double mean, double worst) {
-		bestList.add(best);
-		meanList.add(mean);
-		worstList.add(worst);
+		bestList.add(1/best);
+		meanList.add(1/mean);
+		worstList.add(1/worst);
 	}
 	
 	public String fileString(double val) {
 		return val + " ";
 	}
 	
-	public void printResults(double factor){
+	public void printResults(){
 		for(int i=0; i < bestList.size(); i++){
-			System.out.println(i + " : " + bestList.get(i) * factor + " | " + meanList.get(i) * factor + " | " + worstList.get(i) * factor);
+			print(i);
 		}
+	}
+	
+	public void printShort(){
+		print(0);
+		print(bestList.size()-1);
+	}
+	
+	private void print(int i){
+		System.out.println(i + " : " + bestList.get(i) + " | " + meanList.get(i) + " | " + worstList.get(i));
 	}
 	
 	public void writeFile(){

@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Random;
+
 import main.crossover.AlternatingEdge;
 import main.crossover.CrossOver;
 import main.crossover.EdgeRecombination;
@@ -7,6 +9,8 @@ import main.insertion.FBI;
 import main.insertion.Insertor;
 import main.mutation.ExchangeMutator;
 import main.mutation.Mutator;
+import main.mutation.SimpleInversionMutator;
+import main.selectors.RWS;
 import main.selectors.SUS;
 import main.selectors.Selector;
 import params.Params;
@@ -27,14 +31,14 @@ public class Main {
 		createGA1(problem).run(problem, history1);
 		
 		System.out.println("Adjacency");
-		history1.printResults(100000);
+		history1.printResults();
 		
 
 		History history2 = new History("../genetic/result/result.txt");
 		createGA2(problem).run(problem, history2);
 
 		System.out.println("Path");
-		history2.printResults(100000);
+		history2.printShort();
 	}
 	
 	
@@ -42,19 +46,19 @@ public class Main {
 	}
 	
 	public static GA<Adjacency> createGA1(Problem problem){
-		Params params = createParams(true);
+		Params params = createParams(false);
 		AdjacencyFactory factory = new AdjacencyFactory();
 		Selector<Adjacency> selector = new SUS<Adjacency>(params);
 		CrossOver<Adjacency> crossover = new AlternatingEdge(factory, params, problem);
 		Insertor<Adjacency> insertor =new FBI<Adjacency>(params);
-		Mutator<Adjacency> mutator = new ExchangeMutator<Adjacency>(params);
+		Mutator<Adjacency> mutator = new SimpleInversionMutator<Adjacency>(params);
 		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator);
 	}
 
 	public static GA<Path> createGA2(Problem problem){
-		Params params = createParams(true);
+		Params params = createParams(false);
 		PathFactory factory = new PathFactory();
-		Selector<Path> selector = new SUS<Path>(params);
+		Selector<Path> selector = new RWS<Path>(params);
 		CrossOver<Path> crossover = new EdgeRecombination(factory, problem, params);
 		Insertor<Path> insertor =new FBI<Path>(params);
 		Mutator<Path> mutator = new ExchangeMutator<Path>(params);
@@ -68,12 +72,13 @@ public class Main {
 	 */
 	private static Params createParams(boolean useTestParams) {
 		Params params = new Params();
-		params.crossover = 0.95;
-		params.elitists = 0.05;
+		params.crossover = 0.00;
+		params.elitists = 0.00;
 		params.maxGenerations = 100;
-		params.mutation = 0.05;
+		params.mutation = 1.0;
 		params.popSize = 100;
 		params.stop = 0.95;
+		params.rand = new Random();
 		return useTestParams ? new TestParams() : params ;
 	}
 	

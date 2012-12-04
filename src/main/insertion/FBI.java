@@ -27,7 +27,7 @@ public class FBI<R extends Representation> implements Insertor<R>{
 		
 		ArrayList<R> result = new ArrayList<R>();
 		for(int i =0; i < params.popSize; i++){
-			result.add(oldPop.get(i));
+			result.add(oldPop.get(oldPop.size()-(i+1)));
 		}
 		
 		return result;

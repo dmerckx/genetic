@@ -26,8 +26,8 @@ public class UI<R extends Representation> implements Insertor<R>{
 			int index = params.rand.nextInt(oldPop.size()+children.size());
 			R chrom;
 			if(index >= oldPop.size()){
-				chrom = children.get(oldPop.size() - index);
-				children.remove(oldPop.size() - index);
+				chrom = children.get(index - oldPop.size());
+				children.remove(index - oldPop.size());
 			}
 			else {
 				chrom = oldPop.get(index);
