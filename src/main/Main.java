@@ -26,7 +26,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Problem problem = ProblemGenerator.generate("../genetic/datafiles/rondrit016.tsp");
-		History history1 = new History("../genetic/result/resultFBIAdj.txt");
+		History history1 = new History("../genetic/result/resultUIAdj.txt");
 		createGA1(problem).run(problem, history1);
 		history1.writeFile();
 		
@@ -34,7 +34,7 @@ public class Main {
 		history1.printResults();
 		
 
-		History history2 = new History("../genetic/result/resultFBIPath.txt");
+		History history2 = new History("../genetic/result/resultUIPath.txt");
 		createGA2(problem).run(problem, history2);
 		history2.writeFile();
 		
@@ -51,7 +51,7 @@ public class Main {
 		AdjacencyFactory factory = new AdjacencyFactory();
 		Selector<Adjacency> selector = new SUS<Adjacency>(params);
 		CrossOver<Adjacency> crossover = new AlternatingEdge(factory, params, problem);
-		Insertor<Adjacency> insertor =new FBI<Adjacency>(params);
+		Insertor<Adjacency> insertor =new UI<Adjacency>(params);
 		Mutator<Adjacency> mutator = new SimpleInversionMutator<Adjacency>(params);
 		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator);
 	}
@@ -61,7 +61,7 @@ public class Main {
 		PathFactory factory = new PathFactory();
 		Selector<Path> selector = new SUS<Path>(params);
 		CrossOver<Path> crossover = new EdgeRecombination(factory, problem, params);
-		Insertor<Path> insertor =new FBI<Path>(params);
+		Insertor<Path> insertor =new UI<Path>(params);
 		Mutator<Path> mutator = new SimpleInversionMutator<Path>(params);
 		return new GA<Path>(params, factory, selector, crossover, insertor, mutator);
 	}
