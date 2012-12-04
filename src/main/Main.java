@@ -35,13 +35,12 @@ public class Main {
 		history1.printResults();
 		
 
-		/*
 		History history2 = new History("../genetic/result/resultFBIPath.txt");
 		createGA2(problem).run(problem, history2);
 		history2.writeFile();
 		
 		System.out.println("Path");
-		history2.printShort();*/
+		history2.printShort();
 	}
 	
 	
@@ -53,7 +52,7 @@ public class Main {
 		AdjacencyFactory factory = new AdjacencyFactory();
 		Selector<Adjacency> selector = new SUS<Adjacency>(params);
 		CrossOver<Adjacency> crossover = new AlternatingEdge(factory, params, problem);
-		Insertor<Adjacency> insertor =new Nico<Adjacency>(params);
+		Insertor<Adjacency> insertor =new FBI<Adjacency>(params);
 		Mutator<Adjacency> mutator = new ExchangeMutator<Adjacency>(params);
 		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator);
 	}
@@ -63,7 +62,7 @@ public class Main {
 		PathFactory factory = new PathFactory();
 		Selector<Path> selector = new SUS<Path>(params);
 		CrossOver<Path> crossover = new EdgeRecombination(factory, problem, params);
-		Insertor<Path> insertor =new FBI<Path>(params);
+		Insertor<Path> insertor =new Nico<Path>(params);
 		Mutator<Path> mutator = new SimpleInversionMutator<Path>(params);
 		return new GA<Path>(params, factory, selector, crossover, insertor, mutator);
 	}

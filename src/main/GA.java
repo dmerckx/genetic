@@ -52,15 +52,15 @@ public class GA<R extends Representation> {
 			List<R> selection = selector.doSelection(pop);
 			
 
-			System.out.println("selection: " + selection.size());
+			//System.out.println("selection: " + selection.size());
 			
 			List<R> children = crossover.doCrossOver(selection);
 			
-			System.out.println("children: " + children.size());
+			//System.out.println("children: " + children.size());
 			
 			mutate(children);
 			
-			System.out.println("pop: " + pop.size());
+			//System.out.println("pop: " + pop.size());
 			
 			pop = insertor.merge(pop, children);
 			
