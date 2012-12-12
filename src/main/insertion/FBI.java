@@ -10,23 +10,18 @@ import representations.Representation;
 /**
  * Fitness based insertion.
  */
-public class FBI<R extends Representation> implements Insertor<R>{
+public class FBI<R extends Representation> extends ReInsertor<R>{
 
-	private Params params;
-	
 	public FBI(Params params) {
-		this.params = params;
+		super(params);
 	}
 	
 	@Override
-	public List<R> merge(List<R> oldPop, List<R> children) {
-		
-		oldPop.addAll(children);
-		
-		Collections.sort(oldPop);
+	public List<R> selectParentSurvivors(List<R> oldPop, int nrSurvivors) {
+		Collections.sort(oldPop); //TODO: check if redundant
 		
 		ArrayList<R> result = new ArrayList<R>();
-		for(int i =0; i < params.popSize; i++){
+		for(int i =0; i < nrSurvivors; i++){
 			result.add(oldPop.get(oldPop.size()-(i+1)));
 		}
 		

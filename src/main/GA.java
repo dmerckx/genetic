@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import main.crossover.CrossOver;
-import main.insertion.Insertor;
+import main.insertion.ReInsertor;
 import main.mutation.Mutator;
 import main.selectors.Selector;
 import params.Params;
@@ -19,11 +19,11 @@ public class GA<R extends Representation> {
 	
 	private final Selector<R> selector;
 	private final CrossOver<R> crossover;
-	private final Insertor<R> insertor;
+	private final ReInsertor<R> insertor;
 	private final Mutator<R> mutator;
 	
 	public GA(Params params, RepresentationFactory<R> factory, Selector<R> selector,
-			CrossOver<R> crossover, Insertor<R> insertor, Mutator<R> mutator) {
+			CrossOver<R> crossover, ReInsertor<R> insertor, Mutator<R> mutator) {
 		this.params = params;
 		this.factory = factory;
 		
@@ -50,24 +50,25 @@ public class GA<R extends Representation> {
 			//if(checkStop(best, pop)) break;
 			
 			List<R> selection = selector.doSelection(pop);
-			
+			System.out.println(selection.size());
 
 			//System.out.println("selection: " + selection.size());
 			
 			List<R> children = crossover.doCrossOver(selection);
 			
-			//System.out.println("children: " + children.size());
+			System.out.println("children: " + children.size());
 			
 			mutate(children);
 			
 			//System.out.println("pop: " + pop.size());
 			
-			pop = insertor.merge(pop, children);
+			pop = insertor.reinsert(pop, children);
 			
 			i++;
 		}
 		
-		/*int doubles = 0;
+		/*
+		int doubles = 0;
 		for(R chrom:pop){
 			int d = 0;
 			for(R chrom2:pop){
@@ -75,7 +76,8 @@ public class GA<R extends Representation> {
 					d++;
 			}
 			doubles += d-1;
-		}*/
+		}
+		System.out.println("DOUBLES " + doubles);*/
 	}
 	
 	private double calculateMean(List<R> pop){

@@ -95,7 +95,7 @@ public class Path extends Representation {
 	public Path clone() {
 		List<Integer> clonedList = new ArrayList<Integer>();
 		for (int i = 0; i < getPath().size(); i++) {
-			clonedList.add(getPath().get(i));
+			clonedList.add(getPath().get(i).intValue());
 		}
 		return new Path(problem, clonedList);
 	}
