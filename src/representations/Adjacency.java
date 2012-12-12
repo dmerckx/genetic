@@ -8,7 +8,7 @@ import java.util.Random;
 import main.Problem;
 import representations.path.Path;
 
-public class Adjacency extends Representation {
+public class Adjacency extends Chromosome {
 
 	private List<Integer> path;
 	
@@ -47,7 +47,7 @@ public class Adjacency extends Representation {
 	}
 	
 	@Override
-	public double getPathLength() {
+	public double calcPathLength() {
 		return recursiveCalculation(0);
 	}
 	

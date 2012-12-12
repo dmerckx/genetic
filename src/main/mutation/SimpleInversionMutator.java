@@ -1,10 +1,10 @@
 package main.mutation;
 
 import params.Params;
-import representations.Representation;
+import representations.Chromosome;
 import representations.path.Path;
 
-public class SimpleInversionMutator<R extends Representation> extends Mutator<R> {
+public class SimpleInversionMutator<R extends Chromosome> extends Mutator<R> {
 
 	public SimpleInversionMutator(Params params) {
 		super(params);

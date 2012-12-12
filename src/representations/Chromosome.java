@@ -4,25 +4,23 @@ import java.util.Random;
 
 import representations.path.Path;
 
-public abstract class Representation implements Comparable<Representation>, Cloneable{
+/**
+ * Can be compared on basis of path length, not fitness !
+ *
+ */
+public abstract class Chromosome implements Comparable<Chromosome>{
 
 	private boolean isCached = false;
+	private double length;
 	
-	private double fitness;
-	
-	public Representation() {
+	public Chromosome() {
 		
 	}
 	
-	public Representation(double fitness){
-		this.fitness = fitness;
-		this.isCached = true;
-	}
-	
-	public int compareTo(Representation r2) {
-		if(getFitness() < r2.getFitness())
+	public int compareTo(Chromosome r2) {
+		if(getPathLength() < r2.getPathLength())
 			return -1;
-		if(getFitness() > r2.getFitness())
+		if(getPathLength() > r2.getPathLength())
 			return 1;
 		return 0;
 	}
@@ -39,21 +37,21 @@ public abstract class Representation implements Comparable<Representation>, Clon
 		isCached = false;
 	}
 	
-	public final double getFitness() {
+	public final double getPathLength() {
 		if(!isCached) {
-			fitness = 1 / getPathLength();
+			length = calcPathLength();
 			isCached = true;
 		}
-		return fitness;
+		return length;
 	}
 	
-	public abstract double getPathLength();
+	public abstract double calcPathLength();
 	
 	
 	public abstract Path toPath();
 	public abstract void fromPath(Path path);
 	
-	public abstract Representation clone();
+	public abstract Chromosome clone();
 	
 	public abstract double getPathLength(int from, int to);
 	

@@ -4,26 +4,28 @@ import java.util.Collections;
 import java.util.List;
 
 import main.crossover.CrossOver;
-import main.insertion.Insertor;
+import main.insertion.ReInsertor;
 import main.mutation.Mutator;
+import main.rankers.Ranker;
 import main.selectors.Selector;
 import params.Params;
-import representations.Representation;
+import representations.Chromosome;
 import factory.RepresentationFactory;
 
 
-public class GA<R extends Representation> {
+public class GA<R extends Chromosome> {
 
 	protected Params params;
 	private RepresentationFactory<R> factory;
 	
 	private final Selector<R> selector;
 	private final CrossOver<R> crossover;
-	private final Insertor<R> insertor;
+	private final ReInsertor<R> insertor;
 	private final Mutator<R> mutator;
+	private final Ranker<R> ranker;
 	
 	public GA(Params params, RepresentationFactory<R> factory, Selector<R> selector,
-			CrossOver<R> crossover, Insertor<R> insertor, Mutator<R> mutator) {
+			CrossOver<R> crossover, ReInsertor<R> insertor, Mutator<R> mutator, Ranker<R> ranker) {
 		this.params = params;
 		this.factory = factory;
 		
@@ -31,6 +33,7 @@ public class GA<R extends Representation> {
 		this.crossover = crossover;
 		this.insertor = insertor;
 		this.mutator = mutator;
+		this.ranker = ranker;
 	}
 	
 	public void run(Problem problem, History history){
@@ -42,15 +45,17 @@ public class GA<R extends Representation> {
 			//TODO: work with linkedlists instead of arraylists?
 			Collections.sort(pop);
 			
-			double worst = pop.get(0).getFitness();
-			double best = pop.get(pop.size()-1).getFitness();
+			double best = pop.get(0).getPathLength();
+			double worst = pop.get(pop.size()-1).getPathLength();
 			double mean = calculateMean(pop);
 			history.write(best, mean, worst);
 			
 			//if(checkStop(best, pop)) break;
 			
-			List<R> selection = selector.doSelection(pop);
+			List<RankedChrom<R>> rankedPop = ranker.rank(pop);
 			
+			List<R> selection = selector.doSelection(rankedPop);
+			//System.out.println(selection.size());
 
 			//System.out.println("selection: " + selection.size());
 			
@@ -62,10 +67,11 @@ public class GA<R extends Representation> {
 			
 			//System.out.println("pop: " + pop.size());
 			
-			pop = insertor.merge(pop, children);
+			pop = insertor.reinsert(rankedPop, children);
 			
 			i++;
 		}
+		
 		
 		/*int doubles = 0;
 		for(R chrom:pop){
@@ -75,22 +81,23 @@ public class GA<R extends Representation> {
 					d++;
 			}
 			doubles += d-1;
-		}*/
+		}
+		System.out.println("DOUBLES " + doubles);*/
 	}
 	
 	private double calculateMean(List<R> pop){
 		double total = 0;
 		for(R chrom:pop){
-			total += chrom.getFitness();
+			total += chrom.getPathLength();
 		}
 		
 		return total / pop.size();
 	}
 	
-	private boolean checkStop(double best, List<R> pop){
+	private boolean checkStop(double best, List<RankedChrom<R>> pop){
 		int index = 0;
-		for(R r: pop){
-			if(r.getFitness() - best > params.mach)
+		for(RankedChrom<R> r: pop){
+			if(r.fitness - best > params.mach)
 				break;
 			index++;
 		}

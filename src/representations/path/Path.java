@@ -7,9 +7,9 @@ import java.util.Random;
 
 import main.Problem;
 import representations.Edge;
-import representations.Representation;
+import representations.Chromosome;
 
-public class Path extends Representation {
+public class Path extends Chromosome {
 
 	private List<Integer> path;
 	private Problem problem;
@@ -37,7 +37,7 @@ public class Path extends Representation {
 
 	
 	@Override
-	public double getPathLength() {
+	public double calcPathLength() {
 		double pathLength = 0;
 		for (int i = 0; i < path.size()-1; i++) {
 			pathLength += problem.distance(path.get(i), path.get(i+1));

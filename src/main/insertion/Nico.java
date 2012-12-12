@@ -1,15 +1,14 @@
 package main.insertion;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
+import main.RankedChrom;
+
 import params.Params;
+import representations.Chromosome;
 
-import representations.Representation;
-
-public class Nico<R extends Representation> implements Insertor<R>{
+//TODO: fix this implementation
+public class Nico<R extends Chromosome> extends ReInsertor<R>{
 
 	private Params params;
 	private double del;
@@ -20,13 +19,14 @@ public class Nico<R extends Representation> implements Insertor<R>{
 	}
 	
 	public Nico(Params params, double del, double keep) {
-		this.params = params;
+		super(params);
 		this.del = del;
 		this.keep = keep;
 	}
 	
+	/*
 	@Override
-	public List<R> merge(List<R> oldPop, List<R> children) {
+	public List<R> reinsert(List<R> oldPop, List<R> children) {
 		
 		List<R> newPop = new ArrayList<R>();
 		
@@ -51,5 +51,10 @@ public class Nico<R extends Representation> implements Insertor<R>{
 		}
 		
 		return newPop;
+	}*/
+
+	@Override
+	public List<R> selectParentSurvivors(List<RankedChrom<R>> oldPop, int nrSurvivors) {
+		throw new RuntimeException();	//Currently can not be used
 	}
 }

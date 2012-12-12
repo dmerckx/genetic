@@ -1,9 +1,9 @@
 package main.mutation;
 
 import params.Params;
-import representations.Representation;
+import representations.Chromosome;
 
-public abstract class Mutator<R extends Representation> {
+public abstract class Mutator<R extends Chromosome> {
 	
 	protected Params params;
 	
