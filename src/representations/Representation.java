@@ -54,4 +54,13 @@ public abstract class Representation implements Comparable<Representation>, Clon
 	public abstract void fromPath(Path path);
 	
 	public abstract Representation clone();
+	
+	public abstract double getPathLength(int from, int to);
+	
+	/**
+	 * Swaps the specified indices(!), not cities.
+	 * @param city1
+	 * @param city2
+	 */
+	public abstract void swap(int city1, int city2);
 }

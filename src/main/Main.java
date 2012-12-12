@@ -77,7 +77,7 @@ public class Main {
 		params.maxGenerations = 20;
 		params.mutation = 0;
 		params.popSize = 100;
-		params.stop = 0;
+		params.stop = 0.95;
 		params.rand = new Random();
 		return useTestParams ? new TestParams() : params ;
 	}

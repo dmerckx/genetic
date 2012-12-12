@@ -11,4 +11,5 @@ public class Params {
 	public double elitists;
 	public double mach = 1e-15d;
 	public Random rand = new Random();
+	public boolean detectLoops;
 }

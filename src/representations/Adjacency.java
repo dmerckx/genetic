@@ -115,5 +115,25 @@ public class Adjacency extends Representation {
 		}
 		return new Adjacency(problem, clonedList);
 	}
+
+	@Override
+	public double getPathLength(int from, int to) {
+		return recursivePartialCalculation(from,to);
+	}
+
+	private double recursivePartialCalculation(int from, int to) {
+		int c1 = from;
+		int c2 = path.get(from);
+		if(c2 == to)
+			return problem.distance(c1, c2);
+		return problem.distance(c1, c2) + recursivePartialCalculation(c2, to);
+	}
+	
+	@Override
+	public void swap(int index1, int index2) {
+		int temp = path.get(index1);
+		path.set(index1, path.get(index2));
+		path.set(index2, temp);
+	}
 	
 }
