@@ -36,7 +36,6 @@ public class AdjacencyTest {
 	@Before
 	public void setUp() throws Exception {
 		
-		
 	}
 
 	@Test
@@ -104,6 +103,13 @@ public class AdjacencyTest {
 			
 			assertTrue(Math.abs(fitness - ad.getFitness()) < MACH);
 		}
+	}
+	
+	@Test
+	public void testGetPathLength_partial() {
+		ad.setRandom(new Random(5));
+		ad.printPath();
+		assertTrue((Math.floor(ad.getPathLength(0, 13)*1000)/1000)-409.664 <= 1e-15);
 	}
 	
 }

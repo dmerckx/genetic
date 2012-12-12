@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 
 import main.Problem;
-import representations.Adjacency;
 import representations.Edge;
 import representations.Representation;
 
@@ -28,9 +27,10 @@ public class Path extends Representation {
 
 	@Override
 	public void setRandomImpl(Random rand){
-		
-		for (int i = 0; i < problem.size(); i++) {
-			path.add(i);
+		if(path.size() == 0) {
+			for (int i = 0; i < problem.size(); i++) {
+				path.add(i);
+			}
 		}
 		Collections.shuffle(path, rand);
 	}
@@ -71,7 +71,7 @@ public class Path extends Representation {
 	public String printPath() {
 		String print ="";
 		for (int nb : path) {
-			print = print + nb + " ";
+			print = print + nb + "\r\n";
 		}
 		return print;
 	}
@@ -98,6 +98,29 @@ public class Path extends Representation {
 			clonedList.add(getPath().get(i).intValue());
 		}
 		return new Path(problem, clonedList);
+	}
+	
+	@Override
+	public void swap(int index1, int index2) {
+		int temp = path.get(index1);
+		path.set(index1, path.get(index2));
+		path.set(index2, temp);
+	}
+
+	@Override
+	public double getPathLength(int from, int to) {
+		int index = 0;
+		double distance = 0;
+		for (int i = 0; i < path.size(); i++) {
+			if(path.get(i) == from)
+				index = i;
+		}
+		for (int i = index; i < path.size()+index; i++) {
+			distance += problem.distance(path.get(i%path.size()), path.get((i+1)%path.size()));
+			if(path.get((i+1)%path.size()) == to)
+				break;
+		}
+		return distance;
 	}
 	
 }

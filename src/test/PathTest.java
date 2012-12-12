@@ -56,4 +56,9 @@ public class PathTest {
 		assertTrue(Math.abs(path.getFitness() - fitness) <= machine_precision);
 	}
 	
+	@Test
+	public void testGetPathLength_partial() {
+		assertTrue((Math.floor(path.getPathLength(8, 3)*1000)/1000)-592.237 <= 1e-15);
+	}
+	
 }

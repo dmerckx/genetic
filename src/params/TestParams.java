@@ -9,5 +9,6 @@ public class TestParams extends Params{
 		crossover = 0.95d;
 		mutation = 0.05d;
 		stop = 0.95d;
+		detectLoops = false;
 	}
 }

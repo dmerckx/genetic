@@ -78,7 +78,7 @@ public class Main {
 		params.mutation = 0.05;
 		params.popSize = 100;
 		params.stop = 0.95;
-		params.rand = new Random(13);
+		params.rand = new Random(162);
 		return useTestParams ? new TestParams() : params ;
 	}
 	

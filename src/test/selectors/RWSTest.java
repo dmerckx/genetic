@@ -153,6 +153,18 @@ class DummyRep extends Representation{
 	public Representation clone() {
 		return null;
 	}
+
+	@Override
+	public double getPathLength(int from, int to) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void swap(int city1, int city2) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
 class DummyRand extends Random{
