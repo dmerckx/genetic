@@ -5,11 +5,11 @@ import java.util.List;
 
 import main.Problem;
 import params.Params;
-import representations.Representation;
+import representations.Chromosome;
 import factory.RepresentationFactory;
 
 
-public abstract class CrossOver<R extends Representation> {
+public abstract class CrossOver<R extends Chromosome> {
 
 	protected Params params;
 	protected Problem problem;

@@ -3,11 +3,11 @@ package main.insertion;
 import java.util.Collections;
 import java.util.List;
 
+import main.RankedChrom;
 import params.Params;
+import representations.Chromosome;
 
-import representations.Representation;
-
-public abstract class ReInsertor<R extends Representation> {
+public abstract class ReInsertor<R extends Chromosome> {
 	
 	protected Params params;
 	
@@ -21,7 +21,7 @@ public abstract class ReInsertor<R extends Representation> {
 	 * 	More children then popSize -> murder the weakest children
 	 *  Less children then popSize -> select some parents to be reused
 	 */
-	public List<R> reinsert(List<R> oldPop, List<R> children){
+	public List<R> reinsert(List<RankedChrom<R>> oldPop, List<R> children){
 		int nrSurvivors = params.popSize - children.size();
 		
 		if(nrSurvivors <= 0){
@@ -29,7 +29,7 @@ public abstract class ReInsertor<R extends Representation> {
 			Collections.sort(children); //Sort children to remove to weakest
 			while(children.size() > params.popSize){
 				//Murder weakest child
-				children.remove(0);
+				children.remove(children.size()-1);
 			}
 		}
 		else{
@@ -43,5 +43,5 @@ public abstract class ReInsertor<R extends Representation> {
 		return children;
 	}
 	
-	public abstract List<R> selectParentSurvivors (List<R> oldPop, int nrSurvivors);
+	public abstract List<R> selectParentSurvivors (List<RankedChrom<R>> oldPop, int nrSurvivors);
 }

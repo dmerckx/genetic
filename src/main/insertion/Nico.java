@@ -2,11 +2,13 @@ package main.insertion;
 
 import java.util.List;
 
+import main.RankedChrom;
+
 import params.Params;
-import representations.Representation;
+import representations.Chromosome;
 
 //TODO: fix this implementation
-public class Nico<R extends Representation> extends ReInsertor<R>{
+public class Nico<R extends Chromosome> extends ReInsertor<R>{
 
 	private Params params;
 	private double del;
@@ -52,7 +54,7 @@ public class Nico<R extends Representation> extends ReInsertor<R>{
 	}*/
 
 	@Override
-	public List<R> selectParentSurvivors(List<R> oldPop, int nrSurvivors) {
+	public List<R> selectParentSurvivors(List<RankedChrom<R>> oldPop, int nrSurvivors) {
 		throw new RuntimeException();	//Currently can not be used
 	}
 }

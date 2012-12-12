@@ -25,9 +25,9 @@ public class History {
 	}
 	
 	public void write(double best, double mean, double worst) {
-		bestList.add(1/best);
-		meanList.add(1/mean);
-		worstList.add(1/worst);
+		bestList.add(best);
+		meanList.add(mean);
+		worstList.add(worst);
 	}
 	
 	public String fileString(double val) {

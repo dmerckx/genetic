@@ -3,9 +3,9 @@ package factory;
 import java.util.List;
 
 import main.Problem;
-import representations.Representation;
+import representations.Chromosome;
 
-public interface RepresentationFactory<E extends Representation> {
+public interface RepresentationFactory<E extends Chromosome> {
 
 	E create(Problem problem);
 

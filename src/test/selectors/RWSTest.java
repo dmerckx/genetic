@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import params.Params;
 import params.TestParams;
-import representations.Representation;
+import representations.Chromosome;
 import representations.path.Path;
 import util.ProblemGenerator;
 
@@ -124,7 +124,7 @@ public class RWSTest {
 
 }
 
-class DummyRep extends Representation{
+class DummyRep extends Chromosome{
 	
 	public DummyRep(double fitness) {
 		super(fitness);
@@ -136,7 +136,7 @@ class DummyRep extends Representation{
 	}
 
 	@Override
-	public double getPathLength() {
+	public double calcPathLength() {
 		throw new RuntimeException("mag niet worden aangeroepen");
 	}
 
@@ -150,7 +150,7 @@ class DummyRep extends Representation{
 	}
 
 	@Override
-	public Representation clone() {
+	public Chromosome clone() {
 		return null;
 	}
 

@@ -1,10 +1,10 @@
 package main.mutation;
 
 import params.Params;
-import representations.Representation;
+import representations.Chromosome;
 import representations.path.Path;
 
-public class ExchangeMutator<R extends Representation> extends Mutator<R>{
+public class ExchangeMutator<R extends Chromosome> extends Mutator<R>{
 
 	public ExchangeMutator(Params params) {
 		super(params);
