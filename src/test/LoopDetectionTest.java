@@ -23,7 +23,6 @@ public class LoopDetectionTest {
 	public static final double MACH = 1e-10;
 	
 	private static final LoopDetection<Adjacency> loopDetection = new LoopDetection<Adjacency>();
-	
 	private static final LoopDetection<Path> loopDetection1 = new LoopDetection<Path>();
 	
 	private static Path pa;
@@ -58,15 +57,18 @@ public class LoopDetectionTest {
 	
 	@Test
 	public void testCorrect_Adjacency_Simple() {
+	//	ad.printPath();
 		loopDetection.correct(ad);
-		ad.printPath();
+	//	System.out.println("");
+	//	ad.printPath();
 	}
 	
 	@Test
 	public void testCorrect_Path_Simple() {
-		System.out.println(pa.printPath());
+		//System.out.println(pa.printPath());
 		loopDetection1.correct(pa);
-		System.out.println(pa.printPath());
+	//	System.out.println("");
+	//	System.out.println(pa.printPath());
 	}
 	
 }

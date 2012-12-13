@@ -1,30 +1,40 @@
 package main;
 
-import representations.Representation;
+import representations.Chromosome;
 import representations.path.Path;
 
-public class LoopDetection<R extends Representation> {
+public class LoopDetection<R extends Chromosome> {
 
 	public LoopDetection() {
 	}
-	
+
 	public void correct(R representation) {
 		Path path = representation.toPath();
-		for (int i = 0; i < path.size(); i++) {
-			int firstCity = path.getPath().get(i);
-			int secondCity = path.getPath().get((i + 1) % path.size());
-			int thirdCity = path.getPath().get((i + 2) % path.size());
-			int fourthCity = path.getPath().get((i + 3) % path.size());
-			if(!isAlreadyShortestPath(firstCity, secondCity, thirdCity, fourthCity, path))
-				path.swap((i + 1) % path.size(), (i + 2) % path.size());
+		boolean swapped = true;
+		while(swapped) {
+			swapped = false;
+			for (int i = 0; i < path.size(); i++) {
+				int firstCity = path.getPath().get(i);
+				int indexSecondCity = (i + 1) % path.size();
+				int indexThirdCity = (i + 2) % path.size();
+				int fourthCity = path.getPath().get((i + 3) % path.size());
+				if(!isAlreadyShortestPath(firstCity, indexSecondCity, indexThirdCity, fourthCity, path)) {
+					swapped = true;
+					path.swap(indexSecondCity, indexThirdCity);
+				}
+			}
 		}
+		System.out.println(path.printPath());
+		System.out.println("");
 		representation.fromPath(path);
 	}
 
 	private boolean isAlreadyShortestPath(int first, int second, int third, int last, Path path) {
 		Path clone = path.clone();
 		clone.swap(second, third);
+		if(path.getPathLength(first, last) >= clone.getPathLength(first, last))
+			System.out.println(first + " " + last);
 		return path.getPathLength(first, last) < clone.getPathLength(first, last);
 	}
-	
+
 }

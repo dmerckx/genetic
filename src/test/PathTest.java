@@ -1,6 +1,7 @@
 package test;
 
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -59,6 +60,16 @@ public class PathTest {
 	@Test
 	public void testGetPathLength_partial() {
 		assertTrue((Math.floor(path.getPathLength(8, 3)*1000)/1000)-592.237 <= 1e-15);
+	}
+	
+	@Test
+	public void testSwap() {
+		path.swap(0, 15);
+		assertEquals((int)0,(int)path.getPath().get(15));
+		assertEquals((int)1,(int)path.getPath().get(0));
+		path.swap(5, 2);
+		assertEquals((int)13,(int)path.getPath().get(2));
+		assertEquals((int)7,(int)path.getPath().get(5));
 	}
 	
 }

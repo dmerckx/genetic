@@ -35,7 +35,7 @@ public class AdjacencyGATest {
 	@Before
 	public void setUp() throws Exception {
 		params = new TestParams();
-		adj = new GA<Adjacency>(params, new AdjacencyFactory(), null, null, null, null);
+		adj = new GA<Adjacency>(params, new AdjacencyFactory(), null, null, null, null, null);
 	}
 	
 	@Test
