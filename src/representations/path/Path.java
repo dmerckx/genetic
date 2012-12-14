@@ -123,4 +123,13 @@ public class Path extends Chromosome {
 		return distance;
 	}
 	
+	@Override
+	public List<Integer> getReversePath() {
+		List<Integer> result = new ArrayList<Integer>();
+		for (int i = path.size()-1; i >= 0; i--) {
+			result.add(path.get(i));
+		}
+		return result;
+	}
+	
 }

@@ -3,8 +3,10 @@ package main.crossover;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.Main;
 import main.Problem;
 import params.Params;
+import representations.Adjacency;
 import representations.Chromosome;
 import factory.RepresentationFactory;
 
@@ -36,9 +38,10 @@ public abstract class CrossOver<R extends Chromosome> {
 			R firstParent = selectParent(selection);
 			R secondParent = selectParent(selection);
 			if(haveToBreed()) {
-				List<Integer> path1 = breed(firstParent, secondParent);
-				List<Integer> path2 = breed(secondParent, firstParent);
-
+				R first = determineDirection(firstParent);
+				R second = determineDirection(secondParent);
+				List<Integer> path1 = breed(first, second);
+				List<Integer> path2 = breed(second, first);
 				children.add(factory.create(problem, path1));
 				children.add(factory.create(problem, path2));
 			}
@@ -51,6 +54,14 @@ public abstract class CrossOver<R extends Chromosome> {
 
 	}
 
+	private R determineDirection(R parent) {
+		return getDirection() == 1 ? parent : factory.create(problem, parent.getReversePath());
+	}
+	
+	private int getDirection() {
+		return params.rand.nextFloat() > 0.5 ? 1: 0;
+	}
+	
 	private boolean haveToBreed() {
 		return params.rand.nextFloat()<params.crossover;
 	}

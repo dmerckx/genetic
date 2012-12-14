@@ -62,14 +62,13 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 			int end;
 			if(!options.isEmpty())
 				end = options.get(0);
-			else {
+			else
 				end = getRemainingCity(result);
-			}
 			currentEdge = new Edge(currentEdge.getEnd(), end);
 		}
 		else {	
 			currentEdge = currentParent.getNextEdge(currentEdge);
-			while (hasCycle(currentEdge, result)) {
+			while (introducesCycle(currentEdge, result)) {
 				currentEdge = chooseNewEdge(currentEdge, options);
 			}
 		}
@@ -88,6 +87,11 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 		return options.get(0);
 	}
 
+	/**
+	 * Returns a list with all subsequent numbers from 0 to the given number -1.
+	 * @param number
+	 * @return
+	 */
 	private List<Integer> initializeOptions(int number) {
 		List<Integer> options = new ArrayList<Integer>();
 		for (int i = 0; i < number; i++) {
@@ -96,15 +100,15 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 		return options;
 	}
 
-	private Edge chooseNewEdge(Edge currentEdge, List<Integer> options) {
+	private Edge chooseNewEdge(Edge edge, List<Integer> options) {
 		int end = options.get(params.rand.nextInt(options
 				.size()));
 		options.remove(new Integer(end));
-		return new Edge(currentEdge.getBegin(), end);
+		return new Edge(edge.getBegin(), end);
 	}
 
-	private boolean hasCycle(Edge currentEdge, Integer[] result) {
-		return result[currentEdge.getEnd()] != null;
+	private boolean introducesCycle(Edge edge, Integer[] result) {
+		return result[edge.getEnd()] != null;
 	}
 
 }
