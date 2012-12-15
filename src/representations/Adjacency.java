@@ -152,4 +152,12 @@ public class Adjacency extends Chromosome {
 		return result;
 	}
 	
+	public String toString() {
+		String print = "";
+		for (int iterable_element : path) {
+			print = print + " " + iterable_element;
+		}
+		return print;
+	}
+	
 }

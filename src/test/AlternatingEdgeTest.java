@@ -36,8 +36,8 @@ public class AlternatingEdgeTest {
 		path1.add(7);
 		path1.add(6);
 		path1.add(8);
-		path1.add(0);
 		path1.add(3);
+		path1.add(0);
 		path1.add(4);
 		path1.add(5);
 
@@ -58,21 +58,23 @@ public class AlternatingEdgeTest {
 	public void setUp() throws Exception {
 	}
 
-		@Test
-		public void testCrossOver() {
-			Params params = new TestParams();
-			params.crossover = 1;
-			params.rand = new Random(1);
-			List<Adjacency> parents = new ArrayList<Adjacency>();
-			parents.add(firstParent);
-			parents.add(secondParent);
-			
-			AlternatingEdge crossover = new AlternatingEdge(new AdjacencyFactory(),params, problem);
-//		System.out.println(crossover.doCrossOver(parents).get(0).getPath());
-//		System.out.println(crossover.doCrossOver(parents).get(1).getPath());
-		}
-
 	@Test
+	public void testCrossOver() {
+		Params params = new TestParams();
+		params.crossover = 1;
+		params.rand = new Random(1);
+		List<Adjacency> parents = new ArrayList<Adjacency>();
+		firstParent.printPath();
+		parents.add(firstParent);
+		parents.add(secondParent);
+
+		AlternatingEdge crossover = new AlternatingEdge(new AdjacencyFactory(),params, problem);
+		List<Adjacency> children = crossover.doCrossOver(parents);
+		System.out.println(children.get(0).getPath());
+		System.out.println(children.get(1).getPath());
+	}
+
+	//	@Test
 	public void testcrossOver_SameParent_DiffChild() {
 		int different = 0;
 		Params params = new TestParams();

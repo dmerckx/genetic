@@ -3,10 +3,8 @@ package main.crossover;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.Main;
 import main.Problem;
 import params.Params;
-import representations.Adjacency;
 import representations.Chromosome;
 import factory.RepresentationFactory;
 
@@ -38,10 +36,10 @@ public abstract class CrossOver<R extends Chromosome> {
 			R firstParent = selectParent(selection);
 			R secondParent = selectParent(selection);
 			if(haveToBreed()) {
-				R first = determineDirection(firstParent);
-				R second = determineDirection(secondParent);
-				List<Integer> path1 = breed(first, second);
-				List<Integer> path2 = breed(second, first);
+				ParentChromosome<R> par1 = new ParentChromosome<R>(firstParent, createInverse(firstParent));
+				ParentChromosome<R> par2 = new ParentChromosome<R>(secondParent, createInverse(secondParent));
+				List<Integer> path1 = breed(par1, par2);
+				List<Integer> path2 = breed(par1, par2);
 				children.add(factory.create(problem, path1));
 				children.add(factory.create(problem, path2));
 			}
@@ -54,12 +52,8 @@ public abstract class CrossOver<R extends Chromosome> {
 
 	}
 
-	private R determineDirection(R parent) {
-		return getDirection() == 1 ? parent : factory.create(problem, parent.getReversePath());
-	}
-	
-	private int getDirection() {
-		return params.rand.nextFloat() > 0.5 ? 1: 0;
+	private R createInverse(R chrom) {
+		return factory.create(problem, chrom.getReversePath());
 	}
 	
 	private boolean haveToBreed() {
@@ -70,6 +64,6 @@ public abstract class CrossOver<R extends Chromosome> {
 		return selection.remove(params.rand.nextInt(selection.size()));
 	}
 
-	protected abstract List<Integer> breed(R p1, R p2);
+	protected abstract List<Integer> breed(ParentChromosome<R> p1, ParentChromosome<R> p2);
 
 }
