@@ -55,7 +55,8 @@ public class Main {
 		ReInsertor<Adjacency> insertor = new FBI<Adjacency>(params);
 		Mutator<Adjacency> mutator = new SimpleInversionMutator<Adjacency>(params);
 		Ranker<Adjacency> ranker = new LineairRanker<Adjacency>();
-		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator, ranker);
+		LoopDetection<Adjacency> loopDetection = new LoopDetection<Adjacency>();
+		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator, ranker, loopDetection);
 	}
 
 	public static GA<Path> createGA2(Problem problem){
@@ -66,7 +67,8 @@ public class Main {
 		ReInsertor<Path> insertor = new FBI<Path>(params);
 		Mutator<Path> mutator = new SimpleInversionMutator<Path>(params);
 		Ranker<Path> ranker = new LineairRanker<Path>();
-		return new GA<Path>(params, factory, selector, crossover, insertor, mutator, ranker);
+		LoopDetection<Path> loopDetection = new LoopDetection<Path>();
+		return new GA<Path>(params, factory, selector, crossover, insertor, mutator, ranker, loopDetection);
 	}
 	
 	/**

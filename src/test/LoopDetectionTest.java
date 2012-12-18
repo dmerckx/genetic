@@ -1,7 +1,10 @@
 package test;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import main.LoopDetection;
 import main.Problem;
@@ -57,18 +60,30 @@ public class LoopDetectionTest {
 	
 	@Test
 	public void testCorrect_Adjacency_Simple() {
-	//	ad.printPath();
-		loopDetection.correct(ad);
-	//	System.out.println("");
-	//	ad.printPath();
+		int counter = 0;
+		for (int i = 0; i < 100; i++) {
+			ad.setRandom(new Random());
+			double before = ad.getPathLength();
+			loopDetection.correct(ad);
+			double after = ad.getPathLength();
+			if(after - before <= 0)
+				counter++;
+		}
+		assertTrue(counter == 100);
 	}
 	
 	@Test
 	public void testCorrect_Path_Simple() {
-		//System.out.println(pa.printPath());
-		loopDetection1.correct(pa);
-	//	System.out.println("");
-	//	System.out.println(pa.printPath());
+		int counter = 0;
+		for (int i = 0; i < 100; i++) {
+			ad.setRandom(new Random());
+			double before = ad.getPathLength();
+			loopDetection1.correct(pa);
+			double after = ad.getPathLength();
+			if(after - before <= 0)
+				counter++;
+		}
+		assertTrue(counter == 100);
 	}
 	
 }

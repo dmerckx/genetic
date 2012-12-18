@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.ejml.alg.dense.misc.DeterminantFromMinor;
+
 import main.crossover.CrossOver;
 import main.insertion.ReInsertor;
 import main.mutation.Mutator;
@@ -23,9 +25,10 @@ public class GA<R extends Chromosome> {
 	private final ReInsertor<R> insertor;
 	private final Mutator<R> mutator;
 	private final Ranker<R> ranker;
+	private final LoopDetection<R> loopDetector;
 	
 	public GA(Params params, RepresentationFactory<R> factory, Selector<R> selector,
-			CrossOver<R> crossover, ReInsertor<R> insertor, Mutator<R> mutator, Ranker<R> ranker) {
+			CrossOver<R> crossover, ReInsertor<R> insertor, Mutator<R> mutator, Ranker<R> ranker, LoopDetection<R> loopDetector) {
 		this.params = params;
 		this.factory = factory;
 		
@@ -34,6 +37,7 @@ public class GA<R extends Chromosome> {
 		this.insertor = insertor;
 		this.mutator = mutator;
 		this.ranker = ranker;
+		this.loopDetector = loopDetector;
 	}
 	
 	public void run(Problem problem, History history){
@@ -69,6 +73,9 @@ public class GA<R extends Chromosome> {
 			
 			pop = insertor.reinsert(rankedPop, children);
 			
+			if(params.detectLoops)
+				doLoopDetection(pop);
+			
 			i++;
 		}
 		System.out.print(best + " + ");
@@ -85,6 +92,12 @@ public class GA<R extends Chromosome> {
 		System.out.println("DOUBLES " + doubles);*/
 	}
 	
+	private void doLoopDetection(List<R> pop) {
+		for (R chrom: pop) {
+			loopDetector.correct(chrom);
+		}
+	}
+
 	private double calculateMean(List<R> pop){
 		double total = 0;
 		for(R chrom:pop){
