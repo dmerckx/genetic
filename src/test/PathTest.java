@@ -1,7 +1,7 @@
 package test;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import representations.Adjacency;
 import representations.path.Path;
 import util.ProblemGenerator;
 

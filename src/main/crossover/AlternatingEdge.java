@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import factory.AdjacencyFactory;
-
 import main.Problem;
 import params.Params;
 import representations.Adjacency;
 import representations.Edge;
+import factory.AdjacencyFactory;
 
 public class AlternatingEdge extends CrossOver<Adjacency> {
 

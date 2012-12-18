@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.RankedChrom;
-
 import params.Params;
 import representations.Chromosome;
 

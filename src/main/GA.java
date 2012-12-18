@@ -39,13 +39,13 @@ public class GA<R extends Chromosome> {
 	public void run(Problem problem, History history){
 		
 		List<R> pop = initPopulation(problem);
-		
+		double best = 0;
 		int i = 0;
 		while(i < params.maxGenerations){
 			//TODO: work with linkedlists instead of arraylists?
 			Collections.sort(pop);
 			
-			double best = pop.get(0).getPathLength();
+			best = pop.get(0).getPathLength();
 			double worst = pop.get(pop.size()-1).getPathLength();
 			double mean = calculateMean(pop);
 			history.write(best, mean, worst);
@@ -71,7 +71,7 @@ public class GA<R extends Chromosome> {
 			
 			i++;
 		}
-		
+		System.out.print(best + " + ");
 		
 		/*int doubles = 0;
 		for(R chrom:pop){

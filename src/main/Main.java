@@ -5,8 +5,8 @@ import java.util.Random;
 import main.crossover.AlternatingEdge;
 import main.crossover.CrossOver;
 import main.crossover.EdgeRecombination;
+import main.insertion.FBI;
 import main.insertion.ReInsertor;
-import main.insertion.UI;
 import main.mutation.Mutator;
 import main.mutation.SimpleInversionMutator;
 import main.rankers.LineairRanker;
@@ -27,20 +27,20 @@ public class Main {
 
 	public static void main(String[] args) {
 		Problem problem = ProblemGenerator.generate("../genetic/datafiles/rondrit016.tsp");
-		History history1 = new History("../genetic/result/resultNewAdj.txt");
-		createGA1(problem).run(problem, history1);
-		history1.writeFile();
+		History history1 = new History("../genetic/result/resultAdj.txt");
+		for (int i = 0; i < 1000; i++) {
+			createGA1(problem).run(problem, history1);
+		}
+//		history1.writeFile();
 		
-		System.out.println("Adjacency");
-		history1.printShort();
-		
-
-		History history2 = new History("../genetic/result/resultNewPath.txt");
-		createGA2(problem).run(problem, history2);
-		history2.writeFile();
-		
-		System.out.println("Path");
-		history2.printShort();
+//		System.out.println("Adjacency");
+//		history1.printShort();
+//		History history2 = new History("../genetic/result/resultPath.txt");
+//		createGA2(problem).run(problem, history2);
+//		history2.writeFile();
+//		
+//		System.out.println("Path");
+//		history2.printShort();
 	}
 	
 	
@@ -52,7 +52,7 @@ public class Main {
 		AdjacencyFactory factory = new AdjacencyFactory();
 		Selector<Adjacency> selector = new SUS<Adjacency>(params);
 		CrossOver<Adjacency> crossover = new AlternatingEdge(factory, params, problem);
-		ReInsertor<Adjacency> insertor = new UI<Adjacency>(params);
+		ReInsertor<Adjacency> insertor = new FBI<Adjacency>(params);
 		Mutator<Adjacency> mutator = new SimpleInversionMutator<Adjacency>(params);
 		Ranker<Adjacency> ranker = new LineairRanker<Adjacency>();
 		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator, ranker);
@@ -63,7 +63,7 @@ public class Main {
 		PathFactory factory = new PathFactory();
 		Selector<Path> selector = new SUS<Path>(params);
 		CrossOver<Path> crossover = new EdgeRecombination(factory, problem, params);
-		ReInsertor<Path> insertor = new UI<Path>(params);
+		ReInsertor<Path> insertor = new FBI<Path>(params);
 		Mutator<Path> mutator = new SimpleInversionMutator<Path>(params);
 		Ranker<Path> ranker = new LineairRanker<Path>();
 		return new GA<Path>(params, factory, selector, crossover, insertor, mutator, ranker);

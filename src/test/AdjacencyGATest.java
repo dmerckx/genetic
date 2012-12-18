@@ -12,12 +12,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import factory.AdjacencyFactory;
-
 import params.Params;
 import params.TestParams;
 import representations.Adjacency;
 import util.ProblemGenerator;
+import factory.AdjacencyFactory;
 
 public class AdjacencyGATest {
 	

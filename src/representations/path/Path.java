@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Random;
 
 import main.Problem;
-import representations.Edge;
 import representations.Chromosome;
+import representations.Edge;
 
 public class Path extends Chromosome {
 

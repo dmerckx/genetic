@@ -12,7 +12,6 @@ import java.util.Random;
 import main.Problem;
 import main.insertion.FBI;
 import main.insertion.UI;
-import main.selectors.RWS;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
