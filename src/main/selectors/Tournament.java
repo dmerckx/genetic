@@ -16,13 +16,13 @@ public class Tournament<R extends Chromosome> extends Selector<R> {
 	private final int k;
 	
 	public Tournament(Params params) {
-		this(params, 1, 10);
+		this(params, 1, 0.5);
 	}
 	
-	public Tournament(Params params, double p, int k) {
+	public Tournament(Params params, double p, double percentage) {
 		super(params);
 		this.p = p;
-		this.k = k;
+		this.k = (int) Math.floor(params.popSize*percentage);
 	}
 
 	@Override
@@ -31,7 +31,6 @@ public class Tournament<R extends Chromosome> extends Selector<R> {
 		
 		for (int i = 0; i < nrToSelect; i++) {
 			result.add((R) selectOneChrom(pop).chrom.clone());
-			System.out.println("selected chrom: " + result.get(i));
 		}
 		
 		return result;
@@ -43,14 +42,13 @@ public class Tournament<R extends Chromosome> extends Selector<R> {
 	
 	private RankedChrom<R> selectBest(List<RankedChrom<R>> pool, double roulette) {
 		Collections.sort(pool);
-		System.out.println("sorted pool: " + pool);
 		double traversed = 0;
 		int counter = 0;
-		for(RankedChrom<R> rc: pool){
+		for (int i = pool.size()-1; i >= 0 ; i--) {
 			traversed += p * Math.pow((1-p), counter);
 			counter++;
 			if( traversed >= roulette )
-				return rc;
+				return pool.get(i);
 		}
 		return pool.get(pool.size() -1);
 	}
@@ -60,7 +58,6 @@ public class Tournament<R extends Chromosome> extends Selector<R> {
 		for (int i = 0; i < k; i++) {
 			pool.add(pop.get(params.rand.nextInt(pop.size())));
 		}
-		System.out.println("pool: " + pool);
 		return pool;
 	}
 

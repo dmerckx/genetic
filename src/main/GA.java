@@ -78,7 +78,6 @@ public class GA<R extends Chromosome> {
 			
 			i++;
 		}
-		System.out.print(best + " + ");
 		
 		/*int doubles = 0;
 		for(R chrom:pop){

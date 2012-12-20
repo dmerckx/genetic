@@ -3,8 +3,8 @@ package params;
 public class TestParams extends Params{
 
 	public TestParams() {
-		popSize = 100;
-		maxGenerations = 100;
+		popSize = 1000;
+		maxGenerations = 5000;
 		elitists = 0.05d;
 		crossover = 0.95d;
 		mutation = 0.05d;
