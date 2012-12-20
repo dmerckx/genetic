@@ -1,5 +1,6 @@
 package representations;
 
+import java.util.List;
 import java.util.Random;
 
 import representations.path.Path;
@@ -61,4 +62,6 @@ public abstract class Chromosome implements Comparable<Chromosome>{
 	 * @param city2
 	 */
 	public abstract void swap(int city1, int city2);
+	
+	public abstract List<Integer> getReversePath();
 }

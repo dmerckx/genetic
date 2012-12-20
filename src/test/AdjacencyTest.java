@@ -112,4 +112,31 @@ public class AdjacencyTest {
 		assertTrue((Math.floor(ad.getPathLength(0, 13)*1000)/1000)-409.664 <= 1e-15);
 	}
 	
+	@Test
+	public void getReseversePath() {
+		List<Integer> result = new ArrayList<Integer>();
+		result.add(1);
+		result.add(2);
+		result.add(8);
+		result.add(6);
+		result.add(3);
+		result.add(7);
+		result.add(0);
+		result.add(4);
+		result.add(5);
+		
+		Adjacency ad1 = new Adjacency(problem, result);
+			
+		List<Integer> reverse = ad1.getReversePath();
+		assertEquals((int)reverse.get(0),6);
+		assertEquals((int)reverse.get(1),0);
+		assertEquals((int)reverse.get(2),1);
+		assertEquals((int)reverse.get(3),4);
+		assertEquals((int)reverse.get(4),7);
+		assertEquals((int)reverse.get(5),8);
+		assertEquals((int)reverse.get(6),3);
+		assertEquals((int)reverse.get(7),5);
+		assertEquals((int)reverse.get(8),2);
+	}
+	
 }

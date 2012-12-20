@@ -10,6 +10,7 @@ import java.util.Set;
 
 import main.Problem;
 import main.crossover.EdgeRecombination;
+import main.crossover.ParentChromosome;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -122,7 +123,9 @@ public class EdgeRecombinationTest {
 	
 	@Test
 	public void breedTest() {
-		List<Integer> result = edgeRecombination.breed(parent1, parent2);
+		ParentChromosome<Path> par1 = new ParentChromosome<Path>(parent1, new Path(problem, parent1.getReversePath()));
+		ParentChromosome<Path> par2 = new ParentChromosome<Path>(parent2, new Path(problem, parent2.getReversePath()));
+		List<Integer> result = edgeRecombination.breed(par1, par2);
 		
 		assertEquals((Integer)0, result.get(0));
 		assertEquals((Integer)3, result.get(1));

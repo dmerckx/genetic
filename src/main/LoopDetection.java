@@ -10,30 +10,21 @@ public class LoopDetection<R extends Chromosome> {
 
 	public void correct(R representation) {
 		Path path = representation.toPath();
-		boolean swapped = true;
-		while(swapped) {
-			swapped = false;
-			for (int i = 0; i < path.size(); i++) {
-				int firstCity = path.getPath().get(i);
-				int indexSecondCity = (i + 1) % path.size();
-				int indexThirdCity = (i + 2) % path.size();
-				int fourthCity = path.getPath().get((i + 3) % path.size());
-				if(!isAlreadyShortestPath(firstCity, indexSecondCity, indexThirdCity, fourthCity, path)) {
-					swapped = true;
-					path.swap(indexSecondCity, indexThirdCity);
-				}
+		for (int i = 0; i < path.size(); i++) {
+			int firstCity = path.getPath().get(i);
+			int indexSecondCity = (i + 1) % path.size();
+			int indexThirdCity = (i + 2) % path.size();
+			int fourthCity = path.getPath().get((i + 3) % path.size());
+			if(!isAlreadyShortestPath(firstCity, indexSecondCity, indexThirdCity, fourthCity, path)) {
+				path.swap(indexSecondCity, indexThirdCity);
 			}
 		}
-		System.out.println(path.printPath());
-		System.out.println("");
 		representation.fromPath(path);
 	}
 
 	private boolean isAlreadyShortestPath(int first, int second, int third, int last, Path path) {
 		Path clone = path.clone();
 		clone.swap(second, third);
-		if(path.getPathLength(first, last) >= clone.getPathLength(first, last))
-			System.out.println(first + " " + last);
 		return path.getPathLength(first, last) < clone.getPathLength(first, last);
 	}
 

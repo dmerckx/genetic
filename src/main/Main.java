@@ -7,9 +7,6 @@ import main.crossover.CrossOver;
 import main.crossover.EdgeRecombination;
 import main.insertion.FBI;
 import main.insertion.ReInsertor;
-import main.insertion.UI;
-import main.mutation.ExchangeMutator;
-import main.mutation.InsertionMutator;
 import main.mutation.InversionMutator;
 import main.mutation.Mutator;
 import main.mutation.SimpleInversionMutator;
@@ -58,7 +55,8 @@ public class Main {
 		ReInsertor<Adjacency> insertor = new FBI<Adjacency>(params);
 		Mutator<Adjacency> mutator = new InversionMutator<Adjacency>(params);
 		Ranker<Adjacency> ranker = new LineairRanker<Adjacency>();
-		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator, ranker);
+		LoopDetection<Adjacency> loopDetection = new LoopDetection<Adjacency>();
+		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator, ranker, loopDetection);
 	}
 
 	public static GA<Path> createGA2(Problem problem){
@@ -66,10 +64,11 @@ public class Main {
 		PathFactory factory = new PathFactory();
 		Selector<Path> selector = new SUS<Path>(params);
 		CrossOver<Path> crossover = new EdgeRecombination(problem, params);
-		ReInsertor<Path> insertor = new UI<Path>(params);
+		ReInsertor<Path> insertor = new FBI<Path>(params);
 		Mutator<Path> mutator = new SimpleInversionMutator<Path>(params);
 		Ranker<Path> ranker = new LineairRanker<Path>();
-		return new GA<Path>(params, factory, selector, crossover, insertor, mutator, ranker);
+		LoopDetection<Path> loopDetection = new LoopDetection<Path>();
+		return new GA<Path>(params, factory, selector, crossover, insertor, mutator, ranker, loopDetection);
 	}
 	
 	/**

@@ -55,7 +55,7 @@ public class MainDavid {
 		Params params = createParams();
 		AdjacencyFactory factory = new AdjacencyFactory();
 		Selector<Adjacency> selector = new SUS<Adjacency>(params);
-		CrossOver<Adjacency> crossover = new AlternatingEdge(factory, params, problem);
+		CrossOver<Adjacency> crossover = new AlternatingEdge(params, problem);
 		ReInsertor<Adjacency> insertor = new FBI<Adjacency>(params);
 		Mutator<Adjacency> mutator = new SimpleInversionMutator<Adjacency>(params);
 		Ranker<Adjacency> ranker = new LineairRanker<Adjacency>();
@@ -66,7 +66,7 @@ public class MainDavid {
 		Params params = createParams();
 		PathFactory factory = new PathFactory();
 		Selector<Path> selector = new SUS<Path>(params);
-		CrossOver<Path> crossover = new EdgeRecombination(factory, problem, params);
+		CrossOver<Path> crossover = new EdgeRecombination(problem, params);
 		ReInsertor<Path> insertor = new UI<Path>(params);
 		Mutator<Path> mutator = new SimpleInversionMutator<Path>(params);
 		Ranker<Path> ranker = new LineairRanker<Path>();

@@ -4,51 +4,60 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import factory.AdjacencyFactory;
-
 import main.Problem;
 import params.Params;
 import representations.Adjacency;
 import representations.Edge;
+import factory.AdjacencyFactory;
 
 public class AlternatingEdge extends CrossOver<Adjacency> {
 
+	private Direction currentDirection = getRandomDirection();
+	
 	public AlternatingEdge(Params params, Problem problem) {
 		super(new AdjacencyFactory(), problem, params);
 	}
 
-	//TODO misschien sneller met array list door de omzettingen die moeten gebeuren
+	// TODO misschien sneller met array list door de omzettingen die moeten
+	// gebeuren
 	@Override
-	protected List<Integer> breed(Adjacency firstParent,
-			Adjacency secondParent) {
-		Integer[] result = new Integer[firstParent.size()];
-		List<Integer> options = initializeOptions(firstParent.size());
-		Adjacency currentParent = firstParent;
-		Edge currentEdge = currentParent.getRandomEdge(params.rand);
+	protected List<Integer> breed(ParentChromosome<Adjacency> first,
+			ParentChromosome<Adjacency> second) {
+		currentDirection = getRandomDirection();
+		ParentChromosome<Adjacency> currentParent = first;
+		Integer[] result = new Integer[problem.size()];
+		List<Integer> options = initializeOptions(problem.size());
+		Edge currentEdge = currentParent.getChromOfDirection(currentDirection)
+				.getRandomEdge(params.rand);
 		options.remove(new Integer(currentEdge.getEnd()));
 		int counter = 1;
 		while (Arrays.asList(result).contains(null)) {
 			counter++;
 			result[currentEdge.getBegin()] = currentEdge.getEnd();
+			currentParent = (currentParent == first) ? second : first;
 			currentEdge = determineEdge(result, options, currentParent,
 					currentEdge, isLastEdge(result, counter));
-			currentParent = (currentParent == firstParent) ? secondParent
-					: firstParent;
 			options.remove(new Integer(currentEdge.getEnd()));
-			if(isLastEdge(result,counter))
+			if (isLastEdge(result, counter))
 				result[currentEdge.getBegin()] = currentEdge.getEnd();
 		}
 
 		return Arrays.asList(result);
 	}
 
+	private Direction getRandomDirection() {
+		return params.rand.nextFloat() > 0.5 ? Direction.LEFT_TO_RIGHT
+				: Direction.RIGHT_TO_LEFT;
+	}
+
 	private boolean isLastEdge(Integer[] result, int counter) {
-		return (counter == result.length? true: false);
+		return (counter == result.length ? true : false);
 	}
 
 	/**
-	 * Determines which edge to add next. If adding the edge would result in forming
-	 * a cycle then another (randomly chosen) one is picked instead. 
+	 * Determines which edge to add next. If adding the edge would result in
+	 * forming a cycle then another (randomly chosen) one is picked instead.
+	 * 
 	 * @param result
 	 * @param options
 	 * @param currentParent
@@ -57,30 +66,33 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 	 * @return
 	 */
 	private Edge determineEdge(Integer[] result, List<Integer> options,
-			Adjacency currentParent, Edge currentEdge, boolean isLastEdge) {
-		if(isLastEdge) {
+			ParentChromosome<Adjacency> parent, Edge edge, boolean isLastEdge) {
+		if (isLastEdge) {
 			int end;
-			if(!options.isEmpty())
+			if (!options.isEmpty())
 				end = options.get(0);
-			else {
+			else
 				end = getRemainingCity(result);
+			edge = new Edge(edge.getEnd(), end);
+		} else {
+			edge = parent.getChromOfDirection(currentDirection).getNextEdge(edge);
+			while (introducesCycle(edge, result)) {
+				currentDirection = currentDirection.getOpposite();
+				edge = parent.getChromOfDirection(currentDirection).getNextEdge(new Edge(-1,edge.getBegin()));
+				if(!introducesCycle(edge, result)) 
+					break;
+				edge = chooseNewEdge(edge, options);
 			}
-			currentEdge = new Edge(currentEdge.getEnd(), end);
 		}
-		else {	
-			currentEdge = currentParent.getNextEdge(currentEdge);
-			while (hasCycle(currentEdge, result)) {
-				currentEdge = chooseNewEdge(currentEdge, options);
-			}
-		}
-		return currentEdge;
+		return edge;
 	}
 
 	private int getRemainingCity(Integer[] result) {
 		List<Integer> options = initializeOptions(result.length);
 		int index = 0;
-		while(options.size() > 1) {
-			if(result[index] != null && options.contains(new Integer(result[index]))) {
+		while (options.size() > 1) {
+			if (result[index] != null
+					&& options.contains(new Integer(result[index]))) {
 				options.remove(new Integer(result[index]));
 			}
 			index++;
@@ -88,6 +100,12 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 		return options.get(0);
 	}
 
+	/**
+	 * Returns a list with all subsequent numbers from 0 to the given number -1.
+	 * 
+	 * @param number
+	 * @return
+	 */
 	private List<Integer> initializeOptions(int number) {
 		List<Integer> options = new ArrayList<Integer>();
 		for (int i = 0; i < number; i++) {
@@ -96,15 +114,14 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 		return options;
 	}
 
-	private Edge chooseNewEdge(Edge currentEdge, List<Integer> options) {
-		int end = options.get(params.rand.nextInt(options
-				.size()));
+	private Edge chooseNewEdge(Edge edge, List<Integer> options) {
+		int end = options.get(params.rand.nextInt(options.size()));
 		options.remove(new Integer(end));
-		return new Edge(currentEdge.getBegin(), end);
+		return new Edge(edge.getBegin(), end);
 	}
 
-	private boolean hasCycle(Edge currentEdge, Integer[] result) {
-		return result[currentEdge.getEnd()] != null;
+	private boolean introducesCycle(Edge edge, Integer[] result) {
+		return result[edge.getEnd()] != null;
 	}
 
 }

@@ -1,4 +1,4 @@
-package plots.GA;
+package plots.reps;
 
 import java.util.Random;
 
@@ -55,7 +55,7 @@ public class Crossover {
 		params.elitists = 0.20;
 		params.rand = new Random(256);
 		
-		return new GA<Adjacency>(
+		/*return new GA<Adjacency>(
 			params,
 			new AdjacencyFactory(),
 			getSelector(),
@@ -63,7 +63,7 @@ public class Crossover {
 			getInsertor(),
 			getMutator(),
 			getRanker()
-		);
+		);*/
 	}
 	
 	public static Selector<Adjacency> getSelector(){

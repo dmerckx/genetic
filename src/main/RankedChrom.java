@@ -24,4 +24,8 @@ public class RankedChrom<R extends Chromosome>  implements Comparable<RankedChro
 	public RankedChrom<R> clone(){
 		return new RankedChrom<R>(fitness, (R) chrom.clone());
 	}
+	
+	public String toString() {
+		return "fitness: " + fitness /*+ " chrom: " + chrom*/;
+	}
 }

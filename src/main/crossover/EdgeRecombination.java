@@ -19,7 +19,9 @@ public class EdgeRecombination extends CrossOver<Path> {
 	}
 
 	@Override
-	public List<Integer> breed(Path p1, Path p2) {
+	public List<Integer> breed(ParentChromosome<Path> parent1, ParentChromosome<Path> parent2) {
+		Path p1 = parent1.getChromOfDirection(Direction.LEFT_TO_RIGHT);
+		Path p2 = parent2.getChromOfDirection(Direction.LEFT_TO_RIGHT);
 		List<Integer> result = new ArrayList<Integer>();
 		List<Integer> unvisitedCities = getCities();
 		List<Set<Integer>> edgeMap = constructEdgeMap(p1, p2);

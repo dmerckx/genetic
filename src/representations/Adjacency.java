@@ -2,7 +2,9 @@ package representations;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import main.Problem;
@@ -140,6 +142,28 @@ public class Adjacency extends Chromosome {
 		int temp = path.get(index1);
 		path.set(index1, path.get(index2));
 		path.set(index2, temp);
+	}
+	
+	@Override
+	public List<Integer> getReversePath() {
+		List<Integer> result = new ArrayList<Integer>();
+		Map<Integer, Integer> indexMapping = new HashMap<Integer, Integer>();
+		for (int i = 0; i < path.size(); i++) {
+			indexMapping.put(path.get(i),i);
+			result.add(0);
+		}
+		for (int i = 0; i < path.size(); i++) {
+			result.set(i, indexMapping.get(i));
+		}
+		return result;
+	}
+	
+	public String toString() {
+		String print = "";
+		for (int iterable_element : path) {
+			print = print + " " + iterable_element;
+		}
+		return print;
 	}
 	
 }

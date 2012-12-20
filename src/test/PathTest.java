@@ -1,7 +1,7 @@
 package test;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -70,6 +70,33 @@ public class PathTest {
 		path.swap(5, 2);
 		assertEquals((int)13,(int)path.getPath().get(2));
 		assertEquals((int)7,(int)path.getPath().get(5));
+	}
+	
+	@Test
+	public void getReseversePath() {
+		List<Integer> result = new ArrayList<Integer>();
+		result.add(1);
+		result.add(2);
+		result.add(8);
+		result.add(6);
+		result.add(3);
+		result.add(7);
+		result.add(0);
+		result.add(4);
+		result.add(5);
+		
+		Path ad1 = new Path(problem, result);
+			
+		List<Integer> reverse = ad1.getReversePath();
+		assertEquals((int)reverse.get(0),5);
+		assertEquals((int)reverse.get(1),4);
+		assertEquals((int)reverse.get(2),0);
+		assertEquals((int)reverse.get(3),7);
+		assertEquals((int)reverse.get(4),3);
+		assertEquals((int)reverse.get(5),6);
+		assertEquals((int)reverse.get(6),8);
+		assertEquals((int)reverse.get(7),2);
+		assertEquals((int)reverse.get(8),1);
 	}
 	
 }

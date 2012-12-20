@@ -16,7 +16,6 @@ import org.junit.Test;
 
 import params.Params;
 import params.TestParams;
-
 import representations.Adjacency;
 import representations.path.Path;
 import util.ProblemGenerator;

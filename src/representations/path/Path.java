@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Random;
 
 import main.Problem;
-import representations.Edge;
 import representations.Chromosome;
+import representations.Edge;
 
 public class Path extends Chromosome {
 
@@ -121,6 +121,15 @@ public class Path extends Chromosome {
 				break;
 		}
 		return distance;
+	}
+	
+	@Override
+	public List<Integer> getReversePath() {
+		List<Integer> result = new ArrayList<Integer>();
+		for (int i = path.size()-1; i >= 0; i--) {
+			result.add(path.get(i));
+		}
+		return result;
 	}
 	
 }
