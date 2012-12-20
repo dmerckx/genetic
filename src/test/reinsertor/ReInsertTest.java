@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Random;
 
 import main.Problem;
+import main.RankedChrom;
 import main.insertion.FBI;
 import main.insertion.UI;
-import main.selectors.RWS;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -21,7 +21,6 @@ import org.junit.Test;
 import params.Params;
 import params.TestParams;
 import representations.Chromosome;
-import representations.path.Path;
 import util.ProblemGenerator;
 
 public class ReInsertTest {
@@ -30,8 +29,8 @@ public class ReInsertTest {
 	private static String filePath = "../genetic/datafiles/rondrit016.tsp";
 	
 	private Params params;
-	private FBI<DummyRep> fbi;
-	private UI<DummyRep> ui;
+	private FBI<Chromosome> fbi;
+	private UI<Chromosome> ui;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -41,8 +40,8 @@ public class ReInsertTest {
 	@Before
 	public void setUp() throws Exception {
 		params = new TestParams();
-		fbi = new FBI<DummyRep>(params);
-		ui = new UI<DummyRep>(params);
+		fbi = new FBI<Chromosome>(params);
+		ui = new UI<Chromosome>(params);
 	}
 	
 	@Test
@@ -59,18 +58,18 @@ public class ReInsertTest {
 		oldPop.add(r3);
 		oldPop.add(r1);
 		
-		List<DummyRep> children = new ArrayList<DummyRep>();
+		List<Chromosome> children = new ArrayList<Chromosome>();
 		
-		DummyRep c1 = new DummyRep(1);
-		DummyRep c2 = new DummyRep(2);
+		Chromosome c1 = new DummyRep(1);
+		Chromosome c2 = new DummyRep(2);
 		DummyRep c3 = new DummyRep(3);
 		
 		children.add(c1);
 		children.add(c3);
 		children.add(c2);
 		
-		List<DummyRep> resFBI = fbi.reinsert(oldPop, children);
-		List<DummyRep> resUI = ui.reinsert(oldPop, children);
+		List<Chromosome> resFBI = fbi.reinsert(oldPop, children);
+		List<Chromosome> resUI = ui.reinsert(oldPop, children);
 		
 		assertEquals(popSize, resFBI.size());
 		assertEquals(popSize, resUI.size());
@@ -172,39 +171,15 @@ public class ReInsertTest {
 	
 }
 
-class DummyRep extends Chromosome{
+class DummyRep extends RankedChrom<Chromosome>{
 	
 	public DummyRep(double fitness) {
-		super(fitness);
-	}
-	
-	@Override
-	public void setRandomImpl(Random rand) {
-		
-	}
-
-	@Override
-	public double calcPathLength() {
-		throw new RuntimeException("mag niet worden aangeroepen");
-	}
-
-	@Override
-	public Path toPath() {
-		return null;
-	}
-
-	@Override
-	public void fromPath(Path path) {
-	}
-
-	@Override
-	public Chromosome clone() {
-		return null;
+		super(fitness, null);
 	}
 	
 	@Override
 	public String toString() {
-		return super.toString()+" : " + getFitness();
+		return super.toString()+" : " + fitness;
 	}
 }
 

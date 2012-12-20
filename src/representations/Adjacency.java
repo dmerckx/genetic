@@ -100,6 +100,12 @@ public class Adjacency extends Chromosome {
 	public void fromPath(Path p) {
 		List<Integer> pathRep = p.getPath();
 		
+		if(path.size() == 0){
+			for(int i = 0; i < problem.size(); i++){
+				path.add(0);
+			}
+		}
+		
 		for(int i = 0; i < problem.size()-1; i++){
 			path.set(pathRep.get(i), pathRep.get(i+1));
 		}

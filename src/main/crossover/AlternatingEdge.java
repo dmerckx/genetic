@@ -13,8 +13,8 @@ import representations.Edge;
 
 public class AlternatingEdge extends CrossOver<Adjacency> {
 
-	public AlternatingEdge(AdjacencyFactory adjacencyFactory, Params params, Problem problem) {
-		super(adjacencyFactory, problem, params);
+	public AlternatingEdge(Params params, Problem problem) {
+		super(new AdjacencyFactory(), problem, params);
 	}
 
 	//TODO misschien sneller met array list door de omzettingen die moeten gebeuren

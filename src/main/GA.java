@@ -16,7 +16,7 @@ import factory.RepresentationFactory;
 public class GA<R extends Chromosome> {
 
 	protected Params params;
-	private RepresentationFactory<R> factory;
+	public final RepresentationFactory<R> factory;
 	
 	private final Selector<R> selector;
 	private final CrossOver<R> crossover;
@@ -37,6 +37,10 @@ public class GA<R extends Chromosome> {
 	}
 	
 	public void run(Problem problem, History history){
+		run(problem, history, null);
+	}
+	
+	public void run(Problem problem, History history, Communicator<R> comm){
 		
 		List<R> pop = initPopulation(problem);
 		
@@ -55,23 +59,21 @@ public class GA<R extends Chromosome> {
 			List<RankedChrom<R>> rankedPop = ranker.rank(pop);
 			
 			List<R> selection = selector.doSelection(rankedPop);
-			//System.out.println(selection.size());
-
-			//System.out.println("selection: " + selection.size());
 			
 			List<R> children = crossover.doCrossOver(selection);
 			
-			//System.out.println("children: " + children.size());
-			
 			mutate(children);
-			
-			//System.out.println("pop: " + pop.size());
 			
 			pop = insertor.reinsert(rankedPop, children);
 			
 			i++;
+			
+			if(comm != null && i % params.renegadeFreq == 0){
+				Collections.sort(pop);
+				sendRenegades(comm, pop);
+				pop = addRenegades(pop, comm.getMessages());
+			}
 		}
-		
 		
 		/*int doubles = 0;
 		for(R chrom:pop){
@@ -123,5 +125,25 @@ public class GA<R extends Chromosome> {
 		
 		return result;
 		
+	}
+	
+	public List<R> addRenegades(List<R> pop, List<R> renegades){
+		List<R> newPop = new ArrayList<R>();
+		
+		for(R chrom:renegades){
+			newPop.addAll(renegades);
+		}
+		
+		newPop.addAll(pop.subList(0, pop.size() - renegades.size()));
+		
+		return newPop;
+	}
+	
+	public void sendRenegades(Communicator<R> comm, List<R> pop){
+		int nrRens = (int) (params.renegades * params.popSize);
+		
+		for(int i = 0; i < nrRens; i++){
+			comm.send(pop.get(i));
+		}
 	}
 }

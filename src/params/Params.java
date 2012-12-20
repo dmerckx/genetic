@@ -11,5 +11,9 @@ public class Params {
 	public double elitists;
 	public double mach = 1e-15d;
 	public Random rand = new Random();
+	
+	public double renegades = 0.0d;
+	public int renegadeFreq = 999999;
+	
 	public boolean detectLoops;
 }

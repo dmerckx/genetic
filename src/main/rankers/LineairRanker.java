@@ -29,7 +29,7 @@ public class LineairRanker<R extends Chromosome> implements Ranker<R> {
 			//the fittest individual Pos=Nind
 			//http://www.geatbx.com/docu/algindex-02.html#P240_15119
 			int pos = size-i;
-			int fit = 2 - pressure + 2 * (pressure-1) * (pos-1) / (size-1); 
+			double fit = 2 - pressure + 2.0d * (pressure-1) * (pos-1) / (size-1); 
 			ranked.add(new RankedChrom<R>(fit, unrankedPop.get(i)));
 		}
 		

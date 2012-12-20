@@ -42,7 +42,7 @@ public class AdjacencyTest {
 	public void testGetFitness_simple() {
 		ad.setRandom(new Random(5));
 		double fitness = 1 / 2439.190713;
-		assertTrue(ad.getFitness() - fitness <= 1e-15);
+		assertTrue(ad.getFitnes() - fitness <= 1e-15);
 	}
 	
 	@Test

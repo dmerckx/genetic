@@ -8,12 +8,16 @@ import java.util.List;
 
 public class History {
 
-	private List<Double> bestList;
-	private List<Double> meanList;
-	private List<Double> worstList;
+	public List<Double> bestList;
+	public List<Double> meanList;
+	public List<Double> worstList;
 	
 	private final String filePath;
 	
+	public History() {
+		this(null);
+			
+	}
 	
 	public History(String filePath) {
 		this.filePath = filePath;
@@ -50,6 +54,7 @@ public class History {
 	}
 	
 	public void writeFile(){
+		if(filePath == null) throw new UnsupportedOperationException("Only histories with a filePath can be written to file");
 
 		try {
 			FileWriter writer = new FileWriter(new File(filePath));
@@ -62,5 +67,9 @@ public class History {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	public int size() {
+		return bestList.size();
 	}
 }

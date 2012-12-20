@@ -8,15 +8,14 @@ import java.util.Set;
 import main.Problem;
 import params.Params;
 import representations.path.Path;
-import factory.RepresentationFactory;
+import factory.PathFactory;
 
 public class EdgeRecombination extends CrossOver<Path> {
 
 	// TODO the tie case in choose city(edgeMap) should maybe be chosen completely random!
 	
-	public EdgeRecombination(RepresentationFactory<Path> factory,
-			Problem problem, Params params) {
-		super(factory, problem, params);
+	public EdgeRecombination(Problem problem, Params params) {
+		super(new PathFactory(), problem, params);
 	}
 
 	@Override

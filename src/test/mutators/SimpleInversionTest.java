@@ -1,19 +1,6 @@
 package test.mutators;
 
 
-import java.util.Random;
-
-import main.Problem;
-import main.mutation.Mutator;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import params.Params;
-import params.TestParams;
-import representations.Adjacency;
-import util.ProblemGenerator;
 
 public class SimpleInversionTest {
 
@@ -21,7 +8,7 @@ public class SimpleInversionTest {
 //	
 //	private static final Params params;
 //	
-//	private static final Mutator<Adjacency> simpleInversion;
+//	private static final Mutator<Adjacency> x;
 //	
 //	private static final Adjacency adj;
 //	
