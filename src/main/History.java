@@ -12,7 +12,7 @@ public class History {
 	public List<Double> meanList;
 	public List<Double> worstList;
 	
-	private final String filePath;
+	public final String filePath;
 	
 	public History() {
 		this(null);

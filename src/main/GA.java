@@ -2,6 +2,8 @@ package main;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+
 import main.crossover.CrossOver;
 import main.insertion.ReInsertor;
 import main.mutation.Mutator;
@@ -39,6 +41,30 @@ public class GA<R extends Chromosome> {
 	
 	public void run(Problem problem, History history){
 		run(problem, history, null);
+	}
+	
+	public void run(Problem problem, History history, int nrTimes){
+		params.rand = new Random();
+		
+		List<History> histories = new ArrayList<History>();
+		
+		for(int i=0; i < nrTimes; i++){
+			History h = new History();
+			histories.add(h);
+			run(problem, history, null);
+		}
+		
+		for(int i=0; i < params.maxGenerations; i++){
+			double best = 0;
+			double worst = 0;
+			double mean = 0;
+			for(History h:histories){
+				best += h.bestList.get(i);
+				worst += h.worstList.get(i);
+				mean += h.worstList.get(i);
+			}
+			history.write(best/nrTimes, mean/nrTimes, worst/nrTimes);
+		}
 	}
 	
 	public void run(Problem problem, History history, Communicator<R> comm){
