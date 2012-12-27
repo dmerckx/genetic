@@ -2,7 +2,6 @@ package main;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import main.crossover.CrossOver;
 import main.insertion.ReInsertor;
@@ -26,6 +25,8 @@ public class GA<R extends Chromosome> {
 	private final Ranker<R> ranker;
 	private final LoopDetection<R> loopDetector;
 	
+	public Timer timer = new Timer();
+	
 	public GA(Params params, RepresentationFactory<R> factory, Selector<R> selector,
 			CrossOver<R> crossover, ReInsertor<R> insertor, Mutator<R> mutator, Ranker<R> ranker, LoopDetection<R> loopDetector) {
 		this.params = params;
@@ -44,12 +45,15 @@ public class GA<R extends Chromosome> {
 	}
 	
 	public void run(Problem problem, History history, int nrTimes){
+		
 		List<History> histories = new ArrayList<History>();
 		
 		for(int i=0; i < nrTimes; i++){
 			History h = new History();
 			histories.add(h);
 			run(problem, h, null);
+			
+			System.out.println("completed run: " + (i+1));
 		}
 		
 		for(int i=0; i < params.maxGenerations; i++){
@@ -71,7 +75,8 @@ public class GA<R extends Chromosome> {
 		double best = 0;
 		int i = 0;
 		while(i < params.maxGenerations){
-			//TODO: work with linkedlists instead of arraylists?
+			timer.start();
+			
 			Collections.sort(pop);
 			
 			best = pop.get(0).getPathLength();
@@ -82,17 +87,23 @@ public class GA<R extends Chromosome> {
 			//if(checkStop(best, pop)) break;
 			
 			List<RankedChrom<R>> rankedPop = ranker.rank(pop);
+			timer.addRankingTime();
 			
 			List<R> selection = selector.doSelection(rankedPop);
+			timer.addSelectionTime();
 			
 			List<R> children = crossover.doCrossOver(selection);
+			timer.addCrossTime();
 			
 			mutate(children);
+			timer.addMutationTime();
 			
 			pop = insertor.reinsert(rankedPop, children);
+			timer.addInsertTime();
 			
 			if(params.detectLoops)
 				doLoopDetection(pop);
+			timer.addLoopdetTime();
 			
 			i++;
 			

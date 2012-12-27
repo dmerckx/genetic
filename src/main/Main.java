@@ -28,19 +28,20 @@ public class Main {
 
 	public static void main(String[] args) {
 		Problem problem = ProblemGenerator.generate("../genetic/datafiles/rondrit127.tsp");
+//		
+//		History history1 = new History("../genetic/result/resultNewAdj.txt");
+//		createGA1(problem).run(problem, history1);
+//		
+//		history1.printShort();
 		
-		History history1 = new History("../genetic/result/resultNewAdj.txt");
-		createGA1(problem).run(problem, history1);
 		
-		history1.printShort();
 		
-		/*
 		History history2 = new History("../genetic/result/resultNewPath.txt");
 		createGA2(problem).run(problem, history2);
 		history2.writeFile();
 		
 		System.out.println("Path");
-		history2.printShort();*/
+		history2.printShort();
 	}
 	
 	
@@ -78,13 +79,14 @@ public class Main {
 	 */
 	private static Params createParams(boolean useTestParams) {
 		Params params = new Params();
-		params.crossover = 0.85;
-		params.elitists = 0.15;
+		params.crossover = 0.95;
+		params.elitists = 0.10;
 		params.maxGenerations = 1000;
-		params.mutation = 0.08;
-		params.popSize = 100;
+		params.mutation = 0.05;
+		params.popSize = 150;
 		params.stop = 0.95;
 		params.rand = new Random();
+		params.correlativeTournament = true;
 		return useTestParams ? new TestParams() : params ;
 	}
 	

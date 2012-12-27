@@ -1,31 +1,18 @@
 clear;
 clc;
 
-load ..\result\resultFbiAdj.txt
-load ..\result\resultUiAdj.txt
-load ..\result\resultFbiPath.txt
-load ..\result\resultUiPath.txt
-load ..\result\resultNewPath.txt
-load ..\result\resultNewAdj.txt
+load ..\result\result-adj-rws.txt
+load ..\result\result-adj-sus.txt
+load ..\result\result-adj-tournament.txt
 
 figure;
 
-subplot(2,3,1);
-plotSingleGraph(resultFbiAdj);
-title('Adjacency with FBI insertion');
-subplot(2,3,2);
-plotSingleGraph(resultUiAdj);
-title('Adjacency with UI insertion');
-subplot(2,3,3);
-plotSingleGraph(resultNewAdj);
-title('Adjacency with Own insertion');
-subplot(2,3,4);
-plotSingleGraph(resultFbiPath);
-title('Path with FBI insertion');
-axis([0 100 1300 4000]);
-subplot(2,3,5);
-plotSingleGraph(resultUiPath);
-title('Path with UI insertion');
-subplot(2,3,6);
-plotSingleGraph(resultNewPath);
-title('Path with Own insertion');
+subplot(1,3,1);
+plotSingleGraph(result_adj_rws);
+title('Adjacency with RWS selection');
+subplot(1,3,2);
+plotSingleGraph(result_adj_sus);
+title('Adjacency with SUS selection');
+subplot(1,3,3);
+plotSingleGraph(result_adj_tournament);
+title('Adjacency with tournament selection');

@@ -1,6 +1,6 @@
 package representations;
 
-public class Edge {
+public class Edge implements Comparable<Edge>{
 
 	private int begin;
 	private int end;
@@ -20,6 +20,24 @@ public class Edge {
 	
 	public String toString() {
 		return "begin: " + begin + " end: " + end;
+	}
+
+	@Override
+	public int compareTo(Edge edge) {
+		return (edge.getBegin()==getBegin() && edge.getEnd() == getEnd()) ? 0 : -1;
+	}
+	
+	@Override
+	public int hashCode() {
+		int hash = 23;
+		hash = hash * 31 + begin;
+		hash = hash * 31 + end;
+		return hash;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return other instanceof Edge ? compareTo((Edge) other) == 0 : false;
 	}
 	
 }

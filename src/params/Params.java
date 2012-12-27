@@ -3,6 +3,7 @@ import java.util.Random;
 
 
 public class Params {
+	public boolean correlativeTournament = false;
 	public int popSize;
 	public int maxGenerations;
 	public double crossover;
@@ -16,4 +17,5 @@ public class Params {
 	public int renegadeFreq = 999999;
 	
 	public boolean detectLoops;
+	public double similarSubsetSize = 0.5;
 }

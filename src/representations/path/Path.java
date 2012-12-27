@@ -2,8 +2,11 @@ package representations.path;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import main.Problem;
 import representations.Chromosome;
@@ -15,7 +18,7 @@ public class Path extends Chromosome {
 	private Problem problem;
 	
 	public Path(Problem problem){
-		this(problem, new ArrayList<Integer>());
+		this(problem, new ArrayList<Integer>(problem.size() + 1));
 	}
 	
 	public Path(Problem problem, List<Integer> path ) {
@@ -128,6 +131,18 @@ public class Path extends Chromosome {
 		List<Integer> result = new ArrayList<Integer>();
 		for (int i = path.size()-1; i >= 0; i--) {
 			result.add(path.get(i));
+		}
+		return result;
+	}
+
+	@Override
+	public Set<Edge> getEdges() {
+		Set<Edge> result = new HashSet<Edge>();
+		for (int i = 0; i < path.size(); i++) {
+			if(i != path.size()-1)
+				result.add(new Edge(path.get(i),path.get(i+1)));
+			else
+				result.add(new Edge(path.get(i),path.get(0)));
 		}
 		return result;
 	}

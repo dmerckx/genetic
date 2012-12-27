@@ -31,4 +31,3 @@ cmap = flipud(cmap);
 colormap(cmap);
 
 title('Colormap of QOS vs. mutation and crossover');
-
