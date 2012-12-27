@@ -44,14 +44,12 @@ public class GA<R extends Chromosome> {
 	}
 	
 	public void run(Problem problem, History history, int nrTimes){
-		params.rand = new Random();
-		
 		List<History> histories = new ArrayList<History>();
 		
 		for(int i=0; i < nrTimes; i++){
 			History h = new History();
 			histories.add(h);
-			run(problem, history, null);
+			run(problem, h, null);
 		}
 		
 		for(int i=0; i < params.maxGenerations; i++){
@@ -61,7 +59,7 @@ public class GA<R extends Chromosome> {
 			for(History h:histories){
 				best += h.bestList.get(i);
 				worst += h.worstList.get(i);
-				mean += h.worstList.get(i);
+				mean += h.meanList.get(i);
 			}
 			history.write(best/nrTimes, mean/nrTimes, worst/nrTimes);
 		}

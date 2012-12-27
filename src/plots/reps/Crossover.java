@@ -1,24 +1,25 @@
 package plots.reps;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 
 import main.GA;
 import main.History;
 import main.Problem;
 import main.crossover.AlternatingEdge;
-import main.crossover.CrossOver;
+import main.crossover.EdgeRecombination;
 import main.insertion.FBI;
-import main.insertion.ReInsertor;
 import main.mutation.ExchangeMutator;
-import main.mutation.Mutator;
 import main.rankers.LineairRanker;
-import main.rankers.Ranker;
 import main.selectors.SUS;
-import main.selectors.Selector;
 import params.Params;
 import representations.Adjacency;
+import representations.path.Path;
 import util.ProblemGenerator;
 import factory.AdjacencyFactory;
+import factory.PathFactory;
 
 public class Crossover {
 
@@ -28,61 +29,83 @@ public class Crossover {
 	public static void main(String[] args) {
 		problem = ProblemGenerator.generate("../genetic/datafiles/rondrit070.tsp");
 		
-		double[] mutations = new double[]{0,0.15,0.30,0.50,0.80};
+		double[] mutations = new double[]{0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
+		double[] crossovers = new double[]{0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
+		double[][] bestResultsAdj = new double[mutations.length][crossovers.length];
+		double[][] bestResultsPath = new double[mutations.length][crossovers.length];
 		
-		for(double mut:mutations){
-			double cross = 0;
-			while(cross <= 1.00){
-				History history =
-						new History("../genetic/plots/ga/crossover_m" + mut + "c" + cross + ".txt");
-				GA<Adjacency> ga = createGA(mut, cross);
-				ga.run(problem, history);
-				history.writeFile();
-				System.out.println("Results for mut:" + mut + " cross:" + cross);
-				history.printShort();
+		for(int m = 0; m < mutations.length; m++){
+			for(int c = 0; c < crossovers.length; c++){
+				setParams(mutations[m], crossovers[c]);
 				
-				cross += 0.25;
+				GA<?> ga1 = createAdjGA();
+				History history1 = new History();
+				ga1.run(problem, history1, 3);
+				bestResultsAdj[m][c] = history1.getLastBest();
+				
+
+				GA<?> ga2 = createPathGA();
+				History history2 = new History();
+				ga2.run(problem, history2, 3);
+				bestResultsPath[m][c] = history2.getLastBest();
+				
+				history1.printShort();
+				history2.printShort();
 			}
+		}
+
+		try {
+			FileWriter writerAdj = new FileWriter(new File("../genetic/plots/crossoverAdj"));
+			FileWriter writerPath = new FileWriter(new File("../genetic/plots/crossoverPath"));
+			for(int m = 0; m < mutations.length; m++){
+				for(int c = 0; c < crossovers.length; c++){
+					writerAdj.write(bestResultsAdj[m][c] + " ");
+					writerPath.write(bestResultsPath[m][c] + " ");
+				}
+				writerAdj.write("\r\n");
+				writerPath.write("\r\n");
+			}
+			writerAdj.close();
+			writerPath.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 	}
 	
-	public static GA<Adjacency> createGA(double mutation, double crossover){
+	public static void setParams(double mutation, double crossover){
 		params = new Params();
-		params.popSize = 300;
-		params.maxGenerations = 500;
+		params.popSize = 100;
+		params.maxGenerations = 300;
 		params.mutation = mutation;
 		params.crossover = crossover;
-		params.elitists = 0.20;
+		params.elitists = 0.15;
 		params.rand = new Random(256);
-		
-		/*return new GA<Adjacency>(
+	}
+	
+	public static GA<Adjacency> createAdjGA(){
+		return new GA<Adjacency>(
 			params,
 			new AdjacencyFactory(),
-			getSelector(),
-			getCrossover(),
-			getInsertor(),
-			getMutator(),
-			getRanker()
-		);*/
+			new SUS<Adjacency>(params),
+			new AlternatingEdge(params, problem),
+			new FBI<Adjacency>(params),
+			new ExchangeMutator<Adjacency>(params),
+			new LineairRanker<Adjacency>(),
+			null	//no loop detection
+		);
 	}
 	
-	public static Selector<Adjacency> getSelector(){
-		return new SUS<Adjacency>(params);
+	public static GA<Path> createPathGA(){
+		return new GA<Path>(
+			params,
+			new PathFactory(),
+			new SUS<Path>(params),
+			new EdgeRecombination(problem, params),
+			new FBI<Path>(params),
+			new ExchangeMutator<Path>(params),
+			new LineairRanker<Path>(),
+			null	//no loop detection
+		);
 	}
 	
-	public static CrossOver<Adjacency> getCrossover(){
-		return new AlternatingEdge(params, problem);
-	}
-	
-	public static ReInsertor<Adjacency> getInsertor(){
-		return new FBI<Adjacency>(params);
-	}
-	
-	public static Mutator<Adjacency> getMutator(){
-		return new ExchangeMutator<Adjacency>(params);
-	}
-	
-	public static Ranker<Adjacency> getRanker(){
-		return new LineairRanker<Adjacency>();
-	}
 }

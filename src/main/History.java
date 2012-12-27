@@ -28,6 +28,10 @@ public class History {
 			
 	}
 	
+	public double getLastBest(){
+		return bestList.get(size()-1);
+	}
+	
 	public void write(double best, double mean, double worst) {
 		bestList.add(best);
 		meanList.add(mean);
