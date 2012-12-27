@@ -2,6 +2,7 @@ package representations;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import representations.path.Path;
 
@@ -64,4 +65,21 @@ public abstract class Chromosome implements Comparable<Chromosome>{
 	public abstract void swap(int city1, int city2);
 	
 	public abstract List<Integer> getReversePath();
+	
+	/**
+	 * Returns the number of edges that this chromosome has in common with the other one.
+	 * @param other
+	 * @return
+	 */
+	public final int getCorrelationValue(Chromosome other) {
+		int counter = 0;
+		Set<Edge> edges = other.getEdges();
+		for (Edge edge : getEdges()) {
+			if(edges.contains(edge))
+				counter++;
+		}
+		return counter;
+	}
+	
+	public abstract Set<Edge> getEdges();
 }

@@ -3,9 +3,11 @@ package representations;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import main.Problem;
 import representations.path.Path;
@@ -164,6 +166,19 @@ public class Adjacency extends Chromosome {
 			print = print + " " + iterable_element;
 		}
 		return print;
+	}
+	
+	@Override
+	public Set<Edge> getEdges() {
+		Set<Edge> result = new HashSet<Edge>();
+		Edge begin = getRandomEdge(new Random());
+		Edge currentEdge = getNextEdge(begin);
+		result.add(currentEdge);
+		while((!(currentEdge = getNextEdge(currentEdge)).equals( begin ))) {
+			result.add(currentEdge);
+		}
+		result.add(begin);
+		return result;
 	}
 	
 }

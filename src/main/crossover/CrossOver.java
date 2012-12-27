@@ -22,6 +22,10 @@ public abstract class CrossOver<R extends Chromosome> {
 		this.params = params;
 	}
 
+	private static int counterSame = 0;
+	private static int counterDiff = 0;
+	
+	
 	/**
 	 * @pre The given list is supposed to have an even number of elements.
 	 * @param selection
@@ -34,8 +38,13 @@ public abstract class CrossOver<R extends Chromosome> {
 		int size =selection.size()/2;
 		for (int i = 0; i < size; i++) {
 			R firstParent = selectParent(selection);
-			R secondParent = selectParent(selection);
+			R secondParent;
+				
 			if(haveToBreed()) {
+				if(params.correlativeTournament) 
+					secondParent = selectSimilarParent(selection, firstParent);
+				else
+					secondParent = selectParent(selection);
 				ParentChromosome<R> par1 = new ParentChromosome<R>(firstParent, createInverse(firstParent));
 				ParentChromosome<R> par2 = new ParentChromosome<R>(secondParent, createInverse(secondParent));
 				List<Integer> path1 = breed(par1, par2);
@@ -45,11 +54,33 @@ public abstract class CrossOver<R extends Chromosome> {
 			}
 			else {
 				children.add((R)firstParent.clone());
-				children.add((R)secondParent.clone());
+				children.add((R)selectParent(selection).clone());
 			}
 		}
 		return children;
 
+	}
+
+	//TODO de meest gelijkaardige selecteren in heel de selectie of in een subpopulatie?
+	private R selectSimilarParent(List<R> selection, R firstParent) {
+		int maxSimilarity = 0;
+		R mostSimilarParent = selection.get(0);
+		int range = ((int) (selection.size() - (params.similarSubsetSize*selection.size())));
+		int begin = range == 0 ? 0: params.rand.nextInt(range);
+		List<R> subset = selection.subList(begin, (int) (begin+params.similarSubsetSize*selection.size()));
+		for (R r : subset) {
+			int similarity = r.getCorrelationValue(firstParent);
+			if(similarity > maxSimilarity) {
+				maxSimilarity = similarity;
+				mostSimilarParent = r;
+			}
+		}
+		if(maxSimilarity == 70)
+			counterSame++;
+		else
+			counterDiff++;
+		selection.remove(mostSimilarParent);
+		return mostSimilarParent;
 	}
 
 	private R createInverse(R chrom) {

@@ -51,11 +51,11 @@ public class PathTest {
 	public void setUp() throws Exception {
 	}
 
-	@Test
-	public void getFitnessTest() {
-		double fitness = 1 / 3210.522106;
-		assertTrue(Math.abs(path.getFitness() - fitness) <= machine_precision);
-	}
+//	@Test
+//	public void getFitnessTest() {
+//		double fitness = 1 / 3210.522106;
+//		assertTrue(Math.abs(path.getFitness() - fitness) <= machine_precision);
+//	}
 	
 	@Test
 	public void testGetPathLength_partial() {
@@ -98,5 +98,66 @@ public class PathTest {
 		assertEquals((int)reverse.get(7),2);
 		assertEquals((int)reverse.get(8),1);
 	}
+	
+	@Test
+	public void testCorrelationValue() {
+		List<Integer> path1 = new ArrayList<Integer>();
+		path1.add(0);
+		path1.add(3);
+		path1.add(7);
+		path1.add(2);
+		path1.add(15);
+		path1.add(13);
+		path1.add(11);
+		path1.add(4);
+		path1.add(9);
+		path1.add(6);
+		path1.add(14);
+		path1.add(12);
+		path1.add(10);
+		path1.add(8);
+		path1.add(5);
+		path1.add(1);
+		
+		Path path = new Path(problem, path1);
+		
+		List<Integer> path3 = new ArrayList<Integer>();
+		
+		path3.add(0);
+		path3.add(3);
+		path3.add(7);
+		path3.add(2);
+		path3.add(15);
+		path3.add(13);
+		path3.add(11);
+		path3.add(4);
+		path3.add(9);
+		path3.add(6);
+		path3.add(14);
+		path3.add(12);
+		path3.add(10);
+		path3.add(8);
+		path3.add(5);
+		path3.add(1);
+		
+		List<Integer> path2 = new ArrayList<Integer>();
+		path2.add(0);
+		path2.add(3);
+		path2.add(7);
+		path2.add(2);
+		path2.add(13);
+		path2.add(11);
+		path2.add(9);
+		path2.add(14);
+		path2.add(10);
+		path2.add(5);
+		path2.add(1);
+		
+		assertEquals(6, path.getCorrelationValue(new Path(problem,path2)));
+		
+		assertEquals(16, path.getCorrelationValue(new Path(problem,path3)));
+		
+	}
+	
 	
 }
