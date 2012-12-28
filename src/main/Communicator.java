@@ -27,7 +27,7 @@ public class Communicator<R extends Chromosome> {
 		return result;
 	}
 	
-	public void receive(Chromosome chrom){
+	public synchronized void receive(Chromosome chrom){
 		R newChrom = factory.create(problem);
 		newChrom.fromPath(chrom.toPath());
 		received.add(newChrom);

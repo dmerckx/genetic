@@ -1,4 +1,4 @@
-package plots.reps.populationsize;
+package plots.populationsize;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,7 +14,7 @@ import main.mutation.SimpleInversionMutator;
 import main.rankers.LineairRanker;
 import main.selectors.SUS;
 import params.Params;
-import plots.reps.PlotWriter;
+import plots.PlotWriter;
 import representations.Adjacency;
 import representations.path.Path;
 import util.ProblemGenerator;

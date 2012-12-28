@@ -1,4 +1,4 @@
-package plots.reps.mutation;
+package plots.mutation;
 
 import java.util.Random;
 

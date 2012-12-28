@@ -1,4 +1,4 @@
-package plots.reps.selection;
+package plots.selection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import main.rankers.LineairRanker;
 import main.rankers.Ranker;
 import main.selectors.Tournament;
 import params.Params;
-import plots.reps.PlotWriter;
+import plots.PlotWriter;
 import representations.Adjacency;
 import util.ProblemGenerator;
 import factory.AdjacencyFactory;

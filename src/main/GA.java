@@ -75,7 +75,7 @@ public class GA<R extends Chromosome> {
 		double best = 0;
 		int i = 0;
 		while(i < params.maxGenerations){
-			timer.start();
+			//timer.start();
 			
 			Collections.sort(pop);
 			
@@ -87,30 +87,30 @@ public class GA<R extends Chromosome> {
 			//if(checkStop(best, pop)) break;
 			
 			List<RankedChrom<R>> rankedPop = ranker.rank(pop);
-			timer.addRankingTime();
+			//timer.addRankingTime();
 			
 			List<R> selection = selector.doSelection(rankedPop);
-			timer.addSelectionTime();
+			//timer.addSelectionTime();
 			
 			List<R> children = crossover.doCrossOver(selection);
-			timer.addCrossTime();
+			//timer.addCrossTime();
 			
 			mutate(children);
-			timer.addMutationTime();
+			//timer.addMutationTime();
 			
 			pop = insertor.reinsert(rankedPop, children);
-			timer.addInsertTime();
+			//timer.addInsertTime();
 			
 			if(params.detectLoops)
 				doLoopDetection(pop);
-			timer.addLoopdetTime();
+			//timer.addLoopdetTime();
 			
 			i++;
 			
-			if(comm != null && i % params.renegadeFreq == 0){
+			if(comm != null && i % params.migrationFreq == 0){
 				Collections.sort(pop);
 				sendRenegades(comm, pop);
-				pop = addRenegades(pop, comm.getMessages());
+				pop = addMigrants(pop, comm.getMessages());
 			}
 		}
 		
@@ -172,7 +172,12 @@ public class GA<R extends Chromosome> {
 		
 	}
 	
-	public List<R> addRenegades(List<R> pop, List<R> renegades){
+	public List<R> addMigrants(List<R> pop, List<R> renegades){
+		if(renegades.size() > pop.size()){
+			System.out.println("TOO MANY MIGRANTS: " + renegades.size());
+			return renegades.subList(0, pop.size());
+		}
+		
 		List<R> newPop = new ArrayList<R>();
 		
 		for(R chrom:renegades){
@@ -185,7 +190,7 @@ public class GA<R extends Chromosome> {
 	}
 	
 	public void sendRenegades(Communicator<R> comm, List<R> pop){
-		int nrRens = (int) (params.renegades * params.popSize);
+		int nrRens = (int) (params.migration * params.popSize);
 		
 		for(int i = 0; i < nrRens; i++){
 			comm.send(pop.get(i));

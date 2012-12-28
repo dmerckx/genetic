@@ -1,4 +1,4 @@
-package plots.reps;
+package plots;
 
 import java.io.File;
 import java.io.FileWriter;

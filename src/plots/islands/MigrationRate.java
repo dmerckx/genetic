@@ -1,4 +1,4 @@
-package plots.reps;
+package plots.islands;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -7,6 +7,7 @@ import java.util.Random;
 
 import main.GA;
 import main.History;
+import main.IslandsGA;
 import main.Problem;
 import main.crossover.AlternatingEdge;
 import main.crossover.EdgeRecombination;
@@ -21,40 +22,37 @@ import util.ProblemGenerator;
 import factory.AdjacencyFactory;
 import factory.PathFactory;
 
-public class Crossover {
+public class MigrationRate {
 
 	public static Params params;
 	public static Problem problem;
 	
 	public static void main(String[] args) {
 		problem = ProblemGenerator.generate("../genetic/datafiles/rondrit070.tsp");
-		
-		double[] mutations = new double[]{0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
-		double[] crossovers = new double[]{0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
-		double[][] bestResultsAdj = new double[mutations.length][crossovers.length];
-		double[][] bestResultsPath = new double[mutations.length][crossovers.length];
-		
-		for(int m = 0; m < mutations.length; m++){
-			for(int c = 0; c < crossovers.length; c++){
-				setParams(mutations[m], crossovers[c]);
-				
-				GA<?> ga1 = createAdjGA();
-				History history1 = new History();
-				ga1.run(problem, history1, 3);
-				bestResultsAdj[m][c] = history1.getLastBest();
-				
 
-				GA<?> ga2 = createPathGA();
-				History history2 = new History();
-				ga2.run(problem, history2, 3);
-				bestResultsPath[m][c] = history2.getLastBest();
-				
-				history1.printShort();
-				history2.printShort();
+		double[] migr = new double[]{0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
+		double[] results4 = new double[migr.length];
+		double[] results8 = new double[migr.length];
+		
+		for(int m = 0; m < migr.length; m++){
+			
+			GA<?>[] gas = new GA<?>[12];
+			for(int i = 0; i < 12;i++){
+				setGAParams(migr[m]);
+				params.rand = new Random(13 * i * m);
+				gas[i] = createAdjGA();
 			}
+			
+			History history1 = new History();
+			IslandsGA mainGA = new IslandsGA(problem, gas);
+			mainGA.run(problem, history1, 15);
+			
+			System.out.println("result for migration: " + migr[m]);
+			history1.printShort();
+			System.out.println("----------------------------");
 		}
 
-		try {
+		/*try {
 			FileWriter writerAdj = new FileWriter(new File("../genetic/plots/crossoverAdj"));
 			FileWriter writerPath = new FileWriter(new File("../genetic/plots/crossoverPath"));
 			for(int m = 0; m < mutations.length; m++){
@@ -69,17 +67,19 @@ public class Crossover {
 			writerPath.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
-		}
+		}*/
 	}
 	
-	public static void setParams(double mutation, double crossover){
+	public static void setGAParams(double migration){
 		params = new Params();
-		params.popSize = 100;
-		params.maxGenerations = 300;
-		params.mutation = mutation;
-		params.crossover = crossover;
-		params.elitists = 0.15;
-		params.rand = new Random(256);
+		params.popSize = 70;
+		params.maxGenerations = 220;
+		params.mutation = 0.45;
+		params.crossover = 0.30;
+		params.elitists = 0.20;
+		params.migration = migration;
+		params.migrationFreq = 50;
+		params.rand = new Random(254);
 	}
 	
 	public static GA<Adjacency> createAdjGA(){

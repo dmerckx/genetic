@@ -1,4 +1,4 @@
-package plots.reps.parentSelection;
+package plots.parentSelection;
 
 import java.util.Random;
 

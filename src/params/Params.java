@@ -13,8 +13,8 @@ public class Params {
 	public double mach = 1e-15d;
 	public Random rand = new Random();
 	
-	public double renegades = 0.0d;
-	public int renegadeFreq = 999999;
+	public double migration = 0.0d;
+	public int migrationFreq = 999999;
 	
 	public boolean detectLoops;
 	public double similarSubsetSize = 0.5;

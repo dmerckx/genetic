@@ -35,11 +35,13 @@ public class CommunicationModel {
 		}
 	}
 	
-	public synchronized void send(Communicator<?> comm, Chromosome chrom){
-		for(Communicator<?> c:communicators){
-			if(c != comm){
-				c.receive(chrom);
+	public void send(Communicator<?> comm, Chromosome chrom){
+		for(int i = 0; i < communicators.size(); i++){
+			if(communicators.get(i) == comm){
+				communicators.get((i+1) % communicators.size()).receive(chrom);
+				return;
 			}
 		}
+		
 	}
 }
