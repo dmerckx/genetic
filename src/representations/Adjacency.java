@@ -1,7 +1,6 @@
 package representations;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,40 +14,40 @@ import representations.path.Path;
 
 public class Adjacency extends Chromosome {
 
-	private int[] path;
+	private List<Integer> path;
 	
 	private Problem problem;
 	
 	public Adjacency(Problem problem){
-		this(problem, new int[problem.size()]);
+		this(problem, new ArrayList<Integer>(problem.size() + 1));
 	}
 	
-	public Adjacency(Problem problem, int[] p) {
-		if(p == null ) throw new IllegalArgumentException();
+	public Adjacency(Problem problem, List<Integer> path ) {
+		if(path == null ) throw new IllegalArgumentException();
 		
 		this.problem = problem;
-		this.path = p;
+		this.path = path;
 	}
 
 	@Override
 	public void setRandomImpl(Random rand){
 		List<Integer> pathRep = new ArrayList<Integer>();
-		path = new int[path.length];
+		path = new ArrayList<Integer>();
 		
 		for(int i = 1; i < problem.size(); i++){
 			pathRep.add(i);
-			path[i-1] = 0;
+			path.add(0);
 		}
-		path[path.length-1] = 0;
+		path.add(0);
 
 		Collections.shuffle(pathRep, rand);
 		
 		int index = 0;
 		for(int i = 0; i < problem.size()-1; i++){
-			path[index] = pathRep.get(i);
+			path.set( index, pathRep.get(i));
 			index = pathRep.get(i);
 		}
-		path[index] = 0;
+		path.set(index, 0);
 	}
 	
 	@Override
@@ -58,44 +57,44 @@ public class Adjacency extends Chromosome {
 	
 	private double recursiveCalculation(int nextCity) {
 		int c1 = nextCity;
-		int c2 = path[nextCity];
+		int c2 = path.get(nextCity);
 		if(c2 == 0)
 			return problem.distance(c1, c2);
 		return problem.distance(c1, c2) + recursiveCalculation(c2);
 	}
 
-	public int[] getPath() {
+	public List<Integer> getPath() {
 		return path;
 	}
 	
 	public int size() {
-		return path.length;
+		return path.size();
 	}
 	public Edge getRandomEdge(Random rand) {
 		int begin = rand.nextInt(size());
-		int end = path[begin];
+		int end = path.get(begin);
 		return new Edge(begin, end);
 	}
 
 	public Edge getNextEdge(Edge edge) {
-		return new Edge(edge.getEnd(),path[edge.getEnd()]);
+		return new Edge(edge.getEnd(),getPath().get(edge.getEnd()));
 	}
 	
 	public void printPath() {
-		for (int i =0; i < path.length; i++) {
-			System.out.println(i + " " + path[i]);
+		for (int i =0; i < path.size(); i++) {
+			System.out.println(i + " " + path.get(i));
 		}
 	}
 
 	
 	@Override
 	public Path toPath() {
-		int[] pathRep = new int[path.length];
+		List<Integer> pathRep = new ArrayList<Integer>();
 		
 		int index = 0;
 		for(int i = 0; i < problem.size(); i++){
-			pathRep[i] = path[index];
-			index = path[index];
+			pathRep.add(path.get(index));
+			index = path.get(index);
 		}
 		
 		return new Path(problem, pathRep);
@@ -103,22 +102,28 @@ public class Adjacency extends Chromosome {
 
 	@Override
 	public void fromPath(Path p) {
-		int[] pathRep = p.getPath();
+		List<Integer> pathRep = p.getPath();
 		
-		if(path.length == 0){
-			throw new IllegalStateException();
+		if(path.size() == 0){
+			for(int i = 0; i < problem.size(); i++){
+				path.add(0);
+			}
 		}
 		
 		for(int i = 0; i < problem.size()-1; i++){
-			path[pathRep[i]] = pathRep[i+1];
+			path.set(pathRep.get(i), pathRep.get(i+1));
 		}
-		path[pathRep[problem.size()-1]] = pathRep[0];
+		path.set(pathRep.get(problem.size()-1), pathRep.get(0));
 		isChanged();
 	}
 	
 	@Override
 	public Adjacency clone() {
-		return new Adjacency(problem, Arrays.copyOf(path, path.length));
+		List<Integer> clonedList = new ArrayList<Integer>();
+		for (int i = 0; i < getPath().size(); i++) {
+			clonedList.add(getPath().get(i));
+		}
+		return new Adjacency(problem, clonedList);
 	}
 
 	@Override
@@ -128,7 +133,7 @@ public class Adjacency extends Chromosome {
 
 	private double recursivePartialCalculation(int from, int to) {
 		int c1 = from;
-		int c2 = path[from];
+		int c2 = path.get(from);
 		if(c2 == to)
 			return problem.distance(c1, c2);
 		return problem.distance(c1, c2) + recursivePartialCalculation(c2, to);
@@ -136,20 +141,20 @@ public class Adjacency extends Chromosome {
 	
 	@Override
 	public void swap(int index1, int index2) {
-		int temp = path[index1];
-		path[index1] = path[index2];
-		path[index2] = temp;
+		int temp = path.get(index1);
+		path.set(index1, path.get(index2));
+		path.set(index2, temp);
 	}
 	
 	@Override
 	public List<Integer> getReversePath() {
 		List<Integer> result = new ArrayList<Integer>();
 		Map<Integer, Integer> indexMapping = new HashMap<Integer, Integer>();
-		for (int i = 0; i < path.length; i++) {
-			indexMapping.put(path[i],i);
+		for (int i = 0; i < path.size(); i++) {
+			indexMapping.put(path.get(i),i);
 			result.add(0);
 		}
-		for (int i = 0; i < path.length; i++) {
+		for (int i = 0; i < path.size(); i++) {
 			result.set(i, indexMapping.get(i));
 		}
 		return result;

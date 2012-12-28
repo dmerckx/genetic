@@ -71,7 +71,7 @@ public class EdgeRecombination extends CrossOver<Path> {
 
 	/**
 	 * Returns a list with all the integers between 0 (inc.) and the size of the
-	 * problem (excl.).
+	 * problem (inc.).
 	 * 
 	 * @return
 	 */
@@ -138,7 +138,7 @@ public class EdgeRecombination extends CrossOver<Path> {
 	}
 
 	private void extractNeighbours(int city, Path parent, Set<Integer> neighbours, int j) {
-		if (parent.getPath()[j] == city) {
+		if (parent.getPath().get(j) == city) {
 			neighbours.add(convertToValidLeftNeighbour(parent, j,
 					parent.size()));
 			neighbours.add(convertToValidRightNeighbour(parent, j,
@@ -148,12 +148,13 @@ public class EdgeRecombination extends CrossOver<Path> {
 
 	private int convertToValidRightNeighbour(Path parent, int j, int length) {
 		int index = (j + 1 < length) ? j + 1 : 0;
-		return parent.getPath()[index];
+		return parent.getPath().get(index);
 	}
 
 	private int convertToValidLeftNeighbour(Path parent, int j, int length) {
 		int index = (j - 1 >= 0) ? j - 1 : length - 1;
-		return parent.getPath()[index];
+		return parent.getPath().get(index);
+
 	}
 
 }

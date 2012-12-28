@@ -1,7 +1,5 @@
 package representations;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -84,17 +82,4 @@ public abstract class Chromosome implements Comparable<Chromosome>{
 	}
 	
 	public abstract Set<Edge> getEdges();
-	
-	protected void shuffle(int[] vals, Random rand){
-		Integer[] transf = new Integer[vals.length];
-		
-		for(int i = 0; i < vals.length; i++){
-			transf[i] = vals[i];
-		}
-		Collections.shuffle(Arrays.asList(transf));
-		
-		for(int i = 0; i < vals.length; i++){
-			vals[i] = transf[i];
-		}
-	}
 }

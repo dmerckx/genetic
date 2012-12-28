@@ -21,11 +21,11 @@ public class ExchangeMutator<R extends Chromosome> extends Mutator<R>{
 			rnd2 = params.rand.nextInt(p.size());	
 		}while(rnd1 == rnd2);
 		
-		int val1 = p.getPath()[rnd1];
-		int val2 = p.getPath()[rnd2];
+		int val1 = p.getPath().get(rnd1);
+		int val2 = p.getPath().get(rnd2);
 		
-		p.getPath()[rnd1] = val2;
-		p.getPath()[rnd2] = val1;
+		p.getPath().set(rnd1, val2);
+		p.getPath().set(rnd2, val1);
 		
 		chrom.fromPath(p);
 	}

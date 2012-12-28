@@ -11,10 +11,10 @@ public class LoopDetection<R extends Chromosome> {
 	public void correct(R representation) {
 		Path path = representation.toPath();
 		for (int i = 0; i < path.size(); i++) {
-			int firstCity = path.getPath()[i];
+			int firstCity = path.getPath().get(i);
 			int indexSecondCity = (i + 1) % path.size();
 			int indexThirdCity = (i + 2) % path.size();
-			int fourthCity = path.getPath()[(i + 3) % path.size()];
+			int fourthCity = path.getPath().get((i + 3) % path.size());
 			if(!isAlreadyShortestPath(firstCity, indexSecondCity, indexThirdCity, fourthCity, path)) {
 				path.swap(indexSecondCity, indexThirdCity);
 			}
