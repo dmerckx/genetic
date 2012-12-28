@@ -16,6 +16,7 @@ public class InversionMutator <R extends Chromosome> extends Mutator<R> {
 	@Override
 	public void mutate(R chrom) {
 		Path p = chrom.toPath();
+		List<Integer> pathList = p.pathAsList();
 
 		//System.out.println(p.getPath());
 		
@@ -30,7 +31,7 @@ public class InversionMutator <R extends Chromosome> extends Mutator<R> {
 		int[] subPath = new int[rnd2 - rnd1];
 		//System.out.println(rnd1 + " - " + rnd2);
 		for(int i=0; i < rnd2-rnd1; i++){
-			subPath[i] = p.getPath().remove(rnd1);
+			subPath[i] = pathList.remove(rnd1);
 		}
 		//System.out.println(p.getPath());
 		
@@ -39,11 +40,11 @@ public class InversionMutator <R extends Chromosome> extends Mutator<R> {
 		//System.out.println(rnd3);
 		
 		for(int i: subPath){
-			p.getPath().add(rnd3, i);
+			pathList.add(rnd3, i);
 		}
 		
 		//System.out.println(p.getPath());
-		
+		p.setPathAsList(pathList);
 		chrom.fromPath(p);
 	}
 

@@ -42,12 +42,12 @@ public class MainDavid {
 	
 	public static void setParams(){
 		params = new Params();
-		params.popSize = 500;
-		params.maxGenerations = 500;
+		params.popSize = 100;
+		params.maxGenerations = 50;
 		params.mutation = 0.5;
 		params.crossover = 0.5;
 		params.elitists = 0.15;
-		params.rand = new Random(255);
+		params.rand = new Random(252);
 	}
 	
 	public static GA<Adjacency> createAdjGA(){

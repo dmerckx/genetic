@@ -20,8 +20,6 @@ public class ProblemGenerator {
 
 		List<Point> cities = new ArrayList<Point>();
 
-		Problem problem = new Problem(cities);
-		
 		try{
 
 			FileInputStream fstream = new FileInputStream(filePath);
@@ -37,7 +35,7 @@ public class ProblemGenerator {
 			System.err.println("Error: " + e.getMessage());
 		}
 
-		return problem;
+		return new Problem(cities);
 	}
 
 	private static Point extractPoint(String strLine) {

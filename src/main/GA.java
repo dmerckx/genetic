@@ -1,5 +1,6 @@
 package main;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -164,7 +165,10 @@ public class GA<R extends Chromosome> {
 		
 		for(int i=0; i < params.popSize; i++){
 			R chrom = factory.create(problem);
+			
+			//System.out.println(chrom.toPath().pathAsList());
 			chrom.setRandom(params.rand);
+			//System.out.println(chrom.toPath().pathAsList());
 			result.add(chrom);
 		}
 		

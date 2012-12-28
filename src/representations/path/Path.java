@@ -1,12 +1,13 @@
 package representations.path;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+
+import org.ejml.alg.dense.misc.PermuteArray;
 
 import main.Problem;
 import representations.Chromosome;
@@ -14,61 +15,77 @@ import representations.Edge;
 
 public class Path extends Chromosome {
 
-	private List<Integer> path;
+	private int[] path;
 	private Problem problem;
 	
 	public Path(Problem problem){
-		this(problem, new ArrayList<Integer>(problem.size() + 1));
+		this(problem, new int[problem.size()]);
 	}
 	
-	public Path(Problem problem, List<Integer> path ) {
-		if(path == null ) throw new IllegalArgumentException();
+	public Path(Problem problem, int[] p ) {
+		if(p == null ) throw new IllegalArgumentException();
 		
 		this.problem = problem;
-		this.path = path;
+		this.path = p;
 	}
 
 	@Override
 	public void setRandomImpl(Random rand){
-		if(path.size() == 0) {
-			for (int i = 0; i < problem.size(); i++) {
-				path.add(i);
-			}
+		if(path.length == 0) {
+			throw new IllegalArgumentException();
 		}
-		Collections.shuffle(path, rand);
+		for(int i = 0; i < path.length; i++){
+			path[i] = i;
+		}
+		shuffle(path, rand);
 	}
 
 	
 	@Override
 	public double calcPathLength() {
 		double pathLength = 0;
-		for (int i = 0; i < path.size()-1; i++) {
-			pathLength += problem.distance(path.get(i), path.get(i+1));
-			if(i+1 == path.size()-1)
-				pathLength += problem.distance(path.get(i+1), path.get(0));
+		for (int i = 0; i < path.length-1; i++) {
+			pathLength += problem.distance(path[i], path[i+1]);
+			if(i+1 == path.length-1)
+				pathLength += problem.distance(path[i+1], path[0]);
 		}
 		return pathLength;
 	}
 	
-	public List<Integer> getPath() {
+	public int[] getPath() {
 		return path;
 	}
 	
+	public List<Integer> pathAsList(){
+		List<Integer> list = new ArrayList<Integer>();
+		for(int p:path){
+			list.add(p);
+		}
+		
+		return list;
+	}
+	
+	public void setPathAsList(List<Integer> list){
+		for(int i = 0; i < path.length; i++){
+			path[i] = list.get(i);
+		}
+	}
+	
 	public int size() {
-		return path.size();
+		return path.length;
 	}
 	public Edge getRandomEdge(Random rand) {
 		int begin = rand.nextInt(size());
-		int end = path.get(begin);
+		int end = path[begin];
 		return new Edge(begin, end);
 	}
 
 	public Edge getNextEdge(Edge edge) {
-		return new Edge(edge.getEnd(),path.get(edge.getEnd()));
+		return new Edge(edge.getEnd(),path[edge.getEnd()]);
 	}
 	
 	public int getRandomCity(Random rand) {
-		return path.get(rand.nextInt(path.size()));
+		return path[rand.nextInt(path.length)];
 	}
 	
 	public String printPath() {
@@ -96,31 +113,27 @@ public class Path extends Chromosome {
 	
 	@Override
 	public Path clone() {
-		List<Integer> clonedList = new ArrayList<Integer>();
-		for (int i = 0; i < getPath().size(); i++) {
-			clonedList.add(getPath().get(i).intValue());
-		}
-		return new Path(problem, clonedList);
+		return new Path(problem, Arrays.copyOf(path, path.length));
 	}
 	
 	@Override
 	public void swap(int index1, int index2) {
-		int temp = path.get(index1);
-		path.set(index1, path.get(index2));
-		path.set(index2, temp);
+		int temp = path[index1];
+		path[index1] = path[index2];
+		path[index2] = temp;
 	}
 
 	@Override
 	public double getPathLength(int from, int to) {
 		int index = 0;
 		double distance = 0;
-		for (int i = 0; i < path.size(); i++) {
-			if(path.get(i) == from)
+		for (int i = 0; i < path.length; i++) {
+			if(path[i] == from)
 				index = i;
 		}
-		for (int i = index; i < path.size()+index; i++) {
-			distance += problem.distance(path.get(i%path.size()), path.get((i+1)%path.size()));
-			if(path.get((i+1)%path.size()) == to)
+		for (int i = index; i < path.length+index; i++) {
+			distance += problem.distance(path[i%path.length], path[(i+1)%path.length]);
+			if(path[(i+1)%path.length] == to)
 				break;
 		}
 		return distance;
@@ -129,8 +142,8 @@ public class Path extends Chromosome {
 	@Override
 	public List<Integer> getReversePath() {
 		List<Integer> result = new ArrayList<Integer>();
-		for (int i = path.size()-1; i >= 0; i--) {
-			result.add(path.get(i));
+		for (int i = path.length-1; i >= 0; i--) {
+			result.add(path[i]);
 		}
 		return result;
 	}
@@ -138,11 +151,11 @@ public class Path extends Chromosome {
 	@Override
 	public Set<Edge> getEdges() {
 		Set<Edge> result = new HashSet<Edge>();
-		for (int i = 0; i < path.size(); i++) {
-			if(i != path.size()-1)
-				result.add(new Edge(path.get(i),path.get(i+1)));
+		for (int i = 0; i < path.length; i++) {
+			if(i != path.length-1)
+				result.add(new Edge(path[i],path[i+1]));
 			else
-				result.add(new Edge(path.get(i),path.get(0)));
+				result.add(new Edge(path[i],path[0]));
 		}
 		return result;
 	}
