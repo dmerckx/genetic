@@ -3,7 +3,7 @@ package representations;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -170,8 +170,8 @@ public class Adjacency extends Chromosome {
 	
 	@Override
 	public Set<Edge> getEdges() {
-		Set<Edge> result = new HashSet<Edge>();
-		Edge begin = getRandomEdge(new Random());
+		Set<Edge> result = new LinkedHashSet<Edge>();
+		Edge begin = getRandomEdge(new Random(13));
 		Edge currentEdge = getNextEdge(begin);
 		result.add(currentEdge);
 		while((!(currentEdge = getNextEdge(currentEdge)).equals( begin ))) {

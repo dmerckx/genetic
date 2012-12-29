@@ -9,22 +9,26 @@ import representations.Chromosome;
 public class IslandsGA {
 	
     private GA<?>[] gas; 
-	private List<History> histories = new ArrayList<History>();
 	private CommunicationModel model;
 	
 	public IslandsGA(Problem problem, GA<?>... gas) {
 		this.gas = gas;
-		this.model = new CommunicationModel(problem, gas.length);
 	}
 	
 	public void run(Problem problem, History history, int nrTimes){
-		
 		List<History> histories = new ArrayList<History>();
 		
 		for(int i=0; i < nrTimes; i++){
 			History h = new History();
 			histories.add(h);
+			
+			this.model = new CommunicationModel(problem, gas.length);
+			
 			run(problem, h);
+			
+			//System.out.println("result: " + h.getLastBest());
+			
+			//h.printShort();
 			
 			//System.out.println("completed run: " + (i+1));
 		}
@@ -34,23 +38,33 @@ public class IslandsGA {
 			double worst = 0;
 			double mean = 0;
 			for(History h:histories){
+				if(i == 50){
+				}
+				
 				best += h.bestList.get(i);
 				worst += h.worstList.get(i);
 				mean += h.meanList.get(i);
 			}
+			
 			history.write(best/nrTimes, mean/nrTimes, worst/nrTimes);
 		}
 	}
 	
 	public void run(final Problem problem, History history){
+		List<History> histories = new ArrayList<History>();
+		
 		final CountDownLatch latch = new CountDownLatch(gas.length);
 		
 		for(final GA<?> ga:gas){
+			final History h = new History();
+			histories.add(h);
+			final Communicator<?> comm = model.forge(ga.factory);
+			
 			Thread task = new Thread() {
                 @Override
                 public void run() {
                 	//System.out.println("running !!");
-        			runGa(ga, problem);
+        			runGa(ga, problem, comm, h);
         			latch.countDown();
                 }
             };
@@ -89,16 +103,8 @@ public class IslandsGA {
         //System.out.println("done!");
 	}
 	
-	public <R extends Chromosome> void runGa(GA<R> ga, Problem problem){
-		Communicator<R> comm = model.forge(ga.factory);
-		History history = new History();
-		addHistory(history);
+	public <R extends Chromosome> void runGa(GA ga, Problem problem, Communicator comm, History history){
 		ga.run(problem, history, comm);
 		//System.out.println("done running");
 	}
-	
-	public synchronized void addHistory(History history){
-		histories.add(history);
-	}
-
 }

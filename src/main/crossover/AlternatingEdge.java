@@ -12,8 +12,6 @@ import factory.AdjacencyFactory;
 
 public class AlternatingEdge extends CrossOver<Adjacency> {
 
-	private Direction currentDirection = getRandomDirection();
-	
 	public AlternatingEdge(Params params, Problem problem) {
 		super(new AdjacencyFactory(), problem, params);
 	}
@@ -23,11 +21,10 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 	@Override
 	protected List<Integer> breed(ParentChromosome<Adjacency> first,
 			ParentChromosome<Adjacency> second) {
-		currentDirection = getRandomDirection();
 		ParentChromosome<Adjacency> currentParent = first;
 		Integer[] result = new Integer[problem.size()];
 		List<Integer> options = initializeOptions(problem.size());
-		Edge currentEdge = currentParent.getChromOfDirection(currentDirection)
+		Edge currentEdge = currentParent.getChromOfDirection(getDirection())
 				.getRandomEdge(params.rand);
 		options.remove(new Integer(currentEdge.getEnd()));
 		int counter = 1;
@@ -45,7 +42,7 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 		return Arrays.asList(result);
 	}
 
-	private Direction getRandomDirection() {
+	private Direction getDirection() {
 		return params.rand.nextFloat() > 0.5 ? Direction.LEFT_TO_RIGHT
 				: Direction.RIGHT_TO_LEFT;
 	}
@@ -75,10 +72,11 @@ public class AlternatingEdge extends CrossOver<Adjacency> {
 				end = getRemainingCity(result);
 			edge = new Edge(edge.getEnd(), end);
 		} else {
-			edge = parent.getChromOfDirection(currentDirection).getNextEdge(edge);
+			Direction dir = getDirection();
+			edge = parent.getChromOfDirection(dir).getNextEdge(edge);
 			while (introducesCycle(edge, result)) {
-				currentDirection = currentDirection.getOpposite();
-				edge = parent.getChromOfDirection(currentDirection).getNextEdge(new Edge(-1,edge.getBegin()));
+				dir = dir.getOpposite();
+				edge = parent.getChromOfDirection(dir).getNextEdge(new Edge(-1,edge.getBegin()));
 				if(!introducesCycle(edge, result)) 
 					break;
 				edge = chooseNewEdge(edge, options);

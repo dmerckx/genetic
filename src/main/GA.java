@@ -25,7 +25,7 @@ public class GA<R extends Chromosome> {
 	private final Ranker<R> ranker;
 	private final LoopDetection<R> loopDetector;
 	
-	public Timer timer = new Timer();
+	//public Timer timer = new Timer();
 	
 	public GA(Params params, RepresentationFactory<R> factory, Selector<R> selector,
 			CrossOver<R> crossover, ReInsertor<R> insertor, Mutator<R> mutator, Ranker<R> ranker, LoopDetection<R> loopDetector) {
@@ -91,9 +91,17 @@ public class GA<R extends Chromosome> {
 			
 			List<R> selection = selector.doSelection(rankedPop);
 			//timer.addSelectionTime();
+			if(i == 50){
+				Collections.sort(selection);
+				System.out.println("selection: " + best + " " + selection.get(0).getPathLength());
+			}
 			
 			List<R> children = crossover.doCrossOver(selection);
 			//timer.addCrossTime();
+			if(i == 50){
+				Collections.sort(children);
+				System.out.println("children: " + best + " " + children.get(0).getPathLength());
+			}
 			
 			mutate(children);
 			//timer.addMutationTime();
@@ -105,25 +113,21 @@ public class GA<R extends Chromosome> {
 				doLoopDetection(pop);
 			//timer.addLoopdetTime();
 			
-			i++;
 			
-			if(comm != null && i % params.migrationFreq == 0){
+			if(comm != null && (i+1) % params.migrationFreq == 0){
+				//System.out.println(" do migration: " + i + this);
+				double meanBefore = calculateMean(pop);
+				
 				Collections.sort(pop);
-				sendRenegades(comm, pop);
+				sendMigrants(comm, pop);
 				pop = addMigrants(pop, comm.getMessages());
+				
+				//System.out.println(" finished migration: " + i + this + "    " + meanBefore + " -> " + calculateMean(pop));
 			}
+			
+			//Collections.shuffle(pop, params.rand);
+			i++;
 		}
-		
-		/*int doubles = 0;
-		for(R chrom:pop){
-			int d = 0;
-			for(R chrom2:pop){
-				if(chrom == chrom2)
-					d++;
-			}
-			doubles += d-1;
-		}
-		System.out.println("DOUBLES " + doubles);*/
 	}
 	
 	private void doLoopDetection(List<R> pop) {
@@ -141,7 +145,7 @@ public class GA<R extends Chromosome> {
 		return total / pop.size();
 	}
 	
-	private boolean checkStop(double best, List<RankedChrom<R>> pop){
+	/*private boolean checkStop(double best, List<RankedChrom<R>> pop){
 		int index = 0;
 		for(RankedChrom<R> r: pop){
 			if(r.fitness - best > params.mach)
@@ -149,7 +153,7 @@ public class GA<R extends Chromosome> {
 			index++;
 		}
 		return index > params.stop * pop.size();
-	}
+	}*/
 	
 	private void mutate(List<R> selection){
 		
@@ -173,6 +177,8 @@ public class GA<R extends Chromosome> {
 	}
 	
 	public List<R> addMigrants(List<R> pop, List<R> renegades){
+		//System.out.println(this + " receive: " + renegades.size());
+		
 		if(renegades.size() > pop.size()){
 			System.out.println("TOO MANY MIGRANTS: " + renegades.size());
 			return renegades.subList(0, pop.size());
@@ -189,11 +195,14 @@ public class GA<R extends Chromosome> {
 		return newPop;
 	}
 	
-	public void sendRenegades(Communicator<R> comm, List<R> pop){
-		int nrRens = (int) (params.migration * params.popSize);
+	public void sendMigrants(Communicator<R> comm, List<R> pop){
+		int nrRens = (int) (params.migration * params.popSize + 0.5);
 		
-		for(int i = 0; i < nrRens; i++){
-			comm.send(pop.get(i));
+		//System.out.println("pop size:" + pop.size() + " nrRens: " + nrRens);
+		synchronized (comm) {
+			for(int i = 0; i < nrRens; i++){
+				comm.send(pop.get(i));
+			}
 		}
 	}
 }

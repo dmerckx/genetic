@@ -22,8 +22,8 @@ public abstract class CrossOver<R extends Chromosome> {
 		this.params = params;
 	}
 
-	private static int counterSame = 0;
-	private static int counterDiff = 0;
+	//private static int counterSame = 0;
+	//private static int counterDiff = 0;
 	
 	
 	/**
@@ -75,10 +75,10 @@ public abstract class CrossOver<R extends Chromosome> {
 				mostSimilarParent = r;
 			}
 		}
-		if(maxSimilarity == 70)
+		/*if(maxSimilarity == 70)
 			counterSame++;
 		else
-			counterDiff++;
+			counterDiff++;*/
 		selection.remove(mostSimilarParent);
 		return mostSimilarParent;
 	}

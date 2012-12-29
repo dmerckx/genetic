@@ -1,8 +1,5 @@
 package plots.islands;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Random;
 
 import main.GA;
@@ -24,31 +21,33 @@ import factory.PathFactory;
 
 public class MigrationRate {
 
-	public static Params params;
 	public static Problem problem;
 	
 	public static void main(String[] args) {
 		problem = ProblemGenerator.generate("../genetic/datafiles/rondrit070.tsp");
-
-		double[] migr = new double[]{0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
+		Random seedMaker = new Random(71);
+		
+		double[] migr = new double[]{1.0};
 		double[] results4 = new double[migr.length];
 		double[] results8 = new double[migr.length];
 		
 		for(int m = 0; m < migr.length; m++){
 			
-			GA<?>[] gas = new GA<?>[12];
-			for(int i = 0; i < 12;i++){
-				setGAParams(migr[m]);
-				params.rand = new Random(13 * i * m);
-				gas[i] = createAdjGA();
+			GA<?>[] gas = new GA<?>[2];
+			for(int i = 0; i < 2; i++){
+				Params params = setGAParams(migr[m]);
+				params.rand = new Random(seedMaker.nextLong()); //23 is een goeie
+				gas[i] = createPathGA(params);
 			}
 			
 			History history1 = new History();
 			IslandsGA mainGA = new IslandsGA(problem, gas);
-			mainGA.run(problem, history1, 15);
+			mainGA.run(problem, history1, 1);
 			
 			System.out.println("result for migration: " + migr[m]);
-			history1.printShort();
+			for(int i = 48; i < 52; i++){
+				System.out.println(i + ": " + history1.bestList.get(i));
+			}
 			System.out.println("----------------------------");
 		}
 
@@ -70,19 +69,19 @@ public class MigrationRate {
 		}*/
 	}
 	
-	public static void setGAParams(double migration){
-		params = new Params();
-		params.popSize = 70;
-		params.maxGenerations = 220;
+	public static Params setGAParams(double migration){
+		Params params = new Params();
+		params.popSize = 100;
+		params.maxGenerations = 90;
 		params.mutation = 0.45;
 		params.crossover = 0.30;
 		params.elitists = 0.20;
 		params.migration = migration;
 		params.migrationFreq = 50;
-		params.rand = new Random(254);
+		return params;
 	}
 	
-	public static GA<Adjacency> createAdjGA(){
+	public static GA<Adjacency> createAdjGA(Params params){
 		return new GA<Adjacency>(
 			params,
 			new AdjacencyFactory(),
@@ -95,7 +94,7 @@ public class MigrationRate {
 		);
 	}
 	
-	public static GA<Path> createPathGA(){
+	public static GA<Path> createPathGA(Params params){
 		return new GA<Path>(
 			params,
 			new PathFactory(),

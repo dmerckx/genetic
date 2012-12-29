@@ -40,10 +40,12 @@ public abstract class Chromosome implements Comparable<Chromosome>{
 	}
 	
 	public final double getPathLength() {
-		if(!isCached) {
+		//TODO terug opzetten
+		
+		//if(!isCached) {
 			length = calcPathLength();
-			isCached = true;
-		}
+		//	isCached = true;
+		//}
 		return length;
 	}
 	

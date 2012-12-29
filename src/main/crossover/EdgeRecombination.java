@@ -1,7 +1,7 @@
 package main.crossover;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -129,7 +129,7 @@ public class EdgeRecombination extends CrossOver<Path> {
 	}
 
 	private Set<Integer> getConnectedCities(int city, Path parent1, Path parent2) {
-		Set<Integer> result = new HashSet<Integer>();
+		Set<Integer> result = new LinkedHashSet<Integer>();
 		for (int index = 0; index < parent1.size(); index++) {
 			extractNeighbours(city, parent1, result, index);
 			extractNeighbours(city, parent2, result, index);

@@ -1,4 +1,5 @@
 package params;
+
 import java.util.Random;
 
 
@@ -11,7 +12,8 @@ public class Params {
 	public double stop;
 	public double elitists;
 	public double mach = 1e-15d;
-	public Random rand = new Random();
+	
+	public Random rand = null;
 	
 	public double migration = 0.0d;
 	public int migrationFreq = 999999;

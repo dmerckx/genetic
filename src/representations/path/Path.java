@@ -2,8 +2,7 @@ package representations.path;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -137,7 +136,7 @@ public class Path extends Chromosome {
 
 	@Override
 	public Set<Edge> getEdges() {
-		Set<Edge> result = new HashSet<Edge>();
+		Set<Edge> result = new LinkedHashSet<Edge>();
 		for (int i = 0; i < path.size(); i++) {
 			if(i != path.size()-1)
 				result.add(new Edge(path.get(i),path.get(i+1)));
