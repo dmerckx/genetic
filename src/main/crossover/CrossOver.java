@@ -22,10 +22,6 @@ public abstract class CrossOver<R extends Chromosome> {
 		this.params = params;
 	}
 
-	//private static int counterSame = 0;
-	//private static int counterDiff = 0;
-	
-	
 	/**
 	 * @pre The given list is supposed to have an even number of elements.
 	 * @param selection
@@ -75,10 +71,6 @@ public abstract class CrossOver<R extends Chromosome> {
 				mostSimilarParent = r;
 			}
 		}
-		/*if(maxSimilarity == 70)
-			counterSame++;
-		else
-			counterDiff++;*/
 		selection.remove(mostSimilarParent);
 		return mostSimilarParent;
 	}

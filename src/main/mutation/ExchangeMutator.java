@@ -28,5 +28,6 @@ public class ExchangeMutator<R extends Chromosome> extends Mutator<R>{
 		p.getPath().set(rnd2, val1);
 		
 		chrom.fromPath(p);
+		
 	}
 }

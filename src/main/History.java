@@ -54,7 +54,8 @@ public class History {
 	}
 	
 	private void print(int i){
-		System.out.println(i + " : " + bestList.get(i) + " | " + meanList.get(i) + " | " + worstList.get(i));
+		System.out.println(i + " : " + bestList.get(i));
+		//System.out.println(i + " : " + bestList.get(i) + " | " + meanList.get(i) + " | " + worstList.get(i));
 	}
 	
 	public void writeFile(){
@@ -75,5 +76,26 @@ public class History {
 
 	public int size() {
 		return bestList.size();
+	}
+	
+	public void mergeFrom(List<History> histories){
+		if(bestList.size() != 0) throw new IllegalStateException();
+		
+		int size = histories.get(0).size();
+		for(int i=0; i < size; i++){
+			double best = 0;
+			double worst = 0;
+			double mean = 0;
+			for(History h:histories){
+				if(i == 50){
+				}
+				
+				best += h.bestList.get(i);
+				worst += h.worstList.get(i);
+				mean += h.meanList.get(i);
+			}
+			
+			write(best/size, mean/size, worst/size);
+		}
 	}
 }

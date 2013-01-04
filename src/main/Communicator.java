@@ -2,6 +2,8 @@ package main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
 
 import representations.Chromosome;
 import factory.RepresentationFactory;
@@ -13,17 +15,20 @@ public class Communicator<R extends Chromosome> {
 	private final RepresentationFactory<R> factory;
 	private List<R> received = new ArrayList<R>();
 	
+	public int id;
 	
-	public Communicator(Problem problem, CommunicationModel model, RepresentationFactory<R> factory) {
+	public Communicator(Problem problem, CommunicationModel model, RepresentationFactory<R> factory, int id) {
 		this.model = model;
 		this.problem = problem;
 		this.factory = factory;
+		this.id = id;
 	}
 	
 	public List<R> getMessages(){
 		model.await();
 		List<R> result = received;
 		received = new ArrayList<R>();
+		model.readyToReceive(this);
 		return result;
 	}
 	
