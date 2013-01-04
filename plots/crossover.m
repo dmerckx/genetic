@@ -13,7 +13,9 @@ figure;
 subplot(1,2,1);
 pcolor(X,Y,crossoverAdj);
 axis([0 1 0 1]);
-
+title('Colormap of QOS vs. mutation and crossover');
+xlabel('Crossover (percentage)');
+ylabel('Mutation (percentage)');
 
 subplot(1,2,2);
 pcolor(X,Y,crossoverPath);
@@ -29,3 +31,5 @@ cmap = flipud(cmap);
 colormap(cmap);
 
 title('Colormap of QOS vs. mutation and crossover');
+xlabel('Crossover (percentage)');
+ylabel('Mutation (percentage)');
