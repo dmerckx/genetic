@@ -30,14 +30,12 @@ public class MainDavid {
 		ga1.run(problem, history1, 1);
 		
 		history1.printShort();
-		ga1.timer.print();
 		
 		GA<?> ga2 = createPathGA();
 		History history2 = new History();
 		ga2.run(problem, history2, 1);
 
 		history2.printShort();
-		ga2.timer.print();
 	}
 	
 	public static void setParams(){

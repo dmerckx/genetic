@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import main.GA;
 import main.History;
@@ -15,6 +18,7 @@ import main.mutation.ExchangeMutator;
 import main.rankers.LineairRanker;
 import main.selectors.SUS;
 import params.Params;
+import plots.islands.MigrationRate;
 import representations.Adjacency;
 import representations.path.Path;
 import util.ProblemGenerator;
@@ -23,41 +27,40 @@ import factory.PathFactory;
 
 public class Crossover {
 
-	public static Params params;
 	public static Problem problem;
 	
-	public static void main(String[] args) {
-		problem = ProblemGenerator.generate("../genetic/datafiles/rondrit127.tsp");
+	public static double[] mutations;
+	public static double[] crossovers;
+	public static double[][] bestResultsAdj;
+	public static double[][] bestResultsPath;
+	
+	
+	public static void main(String[] args) throws Exception {
+		problem = ProblemGenerator.generate("../genetic/datafiles/xqf131.tsp");
 		
-		double[] mutations = new double[]
+		mutations = new double[]
 				{0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5,
 				 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0};
-		double[] crossovers = new double[]
+		crossovers = new double[]
 				{0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5,
 				 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0};
-		double[][] bestResultsAdj = new double[mutations.length][crossovers.length];
-		double[][] bestResultsPath = new double[mutations.length][crossovers.length];
+		bestResultsAdj = new double[mutations.length][crossovers.length];
+		bestResultsPath = new double[mutations.length][crossovers.length];
 		
-		for(int m = 0; m < mutations.length; m++){
-			for(int c = 0; c < crossovers.length; c++){
-				setParams(mutations[m], crossovers[c]);
-				
-				GA<?> ga1 = createAdjGA();
-				History history1 = new History();
-				ga1.run(problem, history1, 7);
-				bestResultsAdj[m][c] = history1.getLastBest();
-				
-
-				GA<?> ga2 = createPathGA();
-				History history2 = new History();
-				ga2.run(problem, history2, 7);
-				bestResultsPath[m][c] = history2.getLastBest();
-				
-				history1.printShort();
-				history2.printShort();
-			}
+		
+		ExecutorService pool = Executors.newFixedThreadPool(4);
+		for(int i = 0; i < 21; i++){
+			final int j = i;
+			pool.execute(new Runnable() {
+				@Override
+				public void run() {
+					work(j, j+1);
+				}
+			});
 		}
-
+		pool.shutdown();
+		pool.awaitTermination(10, TimeUnit.HOURS);
+		
 		try {
 			FileWriter writerAdj = new FileWriter(new File("../genetic/plots/crossoverAdj"));
 			FileWriter writerPath = new FileWriter(new File("../genetic/plots/crossoverPath"));
@@ -76,17 +79,41 @@ public class Crossover {
 		}
 	}
 	
-	public static void setParams(double mutation, double crossover){
-		params = new Params();
+	public static void work(int from, int to){
+		for(int m = from; m < to; m++){
+			for(int c = 0; c < crossovers.length; c++){
+				Params params = getParams(mutations[m], crossovers[c]);
+				
+				GA<?> ga1 = createAdjGA(params);
+				History history1 = new History();
+				ga1.run(problem, history1, 10);
+				bestResultsAdj[m][c] = history1.getLastBest();
+				
+
+				GA<?> ga2 = createPathGA(params);
+				History history2 = new History();
+				ga2.run(problem, history2, 10);
+				bestResultsPath[m][c] = history2.getLastBest();
+				
+				System.out.println("m" + mutations[m] + " c" + crossovers[c] + " done");
+				System.out.println("res adj: " + history1.getLastBest() + " res path: " + history2.getLastBest());
+			}
+		}
+	}
+	
+	public static Params getParams(double mutation, double crossover){
+		Params params = new Params();
 		params.popSize = 100;
-		params.maxGenerations = 300;
+		params.maxGenerations = 550;
 		params.mutation = mutation;
 		params.crossover = crossover;
 		params.elitists = 0.20;
-		params.rand = new Random(13);
+		params.rand = new Random(11);
+		
+		return params;
 	}
 	
-	public static GA<Adjacency> createAdjGA(){
+	public static GA<Adjacency> createAdjGA(Params params){
 		return new GA<Adjacency>(
 			params,
 			new AdjacencyFactory(),
@@ -99,7 +126,7 @@ public class Crossover {
 		);
 	}
 	
-	public static GA<Path> createPathGA(){
+	public static GA<Path> createPathGA(Params params){
 		return new GA<Path>(
 			params,
 			new PathFactory(),

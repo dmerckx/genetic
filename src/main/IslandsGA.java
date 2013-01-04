@@ -1,10 +1,10 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-
-import representations.Chromosome;
 
 public class IslandsGA {
 	
@@ -16,55 +16,55 @@ public class IslandsGA {
 	}
 	
 	public void run(Problem problem, History history, int nrTimes){
+		List<List<History>> fullHistories = new ArrayList<List<History>>();
 		List<History> histories = new ArrayList<History>();
 		
 		for(int i=0; i < nrTimes; i++){
 			History h = new History();
 			histories.add(h);
 			
-			this.model = new CommunicationModel(problem, gas.length);
-			
-			run(problem, h);
-			
-			//System.out.println("result: " + h.getLastBest());
-			
-			//h.printShort();
-			
-			//System.out.println("completed run: " + (i+1));
+			fullHistories.add( run(problem, h) );
 		}
+		history.mergeFrom(histories);
 		
-		for(int i=0; i < gas[0].params.maxGenerations; i++){
-			double best = 0;
-			double worst = 0;
-			double mean = 0;
-			for(History h:histories){
-				if(i == 50){
-				}
-				
-				best += h.bestList.get(i);
-				worst += h.worstList.get(i);
-				mean += h.meanList.get(i);
+		
+		/*List<History> fullHistory = new ArrayList<History>();
+		for(int island = 0; island < gas.length; island++){
+			History h = new History();
+			
+			List<History> historiesToMerge = new ArrayList<History>();
+			
+			//Merge the results for island X together from all different runs
+			for(int t = 0; t < nrTimes; t++){
+				historiesToMerge.add(fullHistories.get(t).get(island));
 			}
 			
-			history.write(best/nrTimes, mean/nrTimes, worst/nrTimes);
+			fullHistory.add(h);
 		}
+		return fullHistory;*/
 	}
 	
-	public void run(final Problem problem, History history){
+	public List<History> run(final Problem problem, History history){
+		this.model = new CommunicationModel(problem, gas.length);
 		List<History> histories = new ArrayList<History>();
+		Map<GA<?>, Communicator<?>> comms = new HashMap<GA<?>, Communicator<?>>();
 		
 		final CountDownLatch latch = new CountDownLatch(gas.length);
+		
+		for(int i = 0; i < gas.length; i++){
+			comms.put(gas[i], model.forge(gas[i].factory, i));
+		}
 		
 		for(final GA<?> ga:gas){
 			final History h = new History();
 			histories.add(h);
-			final Communicator<?> comm = model.forge(ga.factory);
+			final Communicator comm = comms.get(ga);
 			
 			Thread task = new Thread() {
                 @Override
                 public void run() {
                 	//System.out.println("running !!");
-        			runGa(ga, problem, comm, h);
+        			ga.run(problem, h, comm);
         			latch.countDown();
                 }
             };
@@ -82,6 +82,7 @@ public class IslandsGA {
         //System.out.println("nr of histories: " + histories.size());
         
         int size = histories.get(0).size();
+        
         for(int i = 0; i < size; i++){
         	double worst = histories.get(0).worstList.get(i);
         	double best = histories.get(0).bestList.get(i);
@@ -101,10 +102,6 @@ public class IslandsGA {
         //histories.get(1).printShort();
         
         //System.out.println("done!");
-	}
-	
-	public <R extends Chromosome> void runGa(GA ga, Problem problem, Communicator comm, History history){
-		ga.run(problem, history, comm);
-		//System.out.println("done running");
+        return histories;
 	}
 }
