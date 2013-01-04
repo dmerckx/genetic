@@ -45,7 +45,7 @@ public class MigrationRate {
 			mainGA.run(problem, history1, 1);
 			
 			System.out.println("result for migration: " + migr[m]);
-			for(int i = 48; i < 52; i++){
+			for(int i = 0; i < 52; i++){
 				System.out.println(i + ": " + history1.bestList.get(i));
 			}
 			System.out.println("----------------------------");
@@ -74,7 +74,7 @@ public class MigrationRate {
 		params.popSize = 100;
 		params.maxGenerations = 90;
 		params.mutation = 0.45;
-		params.crossover = 0.30;
+		params.crossover = 0.0;
 		params.elitists = 0.20;
 		params.migration = migration;
 		params.migrationFreq = 50;

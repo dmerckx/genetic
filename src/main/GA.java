@@ -91,17 +91,18 @@ public class GA<R extends Chromosome> {
 			
 			List<R> selection = selector.doSelection(rankedPop);
 			//timer.addSelectionTime();
-			if(i == 50){
-				Collections.sort(selection);
-				System.out.println("selection: " + best + " " + selection.get(0).getPathLength());
-			}
+			
+//			if(i == 50){
+//				Collections.sort(selection);
+//				System.out.println("selection: " + best + " " + selection.get(0).getPathLength());
+//			}
 			
 			List<R> children = crossover.doCrossOver(selection);
 			//timer.addCrossTime();
-			if(i == 50){
-				Collections.sort(children);
-				System.out.println("children: " + best + " " + children.get(0).getPathLength());
-			}
+//			if(i == 50){
+//				Collections.sort(children);
+//				System.out.println("children: " + best + " " + children.get(0).getPathLength());
+//			}
 			
 			mutate(children);
 			//timer.addMutationTime();

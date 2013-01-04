@@ -41,16 +41,17 @@ public class PlotPopulationSize {
 		ArrayList<String> bestPath = new ArrayList<String>();
 		
 		int randomSeed = (new Random()).nextInt();
-		for (int popSize = 25; popSize < 200; popSize = popSize + 50) {
+		
+		for (int popSize = 25; popSize < 800; popSize = popSize + 50) {
 			History history1 = new History("");
 			createGAAdj(problem, getParamsAdj(randomSeed, popSize)).run(problem, history1, nbTimes);
-			System.out.println("Adjacency ");
+			System.out.println("Adjacency with population: " + popSize);
 			history1.printShort();
 			bestAdj.add(popSize + " " + history1.bestList.get(history1.bestList.size()-1)+ "\r\n");
 			
 			History history2 = new History("");
 			createGAPath(problem, getParamsPath(randomSeed, popSize)).run(problem, history2, nbTimes);
-			System.out.println("Path: ");
+			System.out.println("Path with population: " + popSize);
 			history2.printShort();
 			bestPath.add(popSize + " " + history2.bestList.get(history2.bestList.size()-1)+ "\r\n");
 		}
