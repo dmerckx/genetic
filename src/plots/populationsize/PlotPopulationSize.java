@@ -23,8 +23,6 @@ import factory.PathFactory;
 
 public class PlotPopulationSize {
 
-	private static final Params params = new Params();
-	
 	private static final String problemFilePath = "../genetic/datafiles/xqf131.tsp"; //optimal length 564
 	
 	private static final Problem problem = ProblemGenerator.generate(problemFilePath);
@@ -35,14 +33,19 @@ public class PlotPopulationSize {
 	
 	public static void makePlot() {
 		
-		int nbTimes = 1;
+		long before = System.currentTimeMillis();
+		System.out.println("before: " + before);
+		
+		int nbTimes = 8;
 		
 		ArrayList<String> bestAdj = new ArrayList<String>();
 		ArrayList<String> bestPath = new ArrayList<String>();
 		
 		int randomSeed = (new Random()).nextInt();
-		
-		for (int popSize = 25; popSize < 800; popSize = popSize + 50) {
+//		int randomSeed = -2115352863;
+		System.out.println("seed: " + randomSeed);
+		for (int popSize = 25; popSize < 600; popSize = popSize + 25) {
+			long time = System.currentTimeMillis();
 			History history1 = new History("");
 			createGAAdj(problem, getParamsAdj(randomSeed, popSize)).run(problem, history1, nbTimes);
 			System.out.println("Adjacency with population: " + popSize);
@@ -54,37 +57,45 @@ public class PlotPopulationSize {
 			System.out.println("Path with population: " + popSize);
 			history2.printShort();
 			bestPath.add(popSize + " " + history2.bestList.get(history2.bestList.size()-1)+ "\r\n");
+			long diff = ((System.currentTimeMillis()-time)/1000);
+			System.out.println("executed iteration in: " + diff);
 		}
 		
 		PlotWriter.writeList("../genetic/result/result-adj-pop.txt", bestAdj);
 		PlotWriter.writeList("../genetic/result/result-path-pop.txt", bestPath);
+		System.out.println("after: " + System.currentTimeMillis());
+		double time = System.currentTimeMillis()-before;
+		double hours = time/(3600000);
+		double mins = time/(60000);
+		System.out.println("execution time in hours: " + hours);
+		System.out.println("execution time in minutes: " + mins);
 	}
 
 	private static Params getParamsAdj(int seed, int popSize) {
-		params.popSize = popSize;
-		params.maxGenerations = 1000;
-		params.elitists = 0.05d;
+		Params params = getParams(seed, popSize);
+		params.elitists = 0.10d;
 		params.crossover = 0.20d;
 		params.mutation = 0.35d;
-		params.stop = 0.95d;
-		params.detectLoops = false;
-		params.rand = new Random(seed);
-		params.correlativeTournament = false;
-		params.similarSubsetSize = 1.0;
 		return params;
 	}
 	
 	private static Params getParamsPath(int seed, int popSize) {
-		params.popSize = popSize;
-		params.maxGenerations = 1000;
-		params.elitists = 0.05d;
-		params.crossover = 0.95d;
-		params.mutation = 0.05d;
-		params.stop = 0.95d;
-		params.detectLoops = false;
+		Params params = getParams(seed, popSize);
+		params.elitists = 0.10d;
+		params.crossover = 0.90d;
+		params.mutation = 0.30d;
+		return params;
+	}
+	
+	private static Params getParams(int seed, int popSize) {
+		Params params = new Params();
 		params.rand = new Random(seed);
+		params.popSize = popSize;
+		params.maxGenerations = 300;
+		params.detectLoops = false;
 		params.correlativeTournament = false;
-		params.similarSubsetSize = 1.0;
+		params.similarSubsetSize = 0.0;
+		params.stop = 0.95d;
 		return params;
 	}
 	

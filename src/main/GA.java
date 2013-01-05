@@ -52,6 +52,7 @@ public class GA<R extends Chromosome> {
 			History h = new History();
 			histories.add(h);
 			run(problem, h, null);
+			System.out.println("completed run: " + (i+1) + " out of " + nrTimes);
 		}
 		
 		for(int i=0; i < params.maxGenerations; i++){
