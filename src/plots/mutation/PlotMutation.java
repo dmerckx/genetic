@@ -42,6 +42,7 @@ public class PlotMutation {
 		int nbTimes = 8;
 		double step = 0.02;
 		double max = 0.6;
+
 		
 		int randomSeed = (new Random()).nextInt();
 

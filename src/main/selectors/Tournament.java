@@ -11,6 +11,8 @@ import representations.Chromosome;
 
 public class Tournament<R extends Chromosome> extends Selector<R> {
 
+	public static int counter = 0;
+	
 	private final double p;
 
 	private final int k;
@@ -34,6 +36,7 @@ public class Tournament<R extends Chromosome> extends Selector<R> {
 		super(params);
 		this.p = p;
 		this.k = Math.max((int) Math.floor(params.popSize * percentage), 1);
+		System.out.println("k: " + k);
 	}
 
 	@Override
@@ -59,8 +62,11 @@ public class Tournament<R extends Chromosome> extends Selector<R> {
 		for (int i = pool.size() - 1; i >= 0; i--) {
 			traversed += p * Math.pow((1 - p), counter);
 			counter++;
-			if (traversed >= roulette)
+			if (traversed >= roulette) {
+				Tournament.counter++;
 				return pool.get(i);
+				
+			}
 		}
 		return pool.get(pool.size() - 1);
 	}

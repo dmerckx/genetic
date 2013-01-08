@@ -25,7 +25,7 @@ public class GA<R extends Chromosome> {
 	private final Ranker<R> ranker;
 	private final LoopDetection<R> loopDetector;
 	
-	//public Timer timer = new Timer();
+	public Timer timer = new Timer();
 	
 	public GA(Params params, RepresentationFactory<R> factory, Selector<R> selector,
 			CrossOver<R> crossover, ReInsertor<R> insertor, Mutator<R> mutator, Ranker<R> ranker, LoopDetection<R> loopDetector) {
@@ -60,9 +60,11 @@ public class GA<R extends Chromosome> {
 			double worst = 0;
 			double mean = 0;
 			for(History h:histories){
-				best += h.bestList.get(i);
-				worst += h.worstList.get(i);
-				mean += h.meanList.get(i);
+				if(i < h.bestList.size()) {
+					best += h.bestList.get(i);
+					worst += h.worstList.get(i);
+					mean += h.meanList.get(i);
+				}
 			}
 			history.write(best/nrTimes, mean/nrTimes, worst/nrTimes);
 		}
@@ -70,10 +72,18 @@ public class GA<R extends Chromosome> {
 	
 	public void run(Problem problem, History history, Communicator<R> comm){
 		
+		long startTime = System.nanoTime();
+		
 		List<R> pop = initPopulation(problem);
 		int i = 0;
 		while(i < params.maxGenerations){
-			//timer.start();
+//			timer.start();
+			
+			double elapsed = (System.nanoTime()-startTime);
+			elapsed = elapsed/(60*Math.pow(10,9));
+//			System.out.println("elapsed: " + elapsed + " generation nb: " + i);
+			if(elapsed >= params.simulationTime)
+				break;
 			
 			Collections.sort(pop);
 			

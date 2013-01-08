@@ -31,7 +31,7 @@ public class Plotselection {
 	private static Params params = getParamsAdj(549);
 	private static Params paramsPath = getParamsPath(549);
 	
-	private static final String problemFilePath = "../genetic/datafiles/rondrit070.tsp";
+	private static final String problemFilePath = "../genetic/datafiles/xqf131.tsp";
 	private static final Problem problem = ProblemGenerator.generate(problemFilePath);
 	
 	private static final RWS<Adjacency> rws = new RWS<Adjacency>(params);
@@ -78,35 +78,54 @@ public class Plotselection {
 		
 		int nbTimes = 1;
 		
+		long before = System.currentTimeMillis();
+		
 		History history1 = new History(outputAdjRWSFilePath);
 		createGA(problem, rws).run(problem, history1, nbTimes);
 		history1.printShort();
 		history1.writeFile();
+		
+		System.out.println(Tournament.counter);
 		
 		History history2 = new History(outputAdjSUSFilePath);
 		createGA(problem, sus).run(problem, history2, nbTimes);
 		history2.printShort();
 		history2.writeFile();
 		
+		System.out.println(Tournament.counter);
+		
 		History history3 = new History(outputAdjTournamentFilePath);
 		createGA(problem, tournament).run(problem, history3, nbTimes);
 		history3.printShort();
 		history3.writeFile();
+		
+		System.out.println(Tournament.counter);
 		
 		History history4 = new History(outputPathRWSFilePath);
 		createGAPath(problem, rwsPath).run(problem, history4, nbTimes);
 		history4.printShort();
 		history4.writeFile();
 		
+		System.out.println(Tournament.counter);
+		
 		History history5 = new History(outputPathSUSFilePath);
 		createGAPath(problem, susPath).run(problem, history5, nbTimes);
 		history5.printShort();
 		history5.writeFile();
 		
+		System.out.println(Tournament.counter);
+		
 		History history6 = new History(outputPathTournamentFilePath);
 		createGAPath(problem, tournamentPath).run(problem, history6, nbTimes);
 		history6.printShort();
 		history6.writeFile();
+		
+		System.out.println(Tournament.counter);
+		
+		double time = System.currentTimeMillis()-before;
+		double hours = time/(60000*60);
+		double mins = time/(60000);
+		System.out.println("exec time hours: " + hours + " mins: " + mins);
 		
 	}
 
@@ -114,7 +133,7 @@ public class Plotselection {
 		Params params = new Params();
 		params.rand =  new Random(seed);
 		params.popSize = 100;
-		params.maxGenerations = 100;
+		params.maxGenerations = 300;
 		params.stop = 0.95d;
 		params.detectLoops = false;
 		return params;
@@ -123,8 +142,8 @@ public class Plotselection {
 	private static Params getParamsPath(int seed) {
 		Params params = getParams(seed);
 		params.elitists = 0.05d;
-		params.crossover = 0.95d;
-		params.mutation = 0.05d;
+		params.crossover = 0.90d;
+		params.mutation = 0.20d;
 		return params;
 	}
 	
