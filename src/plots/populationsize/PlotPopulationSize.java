@@ -44,7 +44,7 @@ public class PlotPopulationSize {
 		int randomSeed = (new Random()).nextInt();
 //		int randomSeed = -2115352863;
 		System.out.println("seed: " + randomSeed);
-		for (int popSize = 25; popSize < 600; popSize = popSize + 25) {
+		for (int popSize = 25; popSize < 2000; popSize = popSize + 500) {
 			long time = System.currentTimeMillis();
 			History history1 = new History("");
 			createGAAdj(problem, getParamsAdj(randomSeed, popSize)).run(problem, history1, nbTimes);
