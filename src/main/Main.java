@@ -11,11 +11,11 @@ import main.mutation.InversionMutator;
 import main.mutation.Mutator;
 import main.mutation.SimpleInversionMutator;
 import main.rankers.LineairRanker;
+import main.rankers.NonLinearRanker;
 import main.rankers.Ranker;
 import main.selectors.SUS;
 import main.selectors.Selector;
 import params.Params;
-import params.TestParams;
 import representations.Adjacency;
 import representations.Chromosome;
 import representations.path.Path;
@@ -27,41 +27,43 @@ import factory.PathFactory;
 public class Main {
 
 	public static void main(String[] args) {
-		Problem problem = ProblemGenerator.generate("../genetic/datafiles/rondrit127.tsp");
+		Problem problem = ProblemGenerator.generate("../genetic/datafiles/xqf131.tsp");
+		
+		int randomSeed = (new Random()).nextInt();
+		int nbTimes = 5;
+		
+		History history1 = new History("../genetic/result/resultNewAdj.txt");
+		createGA1(problem, new LineairRanker<Adjacency>(),randomSeed).run(problem, history1, nbTimes);
+		history1.printShort();
+		
+		History history = new History("../genetic/result/resultNewAdj.txt");
+		createGA1(problem, new NonLinearRanker<Adjacency>(createParams(randomSeed)), randomSeed).run(problem, history, nbTimes);
+		history.printShort();
+//		History history2 = new History("../genetic/result/resultNewPath.txt");
+//		createGA2(problem).run(problem, history2);
+//		history2.writeFile();
 //		
-//		History history1 = new History("../genetic/result/resultNewAdj.txt");
-//		createGA1(problem).run(problem, history1);
-//		
-//		history1.printShort();
-		
-		
-		
-		History history2 = new History("../genetic/result/resultNewPath.txt");
-		createGA2(problem).run(problem, history2);
-		history2.writeFile();
-		
-		System.out.println("Path");
-		history2.printShort();
+//		System.out.println("Path");
+//		history2.printShort();
 	}
 	
 	
 	public static <R extends Chromosome>  void run(GA<R> ga){
 	}
 	
-	public static GA<Adjacency> createGA1(Problem problem){
-		Params params = createParams(false);
+	public static GA<Adjacency> createGA1(Problem problem, Ranker<Adjacency> ranker, int randomSeed){
+		Params params = createParams(randomSeed);
 		AdjacencyFactory factory = new AdjacencyFactory();
 		Selector<Adjacency> selector = new SUS<Adjacency>(params);
 		CrossOver<Adjacency> crossover = new AlternatingEdge(params, problem);
 		ReInsertor<Adjacency> insertor = new FBI<Adjacency>(params);
 		Mutator<Adjacency> mutator = new InversionMutator<Adjacency>(params);
-		Ranker<Adjacency> ranker = new LineairRanker<Adjacency>();
 		LoopDetection<Adjacency> loopDetection = new LoopDetection<Adjacency>();
 		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator, ranker, loopDetection);
 	}
 
-	public static GA<Path> createGA2(Problem problem){
-		Params params = createParams(false);
+	public static GA<Path> createGA2(Problem problem, int randomSeed){
+		Params params = createParams(randomSeed);
 		PathFactory factory = new PathFactory();
 		Selector<Path> selector = new SUS<Path>(params);
 		CrossOver<Path> crossover = new EdgeRecombination(problem, params);
@@ -72,22 +74,17 @@ public class Main {
 		return new GA<Path>(params, factory, selector, crossover, insertor, mutator, ranker, loopDetection);
 	}
 	
-	/**
-	 * useTestParams can be set to true to use the predefined TestParams class which has default values.
-	 * @param useTestParams
-	 * @return
-	 */
-	private static Params createParams(boolean useTestParams) {
+	private static Params createParams(int randomSeed) {
 		Params params = new Params();
-		params.crossover = 0.95;
-		params.elitists = 0.10;
+		params.crossover = 0.20;
+		params.mutation = 0.35;
+		params.elitists = 0.1;
 		params.maxGenerations = 1000;
-		params.mutation = 0.05;
 		params.popSize = 150;
 		params.stop = 0.95;
-		params.rand = new Random();
-		params.correlativeTournament = true;
-		return useTestParams ? new TestParams() : params ;
+		params.rand = new Random(randomSeed);
+		params.correlativeTournament = false;
+		return params ;
 	}
 	
 }
