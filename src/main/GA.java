@@ -18,14 +18,14 @@ public class GA<R extends Chromosome> {
 	protected Params params;
 	public final RepresentationFactory<R> factory;
 	
-	private final Selector<R> selector;
-	private final CrossOver<R> crossover;
-	private final ReInsertor<R> insertor;
-	private final Mutator<R> mutator;
-	private final Ranker<R> ranker;
-	private final LoopDetection<R> loopDetector;
+	protected final Selector<R> selector;
+	protected final CrossOver<R> crossover;
+	protected final ReInsertor<R> insertor;
+	protected final Mutator<R> mutator;
+	protected final Ranker<R> ranker;
+	protected final LoopDetection<R> loopDetector;
 	
-	public Timer timer = new Timer();
+//	public Timer timer = new Timer();
 	
 	public GA(Params params, RepresentationFactory<R> factory, Selector<R> selector,
 			CrossOver<R> crossover, ReInsertor<R> insertor, Mutator<R> mutator, Ranker<R> ranker, LoopDetection<R> loopDetector) {
@@ -78,7 +78,6 @@ public class GA<R extends Chromosome> {
 		int i = 0;
 		while(i < params.maxGenerations){
 //			timer.start();
-			
 			double elapsed = (System.nanoTime()-startTime);
 			elapsed = elapsed/(60*Math.pow(10,9));
 //			System.out.println("elapsed: " + elapsed + " generation nb: " + i);
