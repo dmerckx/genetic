@@ -36,7 +36,7 @@ public class PlotPopulationSize {
 		long before = System.currentTimeMillis();
 		System.out.println("before: " + before);
 		
-		int nbTimes = 8;
+		int nbTimes = 10;
 		
 		ArrayList<String> bestAdj = new ArrayList<String>();
 		ArrayList<String> bestPath = new ArrayList<String>();
@@ -44,7 +44,7 @@ public class PlotPopulationSize {
 		int randomSeed = (new Random()).nextInt();
 //		int randomSeed = -2115352863;
 		System.out.println("seed: " + randomSeed);
-		for (int popSize = 25; popSize < 2000; popSize = popSize + 500) {
+		for (int popSize = 20; popSize < 600; popSize = popSize + 20) {
 			long time = System.currentTimeMillis();
 			History history1 = new History("");
 			createGAAdj(problem, getParamsAdj(randomSeed, popSize)).run(problem, history1, nbTimes);
@@ -91,7 +91,7 @@ public class PlotPopulationSize {
 		Params params = new Params();
 		params.rand = new Random(seed);
 		params.popSize = popSize;
-		params.maxGenerations = 300;
+		params.maxGenerations = 400;
 		params.detectLoops = false;
 		params.correlativeTournament = false;
 		params.similarSubsetSize = 0.0;

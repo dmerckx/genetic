@@ -42,7 +42,7 @@ public class PlotPopulationSizeLimited {
 
 		int nbTimes = 5;
 
-		List<Double> simTime = Arrays.asList(0.05d,0.1d,0.5d,1d,2d);
+		List<Double> simTime = Arrays.asList(0.01,0.05d,0.1d,0.5d,1d,2d);
 		
 		Map<Double,ArrayList<String>> bestAdj = new HashMap<Double,ArrayList<String>>();
 		Map<Double,ArrayList<String>> bestPath = new HashMap<Double,ArrayList<String>>();
@@ -102,13 +102,11 @@ public class PlotPopulationSizeLimited {
 
 	private static double getLastNonZeroElement(List<Double> list) {
 		if(list.size() != 1500)
-			System.out.println("illegal size: " + list.size());
+			System.out.println("illegal size: " + list.size() + "----------------------------");
 		for (int i = 0; i < list.size(); i++) {
 			if(list.get(i) <= 0+1e-15) {
 				if(i != 0)
 					return list.get(i-1);
-				else
-					 return list.get(0);
 			}
 		}
 		return list.get(list.size()-1);

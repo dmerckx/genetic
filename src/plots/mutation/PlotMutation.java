@@ -41,12 +41,13 @@ public class PlotMutation {
 		
 		int nbTimes = 8;
 		double step = 0.02;
-		double max = 0.03;
+		double max = 0.6;
+
 		
 		int randomSeed = (new Random()).nextInt();
 
 		System.out.println("seed: " + randomSeed);
-		for (double mutPerc = 0.02; mutPerc < max; mutPerc = mutPerc + step) {
+		for (double mutPerc = 0.00; mutPerc < max; mutPerc = mutPerc + step) {
 			long beforeIt = System.currentTimeMillis();
 			System.out.print("1: ");
 			runSingleMutatorAdj(nbTimes, randomSeed, new SimpleInversionMutator<Adjacency>(getParamsAdj(randomSeed, mutPerc)), "simpleInversion",mutPerc);
@@ -110,8 +111,8 @@ public class PlotMutation {
 	
 	private static Params getParams(int seed) {
 		Params params = new Params();
-		params.popSize = 50;
-		params.maxGenerations = 100;
+		params.popSize = 100;
+		params.maxGenerations = 200;
 		params.detectLoops = false;
 		params.rand = new Random(seed);
 		params.correlativeTournament = false;
