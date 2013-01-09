@@ -72,6 +72,7 @@ public class PlotPopulationSizeLimited {
 				System.out.println("Path with population: " + popSize);
 				history2.printShort();
 				listPath.add(popSize + " " + getLastNonZeroElement(history2.bestList) + "\r\n");
+				System.out.println(popSize + " " + getLastNonZeroElement(history2.bestList) + "\r\n");
 				diff = (System.currentTimeMillis()-time);
 				diff = diff/1000;
 				System.out.println("executed PATH in: " + diff);
