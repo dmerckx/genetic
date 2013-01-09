@@ -16,3 +16,6 @@ title('Adjacency with SUS selection');
 subplot(1,3,3);
 plotSingleGraph(result_adj_tournament);
 title('Adjacency with tournament selection');
+
+
+legend('Best','Average','Worst');

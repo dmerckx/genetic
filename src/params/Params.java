@@ -4,7 +4,7 @@ import java.util.Random;
 
 
 public class Params {
-	public double simulationTime = 0;
+	public double simulationTime = Double.MAX_VALUE;
 	public boolean correlativeTournament = false;
 	public int popSize;
 	public int maxGenerations;
