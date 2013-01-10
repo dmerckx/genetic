@@ -2,3 +2,7 @@ bin/
 matlab/
 datafiles/
 jar/
+
+
+#java specific
+*.class
