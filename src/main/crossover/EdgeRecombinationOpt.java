@@ -1,6 +1,7 @@
 package main.crossover;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,12 +11,11 @@ import params.Params;
 import representations.path.Path;
 import factory.PathFactory;
 
-public class EdgeRecombination extends CrossOver<Path> {
+public class EdgeRecombinationOpt extends CrossOver<Path> {
 
-	// TODO the tie case in choose city(edgeMap) should maybe be chosen completely random!
-	public Timer timer = new Timer();
+//	public Timer timer = new Timer();
 	
-	public EdgeRecombination(Problem problem, Params params) {
+	public EdgeRecombinationOpt(Problem problem, Params params) {
 		super(new PathFactory(), problem, params);
 	}
 
@@ -26,11 +26,13 @@ public class EdgeRecombination extends CrossOver<Path> {
 		List<Integer> result = new ArrayList<Integer>();
 		List<Integer> unvisitedCities = getCities();
 //		timer.start();
-		List<Set<Integer>> edgeMap = constructEdgeMap(p1, p2);
+		HashMap<Integer,Set<Integer>> edgeMap = constructEdgeMap(p1, p2);
+		HashIndex index = new HashIndex();
+		index.add(edgeMap);
 //		timer.addConstructionMap();
 		int currentCity = chooseCity(p1, p2);
 		while (unvisitedCities.size() > 1) {
-			removeOccurences(currentCity, edgeMap);
+			removeOccurences(currentCity, edgeMap, index);
 //			timer.addRemoveOccurences();
 			result.add(currentCity);
 			unvisitedCities.remove(new Integer(currentCity));
@@ -66,7 +68,7 @@ public class EdgeRecombination extends CrossOver<Path> {
 	 * @param edgeMap
 	 * @return
 	 */
-	private int chooseCity(int currentCity, List<Set<Integer>> edgeMap) {
+	private int chooseCity(int currentCity, HashMap<Integer,Set<Integer>> edgeMap) {
 		int currentMinimum = -1;
 		int minimumNbNeighbours = 4;
 		for (int neighbour : edgeMap.get(currentCity)) {
@@ -99,7 +101,7 @@ public class EdgeRecombination extends CrossOver<Path> {
 	 * @param edgeMap
 	 * @return
 	 */
-	private boolean hasNeighbours(int city, List<Set<Integer>> edgeMap) {
+	private boolean hasNeighbours(int city, HashMap<Integer,Set<Integer>> edgeMap) {
 		return !edgeMap.get(city).isEmpty();
 	}
 
@@ -110,12 +112,11 @@ public class EdgeRecombination extends CrossOver<Path> {
 	 * @param city
 	 * @param edgeMap
 	 */
-	private void removeOccurences(int city, List<Set<Integer>> edgeMap) {
-		for (int i = 0; i < edgeMap.size(); i++) {
-			Set<Integer> currentEdgeSet = edgeMap.get(i)/*.remove(city)*/;
-			if(currentEdgeSet.contains(city))
-				currentEdgeSet.remove(city);
+	private void removeOccurences(int city, HashMap<Integer,Set<Integer>> edgeMap, HashIndex index) {
+		for(Integer i: index.index.get(city)) {
+			edgeMap.get(i).remove(city);
 		}
+		index.index.remove(city);
 	}
 
 	/**
@@ -130,10 +131,10 @@ public class EdgeRecombination extends CrossOver<Path> {
 				: p2.getRandomCity(params.rand);
 	}
 
-	public List<Set<Integer>> constructEdgeMap(Path parent1, Path parent2) {
-		List<Set<Integer>> edgeMap = new ArrayList<Set<Integer>>();
+	public HashMap<Integer,Set<Integer>> constructEdgeMap(Path parent1, Path parent2) {
+		HashMap<Integer,Set<Integer>> edgeMap = new HashMap<Integer,Set<Integer>>();
 		for (int city = 0; city < parent1.size(); city++) {
-			edgeMap.add(getConnectedCities(city, parent1, parent2));
+			edgeMap.put(city,getConnectedCities(city, parent1, parent2));
 		}
 		return edgeMap;
 	}
