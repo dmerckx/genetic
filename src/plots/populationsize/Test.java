@@ -25,7 +25,7 @@ import util.ProblemGenerator;
 import factory.AdjacencyFactory;
 import factory.PathFactory;
 
-public class PlotPopulationSizeLimited {
+public class Test {
 
 	private static final String problemFilePath = "../genetic/datafiles/xqf131.tsp"; //optimal length 564
 
@@ -42,12 +42,12 @@ public class PlotPopulationSizeLimited {
 
 		int nbTimes = 5;
 
-		List<Double> simTime = Arrays.asList(0.01,0.05d,0.1d,0.5d,1d,2d);
+		List<Double> simTime = Arrays.asList(0.1d);
 		
 		Map<Double,ArrayList<String>> bestAdj = new HashMap<Double,ArrayList<String>>();
 		Map<Double,ArrayList<String>> bestPath = new HashMap<Double,ArrayList<String>>();
 
-		int randomSeed = (new Random()).nextInt();
+		int randomSeed = -1787213176;
 		System.out.println("seed: " + randomSeed);
 		for(Double simulationTime: simTime) {
 			ArrayList<String> listAdj = new ArrayList<String>();
@@ -55,7 +55,7 @@ public class PlotPopulationSizeLimited {
 			ArrayList<String> listPath = new ArrayList<String>();
 			bestPath.put(simulationTime, listPath);
 			System.out.println("currentSimulationTime: " + simulationTime);
-			for (int popSize = 25; popSize <= 500; popSize = popSize + 25) {
+			for (int popSize = 25; popSize <= 25; popSize = popSize + 25) {
 				long time = System.currentTimeMillis();
 				History history1 = new History("");
 				createGAAdj(problem, getParamsAdj(randomSeed, popSize, simulationTime)).run(problem, history1, nbTimes);
@@ -82,14 +82,14 @@ public class PlotPopulationSizeLimited {
 		int counter = 0;
 		for (Double key : bestAdj.keySet()) {
 			System.out.println("counter: " + counter + " key: " + key );
-			PlotWriter.writeList("../genetic/result/result-adj-pop-" + counter + ".txt", bestAdj.get(key));
+//			PlotWriter.writeList("../genetic/result/result-adj-pop-" + counter + ".txt", bestAdj.get(key));
 			counter++;
 			
 		}
 		counter = 0;
 		for (Double key : bestPath.keySet()) {
 			System.out.println("counter: " + counter + " key: " + key );
-			PlotWriter.writeList("../genetic/result/result-path-pop-" + counter + ".txt", bestPath.get(key));
+//			PlotWriter.writeList("../genetic/result/result-path-pop-" + counter + ".txt", bestPath.get(key));
 			counter++;
 		}
 		

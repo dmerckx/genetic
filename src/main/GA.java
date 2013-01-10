@@ -59,8 +59,13 @@ public class GA<R extends Chromosome> {
 			double best = 0;
 			double worst = 0;
 			double mean = 0;
+			int minLength = Integer.MAX_VALUE;
+			for(History h:histories) {
+				if(h.size()< minLength)
+					minLength = h.size();
+			}
 			for(History h:histories){
-				if(i < h.bestList.size()) {
+				if(i < minLength) {
 					best += h.bestList.get(i);
 					worst += h.worstList.get(i);
 					mean += h.meanList.get(i);
