@@ -4,14 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import factory.AdjacencyFactory;
-import factory.PathFactory;
-
-import params.Params;
-import plots.PlotWriter;
-import representations.Adjacency;
-import representations.path.Path;
-
 import main.History;
 import main.Problem;
 import main.crossover.AlternatingEdge;
@@ -19,9 +11,14 @@ import main.crossover.EdgeRecombination;
 import main.insertion.FBI;
 import main.mutation.SimpleInversionMutator;
 import main.rankers.LineairRanker;
-import main.rankers.Ranker;
 import main.selectors.SUS;
+import params.Params;
+import plots.PlotWriter;
+import representations.Adjacency;
+import representations.path.Path;
 import util.ProblemGenerator;
+import factory.AdjacencyFactory;
+import factory.PathFactory;
 
 public class TimeToQOSPlot {
 
