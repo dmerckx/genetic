@@ -7,7 +7,7 @@ import main.History;
 import main.LoopDetection;
 import main.Problem;
 import main.crossover.AlternatingEdge;
-import main.crossover.EdgeRecombination;
+import main.crossover.EdgeRecombinationOpt;
 import main.insertion.FBI;
 import main.mutation.ExchangeMutator;
 import main.mutation.InsertionMutator;
@@ -39,18 +39,22 @@ public class PlotMutation {
 
 		long before = System.currentTimeMillis();
 		
-		int nbTimes = 8;
-		double step = 0.02;
-		double max = 0.6;
+		int nbTimes = 5;
+		double step = 0.15;
+		double max = 0.3;
 
-		
 		int randomSeed = (new Random()).nextInt();
 
 		System.out.println("seed: " + randomSeed);
-		for (double mutPerc = 0.00; mutPerc < max; mutPerc = mutPerc + step) {
+		for (double mutPerc = 0.0; mutPerc <= max; mutPerc = mutPerc + step) {
+			
+			System.out.println();
+			System.out.println("current mutation: " + mutPerc);
+			System.out.println();
+			
 			long beforeIt = System.currentTimeMillis();
 			System.out.print("1: ");
-			runSingleMutatorAdj(nbTimes, randomSeed, new SimpleInversionMutator<Adjacency>(getParamsAdj(randomSeed, mutPerc)), "simpleInversion",mutPerc);
+			runSingleMutatorAdj(nbTimes, randomSeed, new SimpleInversionMutator<Adjacency>(getParamsAdj(randomSeed, mutPerc)), "simpleinversion",mutPerc);
 			System.out.print("2: ");
 			runSingleMutatorAdj(nbTimes, randomSeed, new ExchangeMutator<Adjacency>(getParamsAdj(randomSeed, mutPerc)), "exchange",mutPerc);
 			System.out.print("3: ");
@@ -58,7 +62,7 @@ public class PlotMutation {
 			System.out.print("4: ");
 			runSingleMutatorAdj(nbTimes, randomSeed, new InsertionMutator<Adjacency>(getParamsAdj(randomSeed,mutPerc)), "insertion",mutPerc);
 			System.out.print("5: ");
-			runSingleMutatorPath(nbTimes, randomSeed, new SimpleInversionMutator<Path>(getParamsPath(randomSeed,mutPerc)), "simpleInversion",mutPerc);
+			runSingleMutatorPath(nbTimes, randomSeed, new SimpleInversionMutator<Path>(getParamsPath(randomSeed,mutPerc)), "simpleinversion",mutPerc);
 			System.out.print("6: ");
 			runSingleMutatorPath(nbTimes, randomSeed, new ExchangeMutator<Path>(getParamsPath(randomSeed,mutPerc)), "exchange",mutPerc);
 			System.out.print("7: ");
@@ -80,14 +84,14 @@ public class PlotMutation {
 	}
 
 	private static void runSingleMutatorAdj(int nbTimes, int randomSeed, Mutator<Adjacency> mut, String name, double mutPerc) {
-		History history = new History(outputAdjacency + name + mutPerc + ".txt");
+		History history = new History(outputAdjacency + name + "-" + Math.round(mutPerc*100) + ".txt");
 		createGAAdj(problem, getParamsAdj(randomSeed, mutPerc), mut).run(problem, history, nbTimes);
 		history.writeFile();
 		history.printShort();
 	}
 
 	private static void runSingleMutatorPath(int nbTimes, int randomSeed, Mutator<Path> mut, String name, double mutPerc) {
-		History history = new History(outputPath + name + mutPerc + ".txt");
+		History history = new History(outputPath + name + "-" + Math.round(mutPerc*100) + ".txt");
 		createGAPath(problem, getParamsPath(randomSeed, mutPerc), mut).run(problem, history, nbTimes);
 		history.writeFile();
 		history.printShort();
@@ -95,16 +99,16 @@ public class PlotMutation {
 
 	private static Params getParamsPath(int seed, double mut) {
 		Params params = getParams(seed);
-		params.elitists = 0.05d;
-		params.crossover = 0.90d;
+		params.elitists = 0.2d;
+		params.crossover = 0.75d;
 		params.mutation = mut;
 		return params;
 	}
 
 	private static Params getParamsAdj(int seed, double mut) {
 		Params params = getParams(seed);
-		params.elitists = 0.05d;
-		params.crossover = 0.20d;
+		params.elitists = 0.2d;
+		params.crossover = 0.25d;
 		params.mutation = mut;
 		return params;
 	}
@@ -126,6 +130,6 @@ public class PlotMutation {
 	}
 
 	public static GA<Path> createGAPath(Problem problem, Params params, Mutator<Path> mut){
-		return new GA<Path>(params, new PathFactory(), new SUS<Path>(params), new EdgeRecombination(problem, params), new FBI<Path>(params), mut, new LineairRanker<Path>(), new LoopDetection<Path>());
+		return new GA<Path>(params, new PathFactory(), new SUS<Path>(params), new EdgeRecombinationOpt(problem, params), new FBI<Path>(params), mut, new LineairRanker<Path>(), new LoopDetection<Path>());
 	}
 }
