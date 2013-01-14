@@ -26,10 +26,10 @@ public class NonLinearRanker<R extends Chromosome> implements Ranker<R> {
 		this.params = params;
 		selectivePressures = new HashMap<Integer,Double>();
 		selectivePressures.put(1,1d);
-//		selectivePressures.add(1.0333); //2
+		selectivePressures.put(2,1.0333); //2
 		selectivePressures.put(3,1.0602); //3
 //		selectivePressures.add(1.0854); //4
-//		selectivePressures.put(5,1.1105); //5
+		selectivePressures.put(5,1.1105); //5
 		selectivePressures.put(6,1.1361); //6
 //		selectivePressures.put(7,1.1627); //7
 //		selectivePressures.put(9,1.2195); //9
