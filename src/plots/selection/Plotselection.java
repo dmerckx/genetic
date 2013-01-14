@@ -8,7 +8,7 @@ import main.LoopDetection;
 import main.Problem;
 import main.crossover.AlternatingEdge;
 import main.crossover.CrossOver;
-import main.crossover.EdgeRecombination;
+import main.crossover.EdgeRecombinationOpt;
 import main.insertion.FBI;
 import main.insertion.ReInsertor;
 import main.mutation.Mutator;
@@ -28,9 +28,6 @@ import factory.PathFactory;
 
 public class Plotselection {
 
-	private static Params params = getParamsAdj(549);
-	private static Params paramsPath = getParamsPath(549);
-	
 	private static final String problemFilePath = "../genetic/datafiles/xqf131.tsp";
 	private static final Problem problem = ProblemGenerator.generate(problemFilePath);
 	
@@ -38,8 +35,8 @@ public class Plotselection {
 	private static final RWS<Path> rwsPath = new RWS<Path>(paramsPath);
 	private static final SUS<Adjacency> sus = new SUS<Adjacency>(params);
 	private static final SUS<Path> susPath = new SUS<Path>(paramsPath);
-	private static final Tournament<Adjacency> tournament = new Tournament<Adjacency>(params, 1.0,1.0);
-	private static final Tournament<Path> tournamentPath = new Tournament<Path>(paramsPath, 1.0,1.0);
+	private static final Tournament<Adjacency> tournament = new Tournament<Adjacency>(params, 1.0,0.1);
+	private static final Tournament<Path> tournamentPath = new Tournament<Path>(paramsPath, 1.0,0.1);
 	
 	private static final AdjacencyFactory factory = new AdjacencyFactory();
 	private static final PathFactory factoryPath = new PathFactory();
@@ -51,7 +48,7 @@ public class Plotselection {
 	private static final Mutator<Path> mutatorPath = new SimpleInversionMutator<Path>(paramsPath);
 	
 	private static final CrossOver<Adjacency> crossover = new AlternatingEdge(params, problem);
-	private static final CrossOver<Path> crossoverPath = new EdgeRecombination(problem,paramsPath);
+	private static final CrossOver<Path> crossoverPath = new EdgeRecombinationOpt(problem,paramsPath);
 	
 	private static final Ranker<Adjacency> ranker = new LineairRanker<Adjacency>();
 	private static final Ranker<Path> rankerPath = new LineairRanker<Path>();
@@ -85,42 +82,30 @@ public class Plotselection {
 		history1.printShort();
 		history1.writeFile();
 		
-		System.out.println(Tournament.counter);
-		
 		History history2 = new History(outputAdjSUSFilePath);
 		createGA(problem, sus).run(problem, history2, nbTimes);
 		history2.printShort();
 		history2.writeFile();
-		
-		System.out.println(Tournament.counter);
 		
 		History history3 = new History(outputAdjTournamentFilePath);
 		createGA(problem, tournament).run(problem, history3, nbTimes);
 		history3.printShort();
 		history3.writeFile();
 		
-		System.out.println(Tournament.counter);
-		
 		History history4 = new History(outputPathRWSFilePath);
 		createGAPath(problem, rwsPath).run(problem, history4, nbTimes);
 		history4.printShort();
 		history4.writeFile();
-		
-		System.out.println(Tournament.counter);
 		
 		History history5 = new History(outputPathSUSFilePath);
 		createGAPath(problem, susPath).run(problem, history5, nbTimes);
 		history5.printShort();
 		history5.writeFile();
 		
-		System.out.println(Tournament.counter);
-		
 		History history6 = new History(outputPathTournamentFilePath);
 		createGAPath(problem, tournamentPath).run(problem, history6, nbTimes);
 		history6.printShort();
 		history6.writeFile();
-		
-		System.out.println(Tournament.counter);
 		
 		double time = System.currentTimeMillis()-before;
 		double hours = time/(60000*60);
@@ -132,8 +117,8 @@ public class Plotselection {
 	private static Params getParams(int seed) {
 		Params params = new Params();
 		params.rand =  new Random(seed);
-		params.popSize = 100;
-		params.maxGenerations = 300;
+		params.popSize = 50;
+		params.maxGenerations = 2000;
 		params.stop = 0.95d;
 		params.detectLoops = false;
 		return params;
@@ -141,9 +126,9 @@ public class Plotselection {
 	
 	private static Params getParamsPath(int seed) {
 		Params params = getParams(seed);
-		params.elitists = 0.05d;
-		params.crossover = 0.90d;
-		params.mutation = 0.20d;
+		params.elitists = 0.2d;
+		params.crossover = 0.75d;
+		params.mutation = 0.40d;
 		return params;
 	}
 	
@@ -151,15 +136,15 @@ public class Plotselection {
 		Params params = getParams(seed);
 		params.elitists = 0.2d;
 		params.crossover = 0.25d;
-		params.mutation = 0.35d;
+		params.mutation = 0.40d;
 		return params;
 	}
 	
-	public static GA<Adjacency> createGA(Problem problem, Selector<Adjacency> selector){
-		return new GA<Adjacency>(params, factory, selector, crossover, insertor, mutator, ranker, loopDetection);
+	public static GA<Adjacency> createGA(Problem problem, Selector<Adjacency> selector, int randomSeed){
+		return new GA<Adjacency>(getParamsAdj(549), factory, selector, crossover, insertor, mutator, ranker, loopDetection);
 	}
 	
-	public static GA<Path> createGAPath(Problem problem, Selector<Path> selector){
-		return new GA<Path>(paramsPath, factoryPath, selector, crossoverPath, insertorPath, mutatorPath, rankerPath, loopDetectionPath);
+	public static GA<Path> createGAPath(Problem problem, Selector<Path> selector, int randomSeed){
+		return new GA<Path>(getParamsPath(549), factoryPath, selector, crossoverPath, insertorPath, mutatorPath, rankerPath, loopDetectionPath);
 	}
 }

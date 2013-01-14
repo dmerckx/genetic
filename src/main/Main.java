@@ -56,17 +56,17 @@ public class Main {
 		time = time/60000;
 		System.out.println("time with no opt: "+ time);
 		
-		before = System.currentTimeMillis();
-		History history1 = new History("../genetic/result/resultNewAdj.txt");
-		GA<Path> ga1 = createGA(problem,randomSeed, new EdgeRecombinationOpt(problem, createParams(randomSeed)));
-		ga1.run(problem, history1, nbTimes);
-		history1.printShort();
-		((EdgeRecombinationOpt)ga1.crossover).timer.print();
-		time = System.currentTimeMillis() - before;
-		time = time/60000;
-		System.out.println();
-		System.out.println("time with hashindex opt: " + time);
-		System.out.println();
+//		before = System.currentTimeMillis();
+//		History history1 = new History("../genetic/result/resultNewAdj.txt");
+//		GA<Path> ga1 = createGA(problem,randomSeed, new EdgeRecombinationOpt(problem, createParams(randomSeed)));
+//		ga1.run(problem, history1, nbTimes);
+//		history1.printShort();
+//		((EdgeRecombinationOpt)ga1.crossover).timer.print();
+//		time = System.currentTimeMillis() - before;
+//		time = time/60000;
+//		System.out.println();
+//		System.out.println("time with hashindex opt: " + time);
+//		System.out.println();
 		
 //		History history2 = new History("../genetic/result/resultNewPath.txt");
 //		createGA2(problem).run(problem, history2);

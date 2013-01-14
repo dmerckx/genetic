@@ -1,6 +1,7 @@
 package main.rankers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import main.RankedChrom;
@@ -14,6 +15,7 @@ public class NonLinearRanker<R extends Chromosome> implements Ranker<R> {
 	private Params params;
 	private double X;
 	private double[] fit;
+	private HashMap<Integer,Double> selectivePressures;
 	
 	public NonLinearRanker(Params params) {
 		this(2, params);
@@ -22,8 +24,29 @@ public class NonLinearRanker<R extends Chromosome> implements Ranker<R> {
 	public NonLinearRanker(int selectivePressure, Params params) {
 		this.selectivePressure = selectivePressure;
 		this.params = params;
-//		X = computeX();
-		X = 1.0163; //TODO hardcoded for popsize 100
+		selectivePressures = new HashMap<Integer,Double>();
+		selectivePressures.put(1,1d);
+//		selectivePressures.add(1.0333); //2
+		selectivePressures.put(3,1.0602); //3
+//		selectivePressures.add(1.0854); //4
+//		selectivePressures.put(5,1.1105); //5
+		selectivePressures.put(6,1.1361); //6
+//		selectivePressures.put(7,1.1627); //7
+//		selectivePressures.put(9,1.2195); //9
+		selectivePressures.put(11, 1.2820); //11
+//		selectivePressures.put(13, 1.3514); //13
+//		selectivePressures.put(15, 1.4286); //15
+		selectivePressures.put(16,1.4706); //16
+//		selectivePressures.put(17, 1.5152); //17
+//		selectivePressures.put(19, 1.6129); // 19
+		selectivePressures.put(21,  1.7241); //21
+//		selectivePressures.put(23,  1.8519);//23
+//		selectivePressures.put(25,  2.0d);   //25
+		selectivePressures.put(26, 2.0833);
+//		selectivePressures.put(27,  2.1739);   //27
+//		selectivePressures.put(29,  2.3810);   
+		
+		X = selectivePressures.get(selectivePressure);
 		fit = new double[params.popSize];
 		for (int i = 0; i < params.popSize; i++) {
 			fit[params.popSize-i-1] = Math.pow(X, i);
@@ -48,11 +71,6 @@ public class NonLinearRanker<R extends Chromosome> implements Ranker<R> {
 		List<RankedChrom<R>> ranked = new ArrayList<RankedChrom<R>>();
 		int size = unrankedPop.size();
 		for(int i = 0; i < size; i++){
-			//least fit individual has Pos=1
-			//the fittest individual Pos=Nind
-			//http://www.pohlheim.com/Papers/mpga_gal95/gal2_3.html#Non-linear Ranking
-			int pos = size-(i);
-//			double fit = params.popSize * Math.pow(X, pos-1)/sum(X);
 			double fit = this.fit[i];
 			ranked.add(new RankedChrom<R>(fit, unrankedPop.get(i)));
 		}

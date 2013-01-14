@@ -8,13 +8,13 @@ import representations.Chromosome;
 
 public class LineairRanker<R extends Chromosome> implements Ranker<R> {
 
-	private int pressure;
+	private double pressure;
 
 	public LineairRanker() {
 		this(2);
 	}
 	
-	public LineairRanker(int selectivePressure) {
+	public LineairRanker(double selectivePressure) {
 		this.pressure = selectivePressure;
 	}
 	
