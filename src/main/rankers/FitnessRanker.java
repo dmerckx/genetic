@@ -20,7 +20,7 @@ public class FitnessRanker<R extends Chromosome> implements Ranker<R> {
 		int size = unrankedPop.size();
 		for(int i = 0; i < size; i++){
 			ranked.add(new RankedChrom<R>(1/unrankedPop.get(i).getPathLength(), unrankedPop.get(i)));
-		}
+		} 
 		
 		return ranked;
 	}
